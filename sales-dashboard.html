@@ -567,6 +567,19 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
 @media(min-width:500px){.cp-qs-grid.two-col{grid-template-columns:1fr 1fr}}
 @media(min-width:768px){.cp-qs-grid.two-col{grid-template-columns:repeat(3,1fr)}}
 
+/* Affordability sub-options */
+.cp-qs-suboptions{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.25,.46,.45,.94),opacity .3s,margin .3s;opacity:0;margin:0 0 0 0}
+.cp-qs-suboptions.visible{max-height:200px;opacity:1;margin:4px 0 8px 0}
+.cp-qs-suboptions .cp-qs-subgrid{display:grid;grid-template-columns:1fr;gap:6px;padding:8px 0 4px 24px}
+@media(min-width:768px){.cp-qs-suboptions .cp-qs-subgrid{grid-template-columns:1fr 1fr;padding-left:32px}}
+.cp-qs-suboption{display:flex;align-items:center;gap:10px;padding:11px 14px;background:rgba(212,168,67,.03);border:1.5px solid rgba(212,168,67,.12);border-radius:8px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;font-size:.88rem}
+.cp-qs-suboption:hover{border-color:rgba(212,168,67,.3);background:rgba(212,168,67,.06)}
+.cp-qs-suboption.selected{border-color:var(--gold);background:rgba(212,168,67,.1);box-shadow:0 0 10px rgba(212,168,67,.08)}
+.cp-qs-suboption .cp-qs-check{width:20px;height:20px;border-radius:5px;border:2px solid var(--text3);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:.75rem}
+.cp-qs-suboption.selected .cp-qs-check{background:var(--gold);border-color:var(--gold);color:var(--bg)}
+.cp-qs-suboption .cp-qs-subtext{color:var(--text2);flex:1}
+.cp-qs-suboption .cp-qs-subemoji{font-size:1rem;flex-shrink:0}
+
 /* Temperature Gauge */
 .cp-temp-gauge{padding:28px;text-align:center;margin-bottom:24px}
 .cp-temp-bar{height:16px;border-radius:8px;background:linear-gradient(90deg,#4a4a6a,#3498DB,#2ECC71,#F1C40F,#E67E22,#E74C3C);margin:20px auto;max-width:900px;position:relative;overflow:visible}
@@ -1100,16 +1113,33 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
       </ul>
     </div>
     <div class="plan-card glass">
-      <div class="plan-tag badge badge-purple">LAST RESORT</div>
+      <div class="plan-tag badge badge-purple">USA ONLY</div>
       <h3 style="color:var(--purple)">Payva / PayPal Later</h3>
       <div class="plan-price" style="color:var(--purple)">Split Payments</div>
-      <div class="plan-detail">1/4, 1/8, or 1/12 splits</div>
+      <div class="plan-detail">1/4, 1/8, or 1/12 splits (USA leads)</div>
       <ul class="plan-features">
         <li>Like Afterpay for education</li>
         <li>Automatic payment splits</li>
-        <li>No interest options available</li>
         <li>Full access from first payment</li>
-        <li>For genuine affordability issues</li>
+        <li>USA leads only</li>
+        <li>DON'T mention interest rates</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Splitit Card -->
+  <div style="max-width:360px;margin:20px auto 48px">
+    <div class="plan-card glass" style="border-color:rgba(26,188,156,.3)">
+      <div class="plan-tag badge" style="background:rgba(26,188,156,.1);color:var(--teal);border:1px solid rgba(26,188,156,.25)">🌍 INTERNATIONAL</div>
+      <h3 style="color:var(--teal)">Splitit</h3>
+      <div class="plan-price" style="color:var(--teal)">Interest-Free</div>
+      <div class="plan-detail">Works worldwide — Visa / Mastercard</div>
+      <ul class="plan-features">
+        <li>100% interest-free — selling point!</li>
+        <li>Works globally (not just USA)</li>
+        <li>Visa or Mastercard required</li>
+        <li>Full access from day one</li>
+        <li>Also works for USA leads as alternative</li>
       </ul>
     </div>
   </div>
@@ -1133,9 +1163,11 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
         <div class="tree-node glass" style="border-color:rgba(46,204,113,.3)"><h4>Still stuck? → In-House</h4><p>"If finance is the only thing holding you back, the BEST I can do is 3 monthly payments of $1,100"</p></div>
       </div>
       <div>
-        <div class="tree-node glass" style="border-color:rgba(231,76,60,.3)"><h4>😓 "Can't afford it right now"</h4><p>Ask what they CAN do monthly. Meet them where they are.</p></div>
+        <div class="tree-node glass" style="border-color:rgba(231,76,60,.3)"><h4>😓 "Can't afford it right now"</h4><p>Offer $1,100 × 3 first. If still stuck…</p></div>
         <div class="tree-arrow"></div>
-        <div class="tree-node glass" style="border-color:rgba(155,89,182,.3)"><h4>Offer Payva Splits</h4><p>1/4, 1/8, or 1/12 payments. "First payment gets you full access to everything."</p></div>
+        <div class="tree-node glass" style="border-color:rgba(155,89,182,.3)"><h4>🇺🇸 USA → Payva / PayPal Later</h4><p>Smaller splits (1/4, 1/8, 1/12). DON'T mention interest.</p></div>
+        <div class="tree-arrow"></div>
+        <div class="tree-node glass" style="border-color:rgba(26,188,156,.3)"><h4>🌍 International → Splitit</h4><p>Interest-free, Visa/MC worldwide. DO mention interest-free.</p></div>
       </div>
     </div>
     <div class="tree-arrow"></div>
@@ -1148,7 +1180,10 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
     <div class="script-block reveal" style="margin:12px 0"><div class="script-label">Transition Line</div><div class="script-text">"If finance is the only thing holding you back, the BEST I can do is 3 monthly payments of $1,100"</div><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
     <div class="script-block reveal" style="margin:12px 0"><div class="script-label">First Payment Closer</div><div class="script-text">"First $1,100 gives you full access to Discord, KCU community, modules, text signals, and daily live trading 🔥"</div><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
     <div class="script-block reveal" style="margin:12px 0"><div class="script-label">Risk Frame</div><div class="script-text">"We can take the risk and do inhouse financing. 3 monthly payments of $1,100. Wanna give that a shot?"</div><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
-    <div class="script-block reveal" style="margin:12px 0"><div class="script-label">Payva Introduction</div><div class="script-text">"We also have Payva — it's like Afterpay for education. Splits your payment into smaller chunks automatically. No interest, no hassle."</div><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
+    <div class="script-block reveal" style="margin:12px 0"><div class="script-label">Payva Introduction (USA)</div><div class="script-text">"We also have Payva and PayPal Pay Later — they let you break it down into even smaller payments. Way more manageable. Want me to send you that link?"</div><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
+    <div class="script-block reveal" style="margin:12px 0"><div class="script-label">Payva Afterpay Frame (USA)</div><div class="script-text">"No stress at all. We have financing through Payva where you can split it into way smaller monthly payments. It's like Afterpay — you get full access from day one and pay it off over time."</div><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
+    <div class="script-block reveal" style="margin:12px 0;border-left-color:var(--teal)"><div class="script-label" style="color:var(--teal)">Splitit Introduction (International)</div><div class="script-text">"Since you're international, we have Splitit which works worldwide. It's interest-free and lets you break the payment into smaller chunks. You get full access from day one."</div><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
+    <div class="script-block reveal" style="margin:12px 0;border-left-color:var(--teal)"><div class="script-label" style="color:var(--teal)">Splitit Visa/MC (International)</div><div class="script-text">"For international students we use Splitit — completely interest-free, works with any Visa or Mastercard worldwide. You can spread the cost out and still get instant access to everything."</div><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
     <div class="script-block reveal" style="margin:12px 0"><div class="script-label">Flexibility Closer</div><div class="script-text">"The best we could do if finance is the only thing holding you back is 3 monthly payments of $1,100. That way you start learning immediately."</div><button class="copy-btn" onclick="copyText(this)">Copy</button></div>
   </div>
 
@@ -1429,6 +1464,12 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
           <div class="cp-qs-grid" id="cpQsObjections">
             <label class="cp-qs-option" data-val="price"><span class="cp-qs-check"></span><span class="cp-qs-emoji">💰</span><span class="cp-qs-text">Price / too expensive</span></label>
             <label class="cp-qs-option" data-val="affordability"><span class="cp-qs-check"></span><span class="cp-qs-emoji">😓</span><span class="cp-qs-text">Can't afford it / needs payment plan</span></label>
+            <div class="cp-qs-suboptions" id="cpAffordSubs">
+              <div class="cp-qs-subgrid">
+                <label class="cp-qs-suboption" data-val="already_offered_1100"><span class="cp-qs-check"></span><span class="cp-qs-subemoji">💸</span><span class="cp-qs-subtext">Already offered $1,100 × 3 — still can't afford</span></label>
+                <label class="cp-qs-suboption" data-val="outside_usa"><span class="cp-qs-check"></span><span class="cp-qs-subemoji">🌍</span><span class="cp-qs-subtext">Lead is outside USA</span></label>
+              </div>
+            </div>
             <label class="cp-qs-option" data-val="scam_reddit"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🔴</span><span class="cp-qs-text">Mentioned Reddit or scam concerns</span></label>
             <label class="cp-qs-option" data-val="bad_reviews"><span class="cp-qs-check"></span><span class="cp-qs-emoji">📝</span><span class="cp-qs-text">Said bad reviews</span></label>
             <label class="cp-qs-option" data-val="think"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🤔</span><span class="cp-qs-text">Need to think about it</span></label>
@@ -1483,6 +1524,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
             <label class="cp-qs-option" data-val="mid_age"><span class="cp-qs-check"></span><span class="cp-qs-text">26-40</span></label>
             <label class="cp-qs-option" data-val="older"><span class="cp-qs-check"></span><span class="cp-qs-text">Older (40+)</span></label>
             <label class="cp-qs-option" data-val="immigrant"><span class="cp-qs-check"></span><span class="cp-qs-text">Immigrant / ESL</span></label>
+            <label class="cp-qs-option" data-val="divorced"><span class="cp-qs-check"></span><span class="cp-qs-text">Divorced / major life change</span></label>
           </div>
         </div>
 
@@ -2393,7 +2435,27 @@ document.querySelectorAll('.cp-mode-tab').forEach(btn => {
 });
 
 // --- Quick-Select Toggle Logic ---
+function cpToggleAffordSubs() {
+  const affordOpt = document.querySelector('#cpQsObjections .cp-qs-option[data-val="affordability"]');
+  const subsPanel = document.getElementById('cpAffordSubs');
+  if (affordOpt && subsPanel) {
+    if (affordOpt.classList.contains('selected')) {
+      subsPanel.classList.add('visible');
+    } else {
+      subsPanel.classList.remove('visible');
+      // Deselect sub-options when parent is deselected
+      subsPanel.querySelectorAll('.cp-qs-suboption.selected').forEach(s => s.classList.remove('selected'));
+    }
+  }
+}
 document.querySelectorAll('#cpQsObjections .cp-qs-option').forEach(opt => {
+  opt.addEventListener('click', () => {
+    opt.classList.toggle('selected');
+    if (opt.dataset.val === 'affordability') cpToggleAffordSubs();
+  });
+});
+// Sub-option click handlers
+document.querySelectorAll('#cpAffordSubs .cp-qs-suboption').forEach(opt => {
   opt.addEventListener('click', () => opt.classList.toggle('selected'));
 });
 document.querySelectorAll('#cpQsTraits .cp-qs-option').forEach(opt => {
@@ -2432,7 +2494,19 @@ const cpObjDB = {
       {label:'Belief Close',text:"I am willing to bet on you if you are willing to bet on yourself 💪 The first $1,100 gets you everything — full access from day one."},
       {label:'ROI Bridge',text:"What if the money you make in the first month covers the rest of the program? That's what happened for a lot of our students."}
     ],
+    scriptsPayvaUSA:[
+      {label:'Payva/PayPal Bridge',text:"I hear you — the 3 payments is already the best we can do in-house. But there IS another option. We work with Payva and PayPal Pay Later — they let you break it down into even smaller payments. Way more manageable. Want me to send you that link?"},
+      {label:'Afterpay Frame',text:"No stress at all. We have financing through Payva where you can split it into way smaller monthly payments. It's like Afterpay — you get full access from day one and pay it off over time. Sound better?"},
+      {label:'Micro-Splits',text:"I get it — $1,100 upfront is still a lot. That's why we also offer Payva and PayPal Pay Later. You can split the total into 1/4, 1/8, or even 1/12 payments. Much easier on the wallet and you start learning immediately."}
+    ],
+    scriptsSplitit:[
+      {label:'Splitit Intro',text:"No worries at all — since you're international, we have Splitit which works worldwide. It's interest-free and lets you break the payment into smaller chunks. You get full access from day one. Want me to set that up?"},
+      {label:'Splitit Global',text:"I hear you. The good news is we have Splitit — it works globally, it's interest-free, and you can split the total into manageable payments. Full access from the moment you sign up."},
+      {label:'Splitit Visa/MC',text:"For international students we use Splitit — completely interest-free, works with any Visa or Mastercard worldwide. You can spread the cost out and still get instant access to everything."}
+    ],
     killShot:"We can take the risk and do inhouse financing. 3 monthly payments of $1,100. Wanna give that a shot?",
+    killShotPayvaUSA:"Look, we've removed every barrier. You can split this into tiny monthly payments, get full access TODAY, and start learning a skill that pays you back. The only thing left is whether you're ready to bet on yourself 💪",
+    killShotSplitit:"Interest-free, works anywhere in the world, and you start learning from day one. We've literally made it as easy as possible. Are you in? 💪",
     note:'Unlike price objection — they WANT in. Offer payment plan.'},
   scam_reddit: {emoji:'🔴',name:'Reddit / Scam Fear',rate:3.4,convos:'1,530',priority:2,
     scripts:[
@@ -2593,9 +2667,11 @@ function cpMatchTestimonial(objKeys, traits) {
     nine_to_five: {tags:['9-5-job','career-change'], weight:3},
     beginner: {tags:['beginner'], weight:3},
     lost_money: {tags:['lost-money-before'], weight:4},
-    young: {tags:['student'], weight:2},
+    young: {tags:['student','young'], weight:2},
+    mid_age: {tags:['9-5-job','career-change','family-motivation'], weight:2},
     older: {tags:['older'], weight:2},
-    immigrant: {tags:['immigrant'], weight:3}
+    immigrant: {tags:['immigrant'], weight:3},
+    divorced: {tags:['life-change','emotional-story','career-change','family-motivation'], weight:4}
   };
 
   const objWeights = {
@@ -2659,6 +2735,7 @@ function cpWhyMatch(t, objKeys, traits) {
   if (traits.includes('has_kids') && tTags.includes('family-motivation')) reasons.push('motivated by family');
   if (traits.includes('single_parent') && tTags.includes('single-parent')) reasons.push('is a single parent');
   if (traits.includes('immigrant') && tTags.includes('immigrant')) reasons.push('has immigrant background');
+  if (traits.includes('divorced') && (tTags.includes('life-change') || tTags.includes('career-change'))) reasons.push('made a major life change');
   if (traits.includes('young') && tTags.includes('student')) reasons.push('was young when they started');
   if (objKeys.includes('scam_reddit') && (t.objections_overcome||[]).includes('scam_fear')) reasons.push('overcame scam skepticism');
   if (objKeys.includes('skill_doubt') && (t.objections_overcome||[]).includes('skill_doubt')) reasons.push('overcame skill doubt');
@@ -2860,7 +2937,7 @@ function cpCalcProbability(objKeys, temp, stage) {
 // --- Don't Say Warnings ---
 const cpDontSayDB = {
   price: ["Don't lead with the payment plan — always reframe value first", "Don't discount the price. Ever. The value proposition must hold.", "Don't get defensive about pricing — confidence sells."],
-  affordability: ["Don't assume they can't afford it — ask what they CAN do", "Don't lower the price. Restructure the payment instead.", "Don't make them feel bad about their financial situation."],
+  affordability: ["Don't assume they can't afford it — ask what they CAN do", "Don't lower the price. Restructure the payment instead.", "Don't make them feel bad about their financial situation.", "⚠️ DON'T mention interest rates for Payva/PayPal Later — just say 'smaller payments' or 'split it up'", "⚠️ DON'T offer Payva/PayPal Later to international leads — use Splitit instead", "⚠️ DO mention Splitit is interest-free — that's the selling point for international leads"],
   scam_reddit: ["Don't say 'Reddit is fake' or 'those people are lying'", "Don't get defensive — it confirms their suspicion", "Don't dismiss their concern. Acknowledge it, then redirect to proof."],
   bad_reviews: ["Don't argue with the reviews — redirect to proof", "Don't name specific negative reviewers", "Don't get emotional. Stay calm and redirect."],
   think: ["Don't say 'take your time' — that's a death sentence", "Don't accept it at face value. There's always a deeper objection.", "Don't let them walk without a follow-up time booked."],
@@ -2928,11 +3005,17 @@ function cpGetContextTips(traits) {
   if (traits.includes('single_parent')) tips.push('Emphasize how trading income could change their kids\' lives — "what would an extra $500/day mean for your family?"');
   if (traits.includes('nine_to_five')) tips.push('Ask what they do for work and how trading could replace that income — "what would it feel like to hand in your notice?"');
   if (traits.includes('young')) tips.push('Talk about building wealth early — the compound effect of starting at their age is massive');
+  if (traits.includes('mid_age')) tips.push('This is their prime earning window — they have the discipline and life experience to follow the system. Emphasize career freedom and family time');
   if (traits.includes('older')) tips.push('Emphasize it\'s never too late — mention students their age who succeeded');
   if (traits.includes('lost_money')) tips.push('Acknowledge their past losses — "I know you\'ve been burned before, which makes what I\'m about to show you even more important"');
   if (traits.includes('beginner')) tips.push('Keep it simple — avoid jargon. Say "you don\'t need to know anything going in"');
   if (traits.includes('female')) tips.push('Many female students report feeling intimidated by male-dominated trading spaces — emphasize KCU\'s supportive community');
   if (traits.includes('immigrant')) tips.push('Connect with their ambition — many immigrants resonate with "building a better life" narrative');
+  if (traits.includes('divorced')) {
+    tips.push('This is YOUR fresh start. Trading gives you financial independence — you don\'t have to depend on anyone.');
+    tips.push('A lot of our students joined after a major life change. They wanted something that was THEIRS. That\'s what this is.');
+    if (traits.includes('has_kids') || traits.includes('single_parent')) tips.push('Imagine being able to provide for your kids on your own terms, from your phone, on your schedule.');
+  }
   return tips;
 }
 
@@ -2994,13 +3077,31 @@ function cpBuildScorecard(text) {
 }
 
 // --- Render Results ---
-function cpRenderResults(objKeys, temp, name, traits, fullConvoText, stage) {
+function cpRenderResults(objKeys, temp, name, traits, fullConvoText, stage, affordSubs) {
   stage = stage || 'middle';
+  affordSubs = affordSubs || [];
   const results = document.getElementById('cpResults');
   results.classList.add('active');
 
+  // Determine if we should use alternative affordability scripts
+  const alreadyOffered1100 = affordSubs.includes('already_offered_1100');
+  const outsideUSA = affordSubs.includes('outside_usa');
+
+  // Temporarily swap affordability scripts if sub-options are selected
+  const origAffordScripts = cpObjDB.affordability.scripts;
+  const origAffordKillShot = cpObjDB.affordability.killShot;
+  if (objKeys.includes('affordability') && alreadyOffered1100) {
+    if (outsideUSA) {
+      cpObjDB.affordability.scripts = cpObjDB.affordability.scriptsSplitit;
+      cpObjDB.affordability.killShot = cpObjDB.affordability.killShotSplitit;
+    } else {
+      cpObjDB.affordability.scripts = cpObjDB.affordability.scriptsPayvaUSA;
+      cpObjDB.affordability.killShot = cpObjDB.affordability.killShotPayvaUSA;
+    }
+  }
+
   // Save state for shuffle
-  cpShuffleState = {objKeys, temp, name, stage, traits, variation: 0};
+  cpShuffleState = {objKeys, temp, name, stage, traits, variation: 0, affordSubs};
 
   // Sort objections by priority
   const sortedObjs = [...objKeys].sort((a, b) => (cpObjDB[a]?.priority ?? 99) - (cpObjDB[b]?.priority ?? 99));
@@ -3110,9 +3211,11 @@ function cpRenderResults(objKeys, temp, name, traits, fullConvoText, stage) {
   const dontSayEl = document.getElementById('cpDontSay');
   const allDonts = [];
   sortedObjs.forEach(k => { if (cpDontSayDB[k]) allDonts.push(...cpDontSayDB[k]); });
+  // Add divorced-specific warning
+  if (traits.includes('divorced')) allDonts.push("⚠️ DON'T say anything that sounds like pity. Frame it as empowerment and a fresh start, not sympathy.");
   if (allDonts.length > 0) {
     dontSayEl.style.display = 'block';
-    dontSayEl.innerHTML = '<h4>⚠️ DON\'T SAY:</h4><ul>' + [...new Set(allDonts)].slice(0,5).map(d => '<li>' + d + '</li>').join('') + '</ul>';
+    dontSayEl.innerHTML = '<h4>⚠️ DON\'T SAY:</h4><ul>' + [...new Set(allDonts)].slice(0,7).map(d => '<li>' + d + '</li>').join('') + '</ul>';
   } else {
     dontSayEl.style.display = 'none';
   }
@@ -3201,6 +3304,10 @@ function cpRenderResults(objKeys, temp, name, traits, fullConvoText, stage) {
     document.getElementById('cpStickyCopy').classList.add('visible');
   }
 
+  // Restore original affordability scripts after rendering
+  cpObjDB.affordability.scripts = origAffordScripts;
+  cpObjDB.affordability.killShot = origAffordKillShot;
+
   // Auto-scroll to results
   setTimeout(() => {
     results.scrollIntoView({behavior:'smooth',block:'start'});
@@ -3219,6 +3326,10 @@ function cpQuickSelect() {
   const stageEl = document.querySelector('#cpQsStage .cp-stage-option.selected');
   const stage = stageEl ? stageEl.dataset.val : 'middle';
 
+  // Read affordability sub-options
+  const affordSubs = [];
+  document.querySelectorAll('#cpAffordSubs .cp-qs-suboption.selected').forEach(o => affordSubs.push(o.dataset.val));
+
   if (!objKeys.length && temp === 'lukewarm') {
     showToast('Select at least one objection or temperature');
     return;
@@ -3229,7 +3340,7 @@ function cpQuickSelect() {
     else objKeys.push('think');
   }
 
-  cpRenderResults(objKeys, temp, name, traits, null, stage);
+  cpRenderResults(objKeys, temp, name, traits, null, stage, affordSubs);
 }
 
 // --- Single Message Handler ---
@@ -3329,6 +3440,7 @@ function cpGuessTraits(text) {
   if (/\b(lost money|lost \$|lost [\d,]+|been burned|tried before|other program|got scammed)\b/.test(lower)) traits.push('lost_money');
   if (/\b(she|her|girl|woman|mom|mother|lady)\b/.test(lower) && !/\b(he|his|man|guy|dude|bro)\b/.test(lower)) traits.push('female');
   else if (/\b(he|his|man|guy|dude|bro|father)\b/.test(lower)) traits.push('male');
+  if (/\b(divorce|divorced|separation|separated|ex.wife|ex.husband|split up|fresh start)\b/.test(lower)) traits.push('divorced');
   return traits;
 }
 
@@ -3348,10 +3460,25 @@ function cpCopyMain() {
 function cpShuffle() {
   const s = cpShuffleState;
   s.variation = (s.variation + 1) % 4;
+
+  // Temporarily swap affordability scripts if needed
+  const origScripts = cpObjDB.affordability.scripts;
+  const origKS = cpObjDB.affordability.killShot;
+  const subs = s.affordSubs || [];
+  if (s.objKeys.includes('affordability') && subs.includes('already_offered_1100')) {
+    if (subs.includes('outside_usa')) {
+      cpObjDB.affordability.scripts = cpObjDB.affordability.scriptsSplitit;
+      cpObjDB.affordability.killShot = cpObjDB.affordability.killShotSplitit;
+    } else {
+      cpObjDB.affordability.scripts = cpObjDB.affordability.scriptsPayvaUSA;
+      cpObjDB.affordability.killShot = cpObjDB.affordability.killShotPayvaUSA;
+    }
+  }
+
   const sortedObjs = [...s.objKeys].sort((a, b) => (cpObjDB[a]?.priority ?? 99) - (cpObjDB[b]?.priority ?? 99));
   const primaryObj = sortedObjs[0] || 'trust';
   const db = cpObjDB[primaryObj];
-  if (!db) return;
+  if (!db) { cpObjDB.affordability.scripts = origScripts; cpObjDB.affordability.killShot = origKS; return; }
 
   const stageConf = cpStageTones[s.stage] || cpStageTones.middle;
   const greeting = stageConf.prefix(s.name || '');
@@ -3381,6 +3508,10 @@ function cpShuffle() {
     newText += '\n\n' + db.killShot;
   }
 
+  // Restore original affordability scripts
+  cpObjDB.affordability.scripts = origScripts;
+  cpObjDB.affordability.killShot = origKS;
+
   document.getElementById('cpMsgText').textContent = newText;
   const btn = document.getElementById('cpShuffleBtn');
   btn.textContent = '🔄 Shuffled! (v' + (s.variation + 1) + '/4)';
@@ -3393,10 +3524,17 @@ function cpQAPaymentPlan() {
   panel.classList.add('active');
   const n = cpShuffleState.name || '[name]';
   panel.innerHTML = `
-    <h4 style="color:var(--gold);margin-bottom:12px">💳 Payment Plan Script</h4>
-    <div class="script-block"><div class="script-label">In-House Financing</div><div class="script-text">"${n}, if finance is the only thing holding you back, the BEST I can do is 3 monthly payments of $1,100. First payment gives you FULL access — Discord, KCU community, modules, text signals, and daily live trading 🔥 I am willing to bet on you if you are willing to bet on yourself 💪"</div><button class="copy-btn" style="opacity:1" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
-    <div class="script-block"><div class="script-label">Payva Option</div><div class="script-text">"We also have Payva — it's like Afterpay for education. Splits your payment into smaller chunks automatically. No interest, no hassle. Want me to send you the Payva link?"</div><button class="copy-btn" style="opacity:1" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
-    <div class="script-block"><div class="script-label">Frame Reversal</div><div class="script-text">"We can take the risk and do inhouse financing. 3 monthly payments of $1,100. Wanna give that a shot?"</div><button class="copy-btn" style="opacity:1" onclick="event.stopPropagation();copyText(this)">Copy</button></div>`;
+    <h4 style="color:var(--gold);margin-bottom:12px">💳 Payment Plan Scripts</h4>
+    <div style="font-size:.82rem;color:var(--text3);margin-bottom:16px;padding:8px 12px;background:rgba(212,168,67,.04);border-radius:8px;border-left:3px solid var(--gold)">
+      <strong>Hierarchy:</strong> Always offer $1,100 × 3 FIRST → If still stuck: USA → Payva/PayPal Later | International → Splitit
+    </div>
+    <div class="script-block"><div class="script-label">① In-House Financing (OFFER FIRST)</div><div class="script-text">"${n}, if finance is the only thing holding you back, the BEST I can do is 3 monthly payments of $1,100. First payment gives you FULL access — Discord, KCU community, modules, text signals, and daily live trading 🔥 I am willing to bet on you if you are willing to bet on yourself 💪"</div><button class="copy-btn" style="opacity:1" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+    <div class="script-block"><div class="script-label">② Payva / PayPal Later (USA — if $1,100 × 3 still too much)</div><div class="script-text">"I hear you — the 3 payments is already the best we can do in-house. But there IS another option. We work with Payva and PayPal Pay Later — they let you break it down into even smaller payments. Way more manageable. Want me to send you that link?"</div><button class="copy-btn" style="opacity:1" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+    <div class="script-block" style="border-left-color:var(--teal)"><div class="script-label" style="color:var(--teal)">② Splitit (International — if $1,100 × 3 still too much)</div><div class="script-text">"No worries at all — since you're international, we have Splitit which works worldwide. It's interest-free and lets you break the payment into smaller chunks. You get full access from day one. Want me to set that up?"</div><button class="copy-btn" style="opacity:1" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+    <div class="script-block"><div class="script-label">Frame Reversal</div><div class="script-text">"We can take the risk and do inhouse financing. 3 monthly payments of $1,100. Wanna give that a shot?"</div><button class="copy-btn" style="opacity:1" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+    <div style="margin-top:12px;padding:10px 14px;background:rgba(231,76,60,.04);border-left:3px solid var(--red);border-radius:0 8px 8px 0;font-size:.85rem;color:var(--text2)">
+      ⚠️ <strong>Don't</strong> mention interest rates for Payva/PayPal Later. <strong>Do</strong> mention Splitit is interest-free.
+    </div>`;
   panel.scrollIntoView({behavior:'smooth',block:'center'});
 }
 
@@ -3476,6 +3614,8 @@ function cpStartOver() {
   document.querySelectorAll('#cpQsObjections .cp-qs-option, #cpQsTraits .cp-qs-option').forEach(o => o.classList.remove('selected'));
   document.querySelectorAll('#cpQsTemp .cp-qs-option').forEach(o => o.classList.remove('selected'));
   document.querySelectorAll('#cpQsStage .cp-stage-option').forEach(o => o.classList.remove('selected'));
+  document.querySelectorAll('#cpAffordSubs .cp-qs-suboption').forEach(o => o.classList.remove('selected'));
+  document.getElementById('cpAffordSubs').classList.remove('visible');
   document.querySelector('#cpQsStage .cp-stage-option[data-val="opening"]').classList.add('selected');
   document.getElementById('cpLeadName').value = '';
   // Hide results
