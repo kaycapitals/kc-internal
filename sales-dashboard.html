@@ -308,6 +308,33 @@ section{padding:60px 0}
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);color:var(--green);padding:10px 20px;border-radius:var(--radius-sm);border:1px solid rgba(46,204,113,.3);font-size:.85rem;opacity:0;transition:all .3s;z-index:500;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* ===== TAB 11: THE PLAYBOOK ===== */
+.pb-progress{margin-bottom:48px}
+.pb-progress-steps{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;padding:0 8px}
+.pb-progress-step{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:opacity .3s;opacity:.5}
+.pb-progress-step.active{opacity:1}
+.pb-step-num{width:36px;height:36px;border-radius:50%;background:var(--bg3);border:2px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;color:var(--text3);transition:all .3s}
+.pb-progress-step.active .pb-step-num{background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-color:var(--gold);color:var(--bg)}
+.pb-step-label{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.pb-progress-step.active .pb-step-label{color:var(--gold)}
+.pb-progress-line{width:40px;height:2px;background:var(--glass-border);flex-shrink:0;margin-bottom:18px}
+
+.pb-step{overflow:hidden;margin-bottom:16px;transition:all .3s;border-left:4px solid transparent}
+.pb-step.open{border-left-color:var(--gold)}
+.pb-step-header{display:flex;align-items:center;gap:16px;padding:20px 24px;cursor:pointer;user-select:none;-webkit-user-select:none}
+.pb-step-number{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,rgba(212,168,67,.15),rgba(212,168,67,.05));border:2px solid rgba(212,168,67,.3);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.3rem;color:var(--gold);flex-shrink:0}
+.pb-step-info{flex:1}
+.pb-step-info h3{font-size:1.1rem;margin-bottom:2px;letter-spacing:.04em}
+.pb-step-info p{color:var(--text2);font-size:.88rem}
+.pb-step .expand-icon{flex-shrink:0}
+.pb-step.open .expand-icon{transform:rotate(180deg)}
+.pb-step-body{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.25,.46,.45,.94);padding:0 24px}
+.pb-step.open .pb-step-body{max-height:5000px;padding:0 24px 24px}
+
+.pb-card{margin:12px 0;padding:16px;border-radius:var(--radius-sm)}
+.pb-card-title{font-size:.95rem;font-weight:700;margin-bottom:12px;color:var(--text)}
+.pb-protip{margin:16px 0;padding:14px 18px;background:linear-gradient(135deg,rgba(212,168,67,.08),rgba(212,168,67,.02));border:1px solid rgba(212,168,67,.25);border-radius:var(--radius-sm);font-size:.9rem;color:var(--gold-light);line-height:1.6}
+
 /* FOOTER */
 footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;border-top:1px solid var(--glass-border);position:relative;z-index:1}
 
@@ -329,6 +356,12 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
   .objection-content{padding:0 16px 16px}
   .funnel-step{padding:12px 16px}
   .funnel-num{font-size:1.1rem;min-width:60px}
+  .pb-progress-line{width:20px}
+  .pb-step-header{padding:16px}
+  .pb-step.open .pb-step-body{padding:0 16px 16px}
+  .pb-step-number{width:40px;height:40px;font-size:1.1rem}
+  .pb-step-num{width:30px;height:30px;font-size:.75rem}
+  .pb-step-label{font-size:.6rem}
 }
 @media(max-width:600px){
   .counters{grid-template-columns:repeat(2,1fr)}
@@ -880,6 +913,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
       <button class="tab-btn" data-tab="testimonials">🎯 Testimonials</button>
       <button class="tab-btn" data-tab="copilot">🤖 AI Co-Pilot</button>
       <button class="tab-btn" data-tab="gains">📸 Gains</button>
+      <button class="tab-btn" data-tab="playbook">🗺️ The Playbook</button>
     </div>
   </div>
 </div>
@@ -953,7 +987,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
 <!-- ==================== TAB 2: OBJECTION PLAYBOOK ==================== -->
 <div class="tab-content" id="tab-objections">
 <div class="container">
-  <div class="section-title reveal"><h2>Objection Handling Playbook</h2><p>All 13 objections with exact scripts, ordered by frequency</p></div>
+  <div class="section-title reveal"><h2>Objection Handling Playbook</h2><p>All 14 objections with exact scripts, ordered by frequency</p></div>
   <div class="search-bar reveal">
     <span class="search-icon">🔍</span>
     <input type="text" class="search-input" id="objectionSearch" placeholder="Search objections... (price, trust, fear, payment...)">
@@ -1607,6 +1641,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
             <label class="cp-qs-option" data-val="friend"><span class="cp-qs-check"></span><span class="cp-qs-emoji">👥</span><span class="cp-qs-text">Friend told them not to</span></label>
             <label class="cp-qs-option" data-val="fear"><span class="cp-qs-check"></span><span class="cp-qs-emoji">😰</span><span class="cp-qs-text">Scared / afraid of losing money</span></label>
             <label class="cp-qs-option" data-val="technical"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🔧</span><span class="cp-qs-text">Not tech-savvy / platform confused</span></label>
+            <label class="cp-qs-option" data-val="trial"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🆓</span><span class="cp-qs-text">Asked for a trial / free access</span></label>
           </div>
         </div>
 
@@ -1853,6 +1888,242 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
 <div class="gs-lightbox" id="gsLightbox" onclick="if(event.target===this)this.classList.remove('open')">
   <button class="gs-lightbox-close" onclick="document.getElementById('gsLightbox').classList.remove('open')">&times;</button>
   <img id="gsLightboxImg" src="" alt="Gain Screenshot">
+</div>
+
+<!-- ==================== TAB 11: THE PLAYBOOK ==================== -->
+<div class="tab-content" id="tab-playbook">
+<div class="container">
+  <section>
+    <div class="section-title reveal"><h2>🗺️ The Playbook</h2><p>The complete conversation flow — from first message to payment. Follow every step.</p></div>
+
+    <!-- Progress Indicator -->
+    <div class="pb-progress reveal" id="pbProgress">
+      <div class="pb-progress-steps">
+        <div class="pb-progress-step active" data-step="1"><span class="pb-step-num">1</span><span class="pb-step-label">Open</span></div>
+        <div class="pb-progress-line"></div>
+        <div class="pb-progress-step" data-step="2"><span class="pb-step-num">2</span><span class="pb-step-label">Qualify</span></div>
+        <div class="pb-progress-line"></div>
+        <div class="pb-progress-step" data-step="3"><span class="pb-step-num">3</span><span class="pb-step-label">Value</span></div>
+        <div class="pb-progress-line"></div>
+        <div class="pb-progress-step" data-step="4"><span class="pb-step-num">4</span><span class="pb-step-label">Offer</span></div>
+        <div class="pb-progress-line"></div>
+        <div class="pb-progress-step" data-step="5"><span class="pb-step-num">5</span><span class="pb-step-label">Objections</span></div>
+        <div class="pb-progress-line"></div>
+        <div class="pb-progress-step" data-step="6"><span class="pb-step-num">6</span><span class="pb-step-label">Close</span></div>
+        <div class="pb-progress-line"></div>
+        <div class="pb-progress-step" data-step="7"><span class="pb-step-num">7</span><span class="pb-step-label">Onboard</span></div>
+      </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="pb-step glass reveal" data-pb-step="1">
+      <div class="pb-step-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="pb-step-number">1</div>
+        <div class="pb-step-info">
+          <h3>THE OPENER</h3>
+          <p>Based on how the lead came in — match the energy to the source</p>
+        </div>
+        <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="pb-step-body">
+        <!-- DM'd keyword -->
+        <div class="pb-card glass-gold">
+          <div class="pb-card-title">📱 DM'd keyword from story (e.g. 'mentor')</div>
+          <div class="script-block"><div class="script-label">OPENER 1</div><div class="script-text">"Hey [name]! Thanks for reaching out 🙌 I see you're interested in learning about trading — what got you curious?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">OPENER 2</div><div class="script-text">"Hey! Glad you messaged. Quick question before I tell you more — have you traded before or would this be completely new for you?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">OPENER 3</div><div class="script-text">"What's up [name]! Love that you took the first step. What's your situation right now — working a 9-5 and looking for something more?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+        <!-- Clicked ad -->
+        <div class="pb-card glass-gold">
+          <div class="pb-card-title">📢 Clicked an ad</div>
+          <div class="script-block"><div class="script-label">OPENER 1</div><div class="script-text">"Hey [name]! I saw you checked out our page — what caught your eye?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">OPENER 2</div><div class="script-text">"What's good [name]! Thanks for showing interest. Quick question — what's your trading experience like right now?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">OPENER 3</div><div class="script-text">"Hey! Glad the ad resonated with you. What's your #1 goal when it comes to trading?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+        <!-- Replied to reel/story -->
+        <div class="pb-card glass-gold">
+          <div class="pb-card-title">🎬 Replied to a reel / story</div>
+          <div class="script-block"><div class="script-label">OPENER 1</div><div class="script-text">"Appreciate you watching! What part stood out to you?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">OPENER 2</div><div class="script-text">"Thanks for the reply! Are you currently trading or thinking about getting started?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">OPENER 3</div><div class="script-text">"Love the engagement! Have you been following for a while or just found us?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+        <!-- Cold follow -->
+        <div class="pb-card glass-gold">
+          <div class="pb-card-title">❄️ Cold follow who engaged (liked posts, watched stories)</div>
+          <div class="script-block"><div class="script-label">OPENER 1</div><div class="script-text">"Hey [name]! I noticed you've been checking out the content — are you into trading or just exploring?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">OPENER 2</div><div class="script-text">"What's up! I see you've been active on our page. Are you trading right now or looking to learn?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="pb-step glass reveal" data-pb-step="2">
+      <div class="pb-step-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="pb-step-number">2</div>
+        <div class="pb-step-info">
+          <h3>QUALIFY THE LEAD</h3>
+          <p>Figure out if they're serious and what their situation is</p>
+        </div>
+        <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="pb-step-body">
+        <div class="pb-card">
+          <div class="pb-card-title">🎯 Key Qualifying Questions</div>
+          <div class="script-block"><div class="script-label">SITUATION</div><div class="script-text">"What's your current situation — working, studying, or something else?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">EXPERIENCE</div><div class="script-text">"Have you traded before? If so, how long?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">MOTIVATION</div><div class="script-text">"What got you interested in trading specifically?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">GOALS</div><div class="script-text">"Where do you want to be in 6 months financially?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">RESEARCH</div><div class="script-text">"Have you looked into any other programs or courses?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+        <div class="pb-protip">💡 <strong>Pro Tip:</strong> The more they talk about themselves, the more invested they become. Ask questions. Don't pitch yet.</div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="pb-step glass reveal" data-pb-step="3">
+      <div class="pb-step-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="pb-step-number">3</div>
+        <div class="pb-step-info">
+          <h3>BUILD VALUE</h3>
+          <p>Make them see what's possible BEFORE talking price</p>
+        </div>
+        <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="pb-step-body">
+        <div class="pb-card glass-gold">
+          <div class="pb-card-title">🟢 If They're a Beginner</div>
+          <div class="script-block"><div class="script-label">VALUE SCRIPT</div><div class="script-text">"The cool thing is you don't need any experience. Our modules take you from zero to executing trades with confidence. And you get daily live trading with Kay — not pre-recorded videos. Real-time, real money."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+        <div class="pb-card glass-gold">
+          <div class="pb-card-title">🔵 If They're Experienced</div>
+          <div class="script-block"><div class="script-label">VALUE SCRIPT</div><div class="script-text">"You've probably seen a lot of BS programs. What makes KCU different is Kay trades live every single day — wins AND losses. Plus the community is insane. 1,100+ students, daily Discord gains, weekly Zoom coaching."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+        <div class="pb-card glass-gold">
+          <div class="pb-card-title">🟠 If They're a 9-5 Worker</div>
+          <div class="script-block"><div class="script-label">VALUE SCRIPT</div><div class="script-text">"Imagine waking up, spending 1-2 hours on your phone, and making what you make in a week at your job. That's what our students do. Trading doesn't require 8 hours — it requires the right skill."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+        <div class="pb-card glass-gold">
+          <div class="pb-card-title">🔴 If They've Lost Money Before</div>
+          <div class="script-block"><div class="script-label">VALUE SCRIPT</div><div class="script-text">"I hear that a lot. The reason most people lose money is they don't have a system. They're guessing. KCU gives you the exact system — entries, exits, stop losses, risk management. The stuff nobody else teaches."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="pb-step glass reveal" data-pb-step="4">
+      <div class="pb-step-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="pb-step-number">4</div>
+        <div class="pb-step-info">
+          <h3>PRESENT THE OFFER</h3>
+          <p>Transition naturally from value to the program</p>
+        </div>
+        <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="pb-step-body">
+        <div class="pb-card">
+          <div class="pb-card-title">🔄 Transition Scripts</div>
+          <div class="script-block"><div class="script-label">TRANSITION 1</div><div class="script-text">"Based on what you're telling me, I genuinely think KCU would be perfect for you. Want me to break down what's included?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">TRANSITION 2</div><div class="script-text">"This is exactly why the program exists. Let me show you what you'd get access to..."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+        <div class="pb-card glass-gold">
+          <div class="pb-card-title">📦 What's Included (Copy & Send)</div>
+          <div class="script-block"><div class="script-label">FULL OFFER BREAKDOWN</div><div class="script-text">"Here's what you get with KCU:\n✅ 20+ in-depth modules (from zero to advanced)\n✅ Daily live trading sessions with Kay\n✅ Private Discord community (1,100+ members)\n✅ Weekly Zoom coaching calls\n✅ Text signals\n✅ Direct access to the team\n✅ 6 months of mentorship\n\nThe investment is $2,984 or 3 monthly payments of $1,100."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="pb-step glass reveal" data-pb-step="5">
+      <div class="pb-step-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="pb-step-number">5</div>
+        <div class="pb-step-info">
+          <h3>HANDLE OBJECTIONS</h3>
+          <p>They'll push back — that's normal. Here's how to handle it.</p>
+        </div>
+        <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="pb-step-body">
+        <div class="pb-card glass-gold" style="text-align:center;padding:24px">
+          <div style="font-size:1.5rem;margin-bottom:8px">🤖</div>
+          <div style="font-size:1.1rem;font-weight:700;margin-bottom:8px">Use the AI Co-Pilot for instant objection handling</div>
+          <p style="color:var(--text2);font-size:.9rem;margin-bottom:16px">Select their exact objection and get a tailored response in seconds</p>
+          <button class="copilot-analyze-btn" style="display:inline-block;width:auto;padding:12px 32px" onclick="switchTab('copilot')">👉 Open AI Co-Pilot</button>
+        </div>
+        <div class="pb-card">
+          <div class="pb-card-title">⚡ Quick Reference — Top 5 Objections</div>
+          <div class="script-block"><div class="script-label">💰 PRICE</div><div class="script-text">"You'll learn a skill to make a grand a day for the rest of your life. Price is what you pay now. Cost is what you miss out on."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">🤔 NEED TO THINK</div><div class="script-text">"What specifically do you need to think about? Let me help you make a clear decision right now."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">😓 CAN'T AFFORD</div><div class="script-text">"$1,100 × 3 monthly payments. First payment gives you FULL access — everything from day one 🔥"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">🛡️ TRUST</div><div class="script-text">"Check our results page — real screenshots from real students. No fake testimonials, just actual trading P&Ls."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">😰 FEAR</div><div class="script-text">"What's the worst case? You learn risk management. Best case? You change your entire life."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="pb-step glass reveal" data-pb-step="6">
+      <div class="pb-step-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="pb-step-number">6</div>
+        <div class="pb-step-info">
+          <h3>CLOSE</h3>
+          <p>Closing scripts based on lead temperature</p>
+        </div>
+        <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="pb-step-body">
+        <div class="pb-card glass-gold">
+          <div class="pb-card-title">🔥🔥🔥 Hot Lead</div>
+          <div class="script-block"><div class="script-label">CLOSE 1</div><div class="script-text">"Let's get you started 🔥 I'll send you the enrollment link right now."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">CLOSE 2</div><div class="script-text">"You're ready. Here's the link — first payment gets you instant access to everything."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+        <div class="pb-card glass-gold">
+          <div class="pb-card-title">🔥🔥 Warm Lead</div>
+          <div class="script-block"><div class="script-label">CLOSE 1</div><div class="script-text">"I don't want you to miss out. We only take a limited number per intake. Want me to send the link?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">CLOSE 2</div><div class="script-text">"I am willing to bet on you if you are willing to bet on yourself 💪 Ready to lock in your spot?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+        <div class="pb-card glass-gold">
+          <div class="pb-card-title">🔥 Lukewarm Lead</div>
+          <div class="script-block"><div class="script-label">CLOSE 1</div><div class="script-text">"Tell you what — watch the VSL, see what Kay has to say, and let me know. I'll follow up tomorrow."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">CLOSE 2</div><div class="script-text">"I know it's a big decision. But every day you're not learning is money left on the table. Want to jump on a quick call?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="pb-step glass reveal" data-pb-step="7">
+      <div class="pb-step-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="pb-step-number">7</div>
+        <div class="pb-step-info">
+          <h3>POST-CLOSE / ONBOARDING</h3>
+          <p>What to say AFTER they pay — the first week matters most</p>
+        </div>
+        <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="pb-step-body">
+        <div class="pb-card glass-gold">
+          <div class="pb-card-title">⚡ Immediate (Within 1 Hour)</div>
+          <div class="script-block"><div class="script-label">WELCOME 1</div><div class="script-text">"Welcome to the team!! 🎉🔥 You just made one of the best decisions of your life. Here's what happens next..."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">WELCOME 2</div><div class="script-text">"Your access is live! First thing — start with Module 1. Don't skip ahead. Trust the process."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+        <div class="pb-card glass-gold">
+          <div class="pb-card-title">📅 Day 1 Check-in</div>
+          <div class="script-block"><div class="script-label">DAY 1</div><div class="script-text">"Hey [name]! How's the first day going? Have you started Module 1 yet?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+        <div class="pb-card glass-gold">
+          <div class="pb-card-title">📅 Week 1 Check-in</div>
+          <div class="script-block"><div class="script-label">WEEK 1 — CHECK</div><div class="script-text">"It's been a week! How are you finding the modules? Any questions?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">WEEK 1 — TIP</div><div class="script-text">"Pro tip: join the daily Zoom sessions even if you're just watching. You'll learn faster."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+        <div class="pb-card">
+          <div class="pb-card-title">⚙️ Setting Expectations</div>
+          <div class="script-block"><div class="script-label">EXPECTATION 1</div><div class="script-text">"Quick heads up — the first few weeks are about learning, not earning. Don't rush to trade live. The money comes after the knowledge."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">EXPECTATION 2</div><div class="script-text">"Some students see red days early on. That's normal. Stick to the system and it compounds."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
 </div>
 
 <!-- QUICK FIND -->
@@ -2132,6 +2403,22 @@ const objections=[
     redFlags:['They lack basic computer literacy to a point where online trading is genuinely not feasible yet'],
     donts:['Don\'t assume they\'re tech-savvy.','Don\'t use platform jargon (TOS, margin, delta) before they\'re enrolled.','Don\'t brush off their concern — offer specific help.'],
     timing:'When they express confusion about platforms or setup. Reassure and offer to walk through it personally.'
+  },
+  {
+    emoji:'🆓',name:'Trial / Free Access',convos:890,convosStr:'890',rate:4.0,rateClass:'low',badge:'LOW — 4.0%',badgeClass:'badge-red',difficulty:65,
+    setup:['"Can I try it first?"','"Do you offer a free trial?"','"Is there a money-back guarantee?"','"Can I get a sample before I commit?"'],
+    read:'They want proof before commitment — which seems logical, but a trial doesn\'t represent the real program. They need to understand that trading is a 6-month skill, not a week-long test drive.',
+    plays:[
+      {label:'False Expectations',text:'I get why you\'d want a trial — but here\'s the thing. If the market is insane that week, you\'ll think every week is like that. False expectations. And if the market is choppy or red? You\'ll think we don\'t know how to trade. Either way, a trial doesn\'t show you the real picture. The program is designed for 6 months because that\'s how long it takes to build the skill properly.'},
+      {label:'Commitment Angle',text:'We don\'t do trials because trading isn\'t something you try for a week. It\'s a skill that takes commitment. The students who succeed are the ones who go all in — not the ones who dip their toe in. That\'s literally the first lesson: commitment beats curiosity.'},
+      {label:'Value Flip',text:'Think about it — if I gave you a free week, what would you actually learn? You\'d barely finish the first few modules. The real transformation happens in months 2-4 when the psychology training kicks in. A trial would give you 5% of the picture and you\'d make a decision based on that. That\'s not fair to you or to us.'},
+      {label:'Social Proof',text:'Nobody who\'s actually in the program has ever said \'I wish I tried it first.\' They all say \'I wish I started sooner.\' Check out what our students say — they paid and within days they knew it was worth double.'}
+    ],
+    followUp:'"I totally get wanting to be sure. Instead of a trial, let me send you real results from students who started just like you. That\'ll give you a much better picture than a one-week sample ever could."',
+    killShot:'"We don\'t offer trials because we know what we have. And the students who are serious — the ones who actually make money — they didn\'t need a trial. They needed a decision. Which one are you?"',
+    redFlags:['They insist on a free trial after you\'ve explained why — they\'re not serious','They mention "money back guarantee" repeatedly — commitment isn\'t there','They want to try multiple programs to compare — tire-kicker behavior'],
+    donts:['DON\'T say "we don\'t do free trials" and leave it there — always explain WHY.','NEVER make them feel stupid for asking — it\'s a reasonable question.','Don\'t get defensive — redirect to value and social proof.'],
+    timing:'Address after trust and value have been established. Trial askers convert at 4.0% — low, but the ones you convert are committed long-term.'
   }
 ];
 
@@ -2346,7 +2633,7 @@ objections.forEach(o=>{searchIndex.push({type:'Objection',name:o.emoji+' '+o.nam
 // Add scripts
 goldenScripts.forEach(s=>{searchIndex.push({type:'Script',name:'"'+s.text.substring(0,60)+'..."',sub:catLabels[s.cat],text:(s.text+' '+s.note+' '+(catLabels[s.cat]||'')).toLowerCase(),action:()=>{switchTab('scripts');setTimeout(()=>{document.querySelectorAll('.script-cat-btn').forEach(b=>b.classList.remove('active'));document.querySelector('.script-cat-btn[data-cat="all"]').classList.add('active');renderScripts('all')},100)}})});
 // Add tabs
-[{n:'Dashboard Overview',t:'dashboard'},{n:'Objection Playbook',t:'objections'},{n:'Payment Plans',t:'payment'},{n:'Where Deals Die',t:'deathpoints'},{n:'Golden Scripts',t:'scripts'},{n:'The Rules',t:'rules'}].forEach(s=>{searchIndex.push({type:'Tab',name:'📍 '+s.n,sub:'Navigate to tab',text:s.n.toLowerCase(),action:()=>switchTab(s.t)})});
+[{n:'Dashboard Overview',t:'dashboard'},{n:'Objection Playbook',t:'objections'},{n:'Payment Plans',t:'payment'},{n:'Where Deals Die',t:'deathpoints'},{n:'Golden Scripts',t:'scripts'},{n:'The Rules',t:'rules'},{n:'The Playbook',t:'playbook'}].forEach(s=>{searchIndex.push({type:'Tab',name:'📍 '+s.n,sub:'Navigate to tab',text:s.n.toLowerCase(),action:()=>switchTab(s.t)})});
 
 document.getElementById('qfInput').addEventListener('input',function(){
   const q=this.value.toLowerCase().trim();
@@ -2939,7 +3226,16 @@ const cpObjDB = {
       {label:'Simplify',text:"All you need is a phone or laptop and an internet connection. We handle the rest. The platform setup is part of the onboarding."}
     ],
     killShot:"If setting up a phone app was the only thing between you and a life-changing skill, wouldn't you want someone to walk you through it? That's exactly what we do.",
-    note:'16.4% conversion. Quick reassurance + offer to walk through it personally.'}
+    note:'16.4% conversion. Quick reassurance + offer to walk through it personally.'},
+  trial: {emoji:'🆓',name:'Trial / Free Access',rate:4.0,convos:'890',priority:10,
+    scripts:[
+      {label:'False Expectations',text:"I get why you'd want a trial — but here's the thing. If the market is insane that week, you'll think every week is like that. False expectations. And if the market is choppy or red? You'll think we don't know how to trade. Either way, a trial doesn't show you the real picture. The program is designed for 6 months because that's how long it takes to build the skill properly."},
+      {label:'Commitment Angle',text:"We don't do trials because trading isn't something you try for a week. It's a skill that takes commitment. The students who succeed are the ones who go all in — not the ones who dip their toe in. That's literally the first lesson: commitment beats curiosity."},
+      {label:'Value Flip',text:"Think about it — if I gave you a free week, what would you actually learn? You'd barely finish the first few modules. The real transformation happens in months 2-4 when the psychology training kicks in. A trial would give you 5% of the picture and you'd make a decision based on that. That's not fair to you or to us."},
+      {label:'Social Proof',text:"Nobody who's actually in the program has ever said 'I wish I tried it first.' They all say 'I wish I started sooner.' Check out what our students say — they paid and within days they knew it was worth double."}
+    ],
+    killShot:"We don't offer trials because we know what we have. And the students who are serious — the ones who actually make money — they didn't need a trial. They needed a decision. Which one are you?",
+    note:"4.0% conversion — trial askers are often tire-kickers, but the ones you convert are committed. Address after trust/value is established. ⚠️ DON'T say 'we don't do free trials' and leave it there — always explain WHY. NEVER make them feel stupid for asking."}
 };
 
 // --- Objection Keyword Map (for text analysis modes) ---
@@ -2958,7 +3254,8 @@ const cpKeywordMap = {
   trust: ['how do i know','prove it','show me','results','testimonials','guarantee','legit','legitimate','real','verified','proof'],
   friend: ['friend told me','friend said','someone told me','people say','warned me','told me not to'],
   fear: ['scared','afraid','worried','risk','lose money','what if','nervous','anxiety','terrified','fear','risky','dangerous'],
-  technical: ['tech','computer','platform','software','app','download','setup','technical','how does it work','what do i need']
+  technical: ['tech','computer','platform','software','app','download','setup','technical','how does it work','what do i need'],
+  trial: ['trial','free trial','try it','test it','sample','free access','try before','money back','refund','guarantee','try for free','demo','test drive']
 };
 
 var cpCurrentProofSent = [];
@@ -4413,6 +4710,48 @@ gsScenarios.forEach(sc=>{
 
 })();
 // [End Tab 10 Gain Screenshots]
+
+// ===== TAB 11: THE PLAYBOOK — INTERACTIVITY =====
+(function(){
+  // Progress bar step clicking
+  document.querySelectorAll('.pb-progress-step').forEach(step => {
+    step.addEventListener('click', function(){
+      const stepNum = this.dataset.step;
+      // Highlight progress
+      document.querySelectorAll('.pb-progress-step').forEach(s => {
+        s.classList.toggle('active', parseInt(s.dataset.step) <= parseInt(stepNum));
+      });
+      // Open corresponding step card
+      const target = document.querySelector('.pb-step[data-pb-step="'+stepNum+'"]');
+      if (target) {
+        target.classList.add('open');
+        target.scrollIntoView({behavior:'smooth', block:'center'});
+      }
+    });
+  });
+  // When a step card is toggled open, update progress
+  document.querySelectorAll('.pb-step-header').forEach(header => {
+    header.addEventListener('click', function(){
+      const step = this.parentElement;
+      const stepNum = parseInt(step.dataset.pbStep);
+      setTimeout(() => {
+        if (step.classList.contains('open')) {
+          document.querySelectorAll('.pb-progress-step').forEach(s => {
+            s.classList.toggle('active', parseInt(s.dataset.step) <= stepNum);
+          });
+        }
+      }, 50);
+    });
+  });
+
+  // Add playbook to global search
+  searchIndex.push({type:'Tab',name:'📍 The Playbook — Conversation Flow',sub:'Navigate to tab',text:'playbook conversation flow opener qualify value offer close onboarding steps',action:()=>switchTab('playbook')});
+  ['Opener','Qualify the Lead','Build Value','Present the Offer','Handle Objections','Close','Post-Close / Onboarding'].forEach((name, i) => {
+    searchIndex.push({type:'Playbook',name:'🗺️ Step '+(i+1)+': '+name,sub:'The Playbook — conversation flow',
+      text:('playbook step '+(i+1)+' '+name).toLowerCase(),
+      action:()=>{switchTab('playbook');setTimeout(()=>{const el=document.querySelector('.pb-step[data-pb-step="'+(i+1)+'"]');if(el){el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'center'})}},150)}});
+  });
+})();
 
 // ===== RE-OBSERVE ON LOAD =====
 setTimeout(()=>{document.querySelectorAll('.reveal:not(.visible)').forEach(el=>observer.observe(el))},100);
