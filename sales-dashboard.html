@@ -497,6 +497,141 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
   .tw-categories{grid-template-columns:1fr}
 }
 
+/* ===== TAB 9: AI CO-PILOT ===== */
+.copilot-input-section{max-width:900px;margin:0 auto}
+
+/* Mode Tabs */
+.cp-mode-tabs{display:flex;gap:0;margin-bottom:24px;border-bottom:2px solid var(--glass-border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.cp-mode-tabs::-webkit-scrollbar{display:none}
+.cp-mode-tab{padding:14px 20px;font-size:.88rem;font-weight:600;color:var(--text3);background:none;border:none;cursor:pointer;white-space:nowrap;position:relative;transition:color .3s}
+.cp-mode-tab:hover{color:var(--text2)}
+.cp-mode-tab.active{color:var(--gold)}
+.cp-mode-tab.active::after{content:'';position:absolute;bottom:-2px;left:4px;right:4px;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:3px 3px 0 0}
+.cp-mode-tab .cp-mode-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.65rem;font-weight:700;background:rgba(212,168,67,.15);color:var(--gold);margin-left:6px;vertical-align:middle}
+.cp-mode-panel{display:none}
+.cp-mode-panel.active{display:block}
+
+/* Quick-Select (mobile-first) */
+.cp-qs-group{margin-bottom:28px}
+.cp-qs-group-title{font-size:1rem;font-weight:700;color:var(--gold-light);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.cp-qs-grid{display:grid;grid-template-columns:1fr;gap:8px}
+.cp-qs-option{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--glass);border:2px solid var(--glass-border);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;min-height:52px}
+.cp-qs-option:hover{border-color:rgba(212,168,67,.25);background:rgba(212,168,67,.04)}
+.cp-qs-option.selected{border-color:var(--gold);background:rgba(212,168,67,.08);box-shadow:0 0 15px rgba(212,168,67,.1)}
+.cp-qs-option .cp-qs-check{width:24px;height:24px;border-radius:6px;border:2px solid var(--text3);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:.85rem}
+.cp-qs-option.selected .cp-qs-check{background:var(--gold);border-color:var(--gold);color:var(--bg)}
+.cp-qs-option .cp-qs-text{font-size:.95rem;color:var(--text);flex:1}
+.cp-qs-option .cp-qs-emoji{font-size:1.1rem;flex-shrink:0}
+
+/* Radio variant for temperature */
+.cp-qs-option.radio .cp-qs-check{border-radius:50%}
+.cp-qs-option.radio.selected .cp-qs-check{background:var(--gold);border-color:var(--gold)}
+
+/* Lead name input */
+.cp-qs-name-input{width:100%;padding:14px 18px;background:var(--bg2);border:2px solid var(--glass-border);border-radius:var(--radius-sm);color:var(--text);font-size:1rem;outline:none;transition:border-color .3s;min-height:52px}
+.cp-qs-name-input:focus{border-color:var(--gold)}
+.cp-qs-name-input::placeholder{color:var(--text3)}
+
+.copilot-analyze-btn{display:block;width:100%;padding:20px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--bg);border:none;border-radius:var(--radius);font-size:1.2rem;font-weight:800;cursor:pointer;transition:transform .2s,box-shadow .2s;letter-spacing:.03em;margin-top:20px;min-height:60px}
+.copilot-analyze-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(212,168,67,.35)}
+.copilot-analyze-btn:active{transform:scale(.98)}
+.copilot-analyze-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* Single message mode */
+.copilot-single-input{width:100%;padding:16px 20px;background:var(--bg2);border:2px solid var(--glass-border);border-radius:var(--radius);color:var(--text);font-size:1rem;outline:none;transition:border-color .3s;min-height:52px}
+.copilot-single-input:focus{border-color:var(--gold)}
+.copilot-single-input::placeholder{color:var(--text3)}
+.copilot-single-results{margin-top:20px}
+
+/* Screenshot upload */
+.copilot-drop-zone{border:2px dashed rgba(212,168,67,.3);border-radius:var(--radius);padding:40px 24px;text-align:center;cursor:pointer;transition:all .3s;position:relative}
+.copilot-drop-zone:hover,.copilot-drop-zone.dragover{border-color:var(--gold);background:rgba(212,168,67,.04)}
+.copilot-drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.copilot-drop-zone .drop-icon{font-size:2.5rem;margin-bottom:8px;display:block}
+.copilot-drop-zone .drop-text{color:var(--text2);font-size:.95rem}
+.copilot-drop-zone .drop-sub{color:var(--text3);font-size:.78rem;margin-top:6px;opacity:.7}
+.copilot-ocr-loading{display:none;text-align:center;padding:24px;color:var(--gold)}
+.copilot-ocr-loading.active{display:block}
+.copilot-ocr-spinner{display:inline-block;width:24px;height:24px;border:3px solid rgba(212,168,67,.2);border-top-color:var(--gold);border-radius:50%;animation:cpspin 1s linear infinite;margin-right:10px;vertical-align:middle}
+@keyframes cpspin{to{transform:rotate(360deg)}}
+
+/* Full convo textarea */
+.copilot-textarea{width:100%;min-height:250px;padding:20px;background:var(--bg2);border:2px solid var(--glass-border);border-radius:var(--radius);color:var(--text);font-family:inherit;font-size:.95rem;line-height:1.7;resize:vertical;outline:none;transition:border-color .3s}
+.copilot-textarea:focus{border-color:var(--gold)}
+.copilot-textarea::placeholder{color:var(--text3)}
+.copilot-instructions{color:var(--text3);font-size:.85rem;margin-bottom:12px;padding-left:4px}
+
+/* Mobile: 2-col for lead traits */
+@media(min-width:500px){.cp-qs-grid.two-col{grid-template-columns:1fr 1fr}}
+@media(min-width:768px){.cp-qs-grid.two-col{grid-template-columns:repeat(3,1fr)}}
+
+/* Temperature Gauge */
+.cp-temp-gauge{padding:28px;text-align:center;margin-bottom:24px}
+.cp-temp-bar{height:16px;border-radius:8px;background:linear-gradient(90deg,#4a4a6a,#3498DB,#2ECC71,#F1C40F,#E67E22,#E74C3C);margin:20px auto;max-width:600px;position:relative;overflow:visible}
+.cp-temp-marker{position:absolute;top:-6px;width:28px;height:28px;background:var(--gold);border:3px solid var(--bg);border-radius:50%;transform:translateX(-50%);transition:left .8s cubic-bezier(.25,.46,.45,.94);box-shadow:0 0 15px rgba(212,168,67,.5)}
+.cp-temp-label{font-size:1.6rem;font-weight:900;margin-bottom:4px}
+.cp-temp-desc{color:var(--text2);font-size:1rem}
+.cp-temp-score{font-size:3rem;font-weight:900;margin:12px 0}
+
+/* Analysis Results */
+.cp-results{display:none;margin-top:40px}
+.cp-results.active{display:block}
+.cp-section{margin-bottom:32px}
+.cp-section-header{font-size:1.1rem;font-weight:700;color:var(--gold-light);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+/* Objection Cards */
+.cp-objection-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.cp-obj-card{padding:20px;position:relative;overflow:hidden}
+.cp-obj-card .cp-obj-icon{font-size:1.5rem;margin-bottom:8px;display:block}
+.cp-obj-card .cp-obj-name{font-size:1rem;font-weight:700;margin-bottom:4px}
+.cp-obj-card .cp-obj-confidence{font-size:.78rem;color:var(--text3);margin-bottom:8px}
+.cp-obj-card .cp-obj-stat{font-size:.85rem;color:var(--text2);line-height:1.5}
+.cp-obj-card .cp-obj-priority{position:absolute;top:12px;right:12px;padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:700;background:rgba(212,168,67,.12);color:var(--gold);border:1px solid rgba(212,168,67,.25)}
+
+/* Next Message Card */
+.cp-next-msg{padding:28px;border:2px solid rgba(212,168,67,.3);background:linear-gradient(135deg,rgba(212,168,67,.06),rgba(212,168,67,.02))}
+.cp-next-msg .cp-msg-text{font-size:1.05rem;line-height:1.7;color:var(--text);padding:16px 20px;background:rgba(255,255,255,.03);border-radius:var(--radius-sm);margin:12px 0;white-space:pre-wrap}
+.cp-copy-big{display:block;width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--bg);border:none;border-radius:var(--radius-sm);font-size:1rem;font-weight:700;cursor:pointer;transition:transform .2s;margin-top:12px}
+.cp-copy-big:hover{transform:translateY(-2px)}
+.cp-alt-msg{margin-top:16px;padding:14px 16px;background:rgba(255,255,255,.02);border-left:3px solid var(--glass-border);border-radius:0 8px 8px 0}
+.cp-alt-msg .cp-alt-label{font-size:.78rem;color:var(--text3);margin-bottom:6px;font-weight:600}
+.cp-alt-msg .cp-alt-text{font-size:.92rem;color:var(--text2);line-height:1.6;white-space:pre-wrap}
+.cp-alt-copy{background:rgba(212,168,67,.1);border:1px solid rgba(212,168,67,.2);color:var(--gold);padding:4px 10px;border-radius:6px;font-size:.72rem;cursor:pointer;float:right;margin-top:-4px}
+
+/* Testimonial Match */
+.cp-testimonial{padding:24px}
+.cp-testimonial .cp-why-match{font-size:.88rem;color:var(--teal);margin-bottom:12px;font-weight:600}
+.cp-testimonial .cp-why-match::before{content:'🎯 '}
+
+/* Scorecard */
+.cp-scorecard{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.cp-score-item{padding:16px;text-align:center}
+.cp-score-item .cp-score-label{font-size:.82rem;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.cp-score-stars{font-size:1.3rem;margin-bottom:6px}
+.cp-score-feedback{font-size:.82rem;color:var(--text2);line-height:1.5}
+
+/* Priority List */
+.cp-priority-list{counter-reset:prio}
+.cp-priority-item{display:flex;gap:16px;align-items:flex-start;padding:16px 20px;margin:8px 0;counter-increment:prio}
+.cp-priority-item::before{counter-increment:prio;content:counter(prio);background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--bg);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;flex-shrink:0}
+.cp-priority-info{flex:1}
+.cp-priority-info h4{font-size:.95rem;margin-bottom:2px}
+.cp-priority-info p{font-size:.82rem;color:var(--text2)}
+
+/* Ghost Recovery */
+.cp-ghost-seq{display:flex;flex-direction:column;gap:12px}
+.cp-ghost-step{padding:16px 20px;border-left:3px solid var(--gold)}
+.cp-ghost-step .cp-ghost-when{font-size:.78rem;color:var(--gold);font-weight:700;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+.cp-ghost-step .cp-ghost-text{font-size:.92rem;color:var(--text);line-height:1.6;font-style:italic}
+
+.cp-divider{height:1px;background:var(--glass-border);margin:32px 0}
+
+@media(max-width:768px){
+  .cp-objection-cards{grid-template-columns:1fr}
+  .cp-scorecard{grid-template-columns:1fr}
+  .copilot-textarea{min-height:200px}
+}
+
 /* PRINT */
 @media print{
   body{background:#fff;color:#000}
@@ -508,6 +643,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
   .objection-body{max-height:none!important}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js" defer></script>
 </head>
 <body>
 
@@ -526,6 +662,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
       <button class="tab-btn" data-tab="scripts">✨ Golden Scripts</button>
       <button class="tab-btn" data-tab="rules">📜 The Rules</button>
       <button class="tab-btn" data-tab="testimonials">🎯 Testimonials</button>
+      <button class="tab-btn" data-tab="copilot">🤖 AI Co-Pilot</button>
     </div>
   </div>
 </div>
@@ -1176,6 +1313,185 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
     <div class="tw-leaderboard" id="twLeaderboard"></div>
   </section>
 
+</div>
+</div>
+
+<!-- ==================== TAB 9: AI CO-PILOT ==================== -->
+<div class="tab-content" id="tab-copilot">
+<div class="container">
+
+  <!-- SECTION 1: INPUT -->
+  <section>
+    <div class="section-title reveal"><h2>🤖 AI Sales Co-Pilot</h2><p>Select the situation, get an instant play. Works on your phone — no pasting needed.</p></div>
+
+    <div class="copilot-input-section reveal">
+
+      <!-- Mode Tabs -->
+      <div class="cp-mode-tabs">
+        <button class="cp-mode-tab active" data-cpmode="quickselect">⚡ Quick Select<span class="cp-mode-badge">DEFAULT</span></button>
+        <button class="cp-mode-tab" data-cpmode="single">💬 Single Message</button>
+        <button class="cp-mode-tab" data-cpmode="screenshot">📸 Screenshot</button>
+        <button class="cp-mode-tab" data-cpmode="fullconvo">📋 Full Convo</button>
+      </div>
+
+      <!-- MODE 1: QUICK SELECT -->
+      <div class="cp-mode-panel active" id="cpMode-quickselect">
+
+        <!-- Lead Name (optional) -->
+        <div class="cp-qs-group">
+          <div class="cp-qs-group-title">👤 Lead's name <span style="color:var(--text3);font-weight:400;font-size:.82rem">(optional — for personalization)</span></div>
+          <input type="text" class="cp-qs-name-input" id="cpLeadName" placeholder="e.g. John, Sarah...">
+        </div>
+
+        <!-- Objection Selection -->
+        <div class="cp-qs-group">
+          <div class="cp-qs-group-title">🎯 What's the objection? <span style="color:var(--text3);font-weight:400;font-size:.82rem">(pick all that apply)</span></div>
+          <div class="cp-qs-grid" id="cpQsObjections">
+            <label class="cp-qs-option" data-val="price"><span class="cp-qs-check"></span><span class="cp-qs-emoji">💰</span><span class="cp-qs-text">Price / too expensive</span></label>
+            <label class="cp-qs-option" data-val="affordability"><span class="cp-qs-check"></span><span class="cp-qs-emoji">😓</span><span class="cp-qs-text">Can't afford it / needs payment plan</span></label>
+            <label class="cp-qs-option" data-val="scam_reddit"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🔴</span><span class="cp-qs-text">Mentioned Reddit or scam concerns</span></label>
+            <label class="cp-qs-option" data-val="bad_reviews"><span class="cp-qs-check"></span><span class="cp-qs-emoji">📝</span><span class="cp-qs-text">Said bad reviews</span></label>
+            <label class="cp-qs-option" data-val="think"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🤔</span><span class="cp-qs-text">Need to think about it</span></label>
+            <label class="cp-qs-option" data-val="timing"><span class="cp-qs-check"></span><span class="cp-qs-emoji">⏰</span><span class="cp-qs-text">Not the right time / maybe later</span></label>
+            <label class="cp-qs-option" data-val="spouse"><span class="cp-qs-check"></span><span class="cp-qs-emoji">👫</span><span class="cp-qs-text">Spouse/partner needs to approve</span></label>
+            <label class="cp-qs-option" data-val="skill_doubt"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🔰</span><span class="cp-qs-text">Beginner / scared to fail</span></label>
+            <label class="cp-qs-option" data-val="bad_past"><span class="cp-qs-check"></span><span class="cp-qs-emoji">😤</span><span class="cp-qs-text">Already tried another program</span></label>
+            <label class="cp-qs-option" data-val="payment_method"><span class="cp-qs-check"></span><span class="cp-qs-emoji">💳</span><span class="cp-qs-text">Asked how to pay (ready to buy!)</span></label>
+            <label class="cp-qs-option" data-val="ghost"><span class="cp-qs-check"></span><span class="cp-qs-emoji">👻</span><span class="cp-qs-text">Went silent / ghosted</span></label>
+            <label class="cp-qs-option" data-val="trust"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🛡️</span><span class="cp-qs-text">"Is this legit?"</span></label>
+            <label class="cp-qs-option" data-val="friend"><span class="cp-qs-check"></span><span class="cp-qs-emoji">👥</span><span class="cp-qs-text">Friend told them not to</span></label>
+            <label class="cp-qs-option" data-val="fear"><span class="cp-qs-check"></span><span class="cp-qs-emoji">😰</span><span class="cp-qs-text">Scared / afraid of losing money</span></label>
+            <label class="cp-qs-option" data-val="technical"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🔧</span><span class="cp-qs-text">Not tech-savvy / platform confused</span></label>
+          </div>
+        </div>
+
+        <!-- Temperature -->
+        <div class="cp-qs-group">
+          <div class="cp-qs-group-title">🌡️ Lead temperature</div>
+          <div class="cp-qs-grid" id="cpQsTemp">
+            <label class="cp-qs-option radio" data-val="hot"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🔥🔥🔥</span><span class="cp-qs-text">Hot — asking how to sign up</span></label>
+            <label class="cp-qs-option radio" data-val="warm"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🔥🔥</span><span class="cp-qs-text">Warm — interested but hesitating</span></label>
+            <label class="cp-qs-option radio" data-val="lukewarm"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🔥</span><span class="cp-qs-text">Lukewarm — asking questions</span></label>
+            <label class="cp-qs-option radio" data-val="cold"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🧊</span><span class="cp-qs-text">Cold — barely engaging</span></label>
+            <label class="cp-qs-option radio" data-val="ghost"><span class="cp-qs-check"></span><span class="cp-qs-emoji">💀</span><span class="cp-qs-text">Ghost — no response</span></label>
+          </div>
+        </div>
+
+        <!-- Lead Traits -->
+        <div class="cp-qs-group">
+          <div class="cp-qs-group-title">👤 About the lead <span style="color:var(--text3);font-weight:400;font-size:.82rem">(optional — improves testimonial matching)</span></div>
+          <div class="cp-qs-grid two-col" id="cpQsTraits">
+            <label class="cp-qs-option" data-val="female"><span class="cp-qs-check"></span><span class="cp-qs-text">Female</span></label>
+            <label class="cp-qs-option" data-val="male"><span class="cp-qs-check"></span><span class="cp-qs-text">Male</span></label>
+            <label class="cp-qs-option" data-val="has_kids"><span class="cp-qs-check"></span><span class="cp-qs-text">Has kids</span></label>
+            <label class="cp-qs-option" data-val="single_parent"><span class="cp-qs-check"></span><span class="cp-qs-text">Single parent</span></label>
+            <label class="cp-qs-option" data-val="nine_to_five"><span class="cp-qs-check"></span><span class="cp-qs-text">Has a 9-5 job</span></label>
+            <label class="cp-qs-option" data-val="beginner"><span class="cp-qs-check"></span><span class="cp-qs-text">Complete beginner</span></label>
+            <label class="cp-qs-option" data-val="lost_money"><span class="cp-qs-check"></span><span class="cp-qs-text">Lost money trading before</span></label>
+            <label class="cp-qs-option" data-val="young"><span class="cp-qs-check"></span><span class="cp-qs-text">Young (18-25)</span></label>
+            <label class="cp-qs-option" data-val="older"><span class="cp-qs-check"></span><span class="cp-qs-text">Older (40+)</span></label>
+            <label class="cp-qs-option" data-val="immigrant"><span class="cp-qs-check"></span><span class="cp-qs-text">Immigrant / ESL</span></label>
+          </div>
+        </div>
+
+        <button class="copilot-analyze-btn" onclick="cpQuickSelect()">⚡ GET MY RESPONSE</button>
+      </div>
+
+      <!-- MODE 2: SINGLE MESSAGE -->
+      <div class="cp-mode-panel" id="cpMode-single">
+        <div style="color:var(--text3);font-size:.88rem;margin-bottom:12px">Paste the lead's last message and hit analyze:</div>
+        <input type="text" class="copilot-single-input" id="cpSingleInput" placeholder="e.g. 'I need to think about it' or 'How much does it cost?'" onkeydown="if(event.key==='Enter')cpSingleAnalyze()">
+        <button class="copilot-analyze-btn" onclick="cpSingleAnalyze()" style="margin-top:12px">⚡ ANALYZE MESSAGE</button>
+        <div class="copilot-single-results" id="cpSingleResults"></div>
+      </div>
+
+      <!-- MODE 3: SCREENSHOT -->
+      <div class="cp-mode-panel" id="cpMode-screenshot">
+        <div class="copilot-drop-zone" id="cpDropZone">
+          <input type="file" accept="image/*" multiple id="cpFileInput" onchange="cpHandleFiles(this.files)">
+          <span class="drop-icon">📸</span>
+          <div class="drop-text">Tap here or drag & drop conversation screenshots</div>
+          <div class="drop-sub">Upload 1-3 screenshots — OCR extracts the text automatically (PNG, JPG, WebP)</div>
+        </div>
+        <div class="copilot-ocr-loading" id="cpOcrLoading">
+          <span class="copilot-ocr-spinner"></span> Extracting text from screenshot... this may take a moment
+        </div>
+      </div>
+
+      <!-- MODE 4: FULL CONVO -->
+      <div class="cp-mode-panel" id="cpMode-fullconvo">
+        <div class="copilot-instructions">📋 Copy your entire GHL conversation and paste below. Include both your messages and the lead's messages.</div>
+        <textarea class="copilot-textarea" id="cpConvoInput" placeholder="Paste your conversation here...&#10;&#10;Example:&#10;Rep: Hey John! I saw you were interested in learning about trading.&#10;Lead: Yeah I've been watching videos but I'm not sure I can afford it&#10;Rep: I totally get that..."></textarea>
+        <button class="copilot-analyze-btn" onclick="cpFullConvoAnalyze()">⚡ ANALYZE CONVERSATION</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 2: ANALYSIS RESULTS -->
+  <div class="cp-results" id="cpResults">
+
+    <!-- 2A: Temperature Gauge -->
+    <div class="cp-section">
+      <div class="cp-section-header">🌡️ Lead Temperature</div>
+      <div class="cp-temp-gauge glass" id="cpTempGauge">
+        <div class="cp-temp-score" id="cpTempScore">0%</div>
+        <div class="cp-temp-label" id="cpTempLabel">--</div>
+        <div class="cp-temp-desc" id="cpTempDesc">--</div>
+        <div class="cp-temp-bar"><div class="cp-temp-marker" id="cpTempMarker" style="left:0%"></div></div>
+      </div>
+    </div>
+
+    <!-- 2B: Detected Objections -->
+    <div class="cp-section">
+      <div class="cp-section-header">🎯 Detected Objections</div>
+      <div class="cp-objection-cards" id="cpObjections"></div>
+    </div>
+
+    <!-- 2F: Multi-Objection Priority -->
+    <div class="cp-section" id="cpPrioritySection" style="display:none">
+      <div class="cp-section-header">📊 Handle In This Order</div>
+      <div class="cp-priority-list glass" id="cpPriorityList"></div>
+      <div style="font-size:.85rem;color:var(--text3);margin-top:12px;padding:12px 16px;background:rgba(212,168,67,.04);border-radius:var(--radius-sm)" id="cpPriorityNote"></div>
+    </div>
+
+    <div class="cp-divider"></div>
+
+    <!-- 2C: What To Say Next -->
+    <div class="cp-section">
+      <div class="cp-section-header">📋 YOUR NEXT MESSAGE</div>
+      <div class="cp-next-msg glass-gold" id="cpNextMsg">
+        <div class="cp-msg-text" id="cpMsgText"></div>
+        <button class="cp-copy-big" onclick="cpCopyMain()">📋 COPY TO CLIPBOARD</button>
+      </div>
+      <div id="cpAltMsgs"></div>
+    </div>
+
+    <div class="cp-divider"></div>
+
+    <!-- 2D: Recommended Testimonial -->
+    <div class="cp-section">
+      <div class="cp-section-header">🎯 Recommended Testimonial</div>
+      <div id="cpTestimonial"></div>
+    </div>
+
+    <div class="cp-divider"></div>
+
+    <!-- 2E: Conversation Scorecard -->
+    <div class="cp-section">
+      <div class="cp-section-header">📊 Conversation Scorecard</div>
+      <div class="cp-scorecard" id="cpScorecard"></div>
+    </div>
+
+    <div class="cp-divider"></div>
+
+    <!-- 2G: Ghost Recovery -->
+    <div class="cp-section" id="cpGhostSection" style="display:none">
+      <div class="cp-section-header">👻 Ghost Recovery Sequence</div>
+      <div class="cp-ghost-seq" id="cpGhostSeq"></div>
+    </div>
+
+  </div>
 </div>
 </div>
 
@@ -1927,6 +2243,655 @@ twData.forEach(t => {
 searchIndex.push({ type: 'Tab', name: '📍 Testimonial Weapons', sub: 'Navigate to tab', text: 'testimonial weapons video proof student', action: () => switchTab('testimonials') });
 
 
+// ===== AI CO-PILOT ENGINE =====
+
+// --- Mode Tab Switching ---
+document.querySelectorAll('.cp-mode-tab').forEach(btn => {
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.cp-mode-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.cp-mode-panel').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('cpMode-'+this.dataset.cpmode).classList.add('active');
+  });
+});
+
+// --- Quick-Select Toggle Logic ---
+document.querySelectorAll('#cpQsObjections .cp-qs-option').forEach(opt => {
+  opt.addEventListener('click', () => opt.classList.toggle('selected'));
+});
+document.querySelectorAll('#cpQsTraits .cp-qs-option').forEach(opt => {
+  opt.addEventListener('click', () => opt.classList.toggle('selected'));
+});
+document.querySelectorAll('#cpQsTemp .cp-qs-option').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('#cpQsTemp .cp-qs-option').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+  });
+});
+
+// --- Objection Database ---
+const cpObjDB = {
+  price: {emoji:'💰',name:'Price Objection',rate:5.5,convos:'9,056',priority:3,
+    scripts:[
+      {label:'Reframe Value',text:"Think about it — you'll learn a skill to make a grand a day for the rest of your life. Price is what you pay now. Cost is what you miss out on."},
+      {label:'Comparison',text:"How much do you spend on subscriptions you barely use? Netflix, Spotify, gym? This is one investment that actually pays you back."},
+      {label:'ROI Frame',text:"I've had students make back the cost of the program in their first WEEK. This isn't an expense — it's the best investment you'll ever make in yourself."},
+      {label:'Pivot to Plan',text:"If finance is the only thing holding you back, the BEST I can do is 3 monthly payments of $1,100. First payment = full access to everything 🔥"}
+    ],
+    killShot:"Look, you can spend $3K and learn a skill that makes you $1K+ a day, or you can keep scrolling and be in the exact same spot a year from now. Which version of yourself do you want to be?",
+    note:'5.5% convert on price alone → but 96.8% convert when payment plan is offered. Always reframe value FIRST, payment plan SECOND.'},
+  affordability: {emoji:'😓',name:'Affordability / Can\'t Afford',rate:9.4,convos:'8,007',priority:4,
+    scripts:[
+      {label:'In-House Plan',text:"$1,100 × 3 monthly payments. First payment gives you FULL access — Discord, KCU community, modules, text signals, and daily live trading 🔥"},
+      {label:'Payva Option',text:"We also have Payva — it's like Afterpay for education. Splits your payment into smaller chunks automatically. No interest, no hassle."},
+      {label:'Belief Close',text:"I am willing to bet on you if you are willing to bet on yourself 💪 The first $1,100 gets you everything — full access from day one."},
+      {label:'ROI Bridge',text:"What if the money you make in the first month covers the rest of the program? That's what happened for a lot of our students."}
+    ],
+    killShot:"We can take the risk and do inhouse financing. 3 monthly payments of $1,100. Wanna give that a shot?",
+    note:'Unlike price objection — they WANT in. Offer payment plan.'},
+  scam_reddit: {emoji:'🔴',name:'Reddit / Scam Fear',rate:3.4,convos:'1,530',priority:2,
+    scripts:[
+      {label:'Validate',text:"I appreciate you bringing that up — most people don't, and it tells me you're doing your homework. That's exactly the kind of person we want in KCU."},
+      {label:'Reframe',text:"Have you ever noticed how on Reddit, the loudest voices are always the people who failed? Nobody who's making money sits on Reddit writing reviews. They're too busy trading."},
+      {label:'Proof Stack',text:"I'll be straight with you — we've mentored over a thousand students. Not everyone makes it. The ones who fail? They blame the program. The ones who succeed? They're posting gains in our Discord."},
+      {label:'Evidence',text:"Let me send you something real — actual P&L screenshots from our students. Not testimonials we wrote. Real numbers."}
+    ],
+    killShot:"The question isn't whether some random person on Reddit thinks I'm legit. The question is — are YOU going to keep losing money on your own, or are you going to learn how to do this properly?",
+    note:'3.4% conversion — hardest objection. Need massive social proof. NEVER get defensive.'},
+  bad_reviews: {emoji:'📝',name:'Bad Reviews',rate:3.4,convos:'1,530',priority:2,
+    scripts:[
+      {label:'Curiosity',text:"Which reviews? I'm curious because I want to know what you saw."},
+      {label:'Counter',text:"Anyone can write anything on the internet. What you can't fake is real student results. These are real students, real P&L screenshots, real money."},
+      {label:'Authority',text:"I've been public about my trading for years. 1 million followers didn't come from being a scam. But don't take my word for it — here are students on video sharing their experience."},
+      {label:'Redirect',text:"At the end of the day, you're not investing in a review — you're investing in a skill. Would you rather listen to anonymous strangers or see real results?"}
+    ],
+    killShot:"Look, I get it. The trading education space is full of frauds. That's exactly why KCU exists — to be the real thing. I can't make you trust me over text. But I CAN show you the results.",
+    note:'Same conversion as scam fear. Proof beats words every time.'},
+  think: {emoji:'🤔',name:'Need to Think',rate:23.4,convos:'1,614',priority:5,
+    scripts:[
+      {label:'Dig Deeper',text:"What specifically do you need to think about? Let me help you make a clear decision right now."},
+      {label:'Uncover',text:"Is it the price, the timing, or something else? I'd rather help you figure it out now than have you wonder 'what if' for the next month."},
+      {label:'Bet On You',text:"I am willing to bet on you if you are willing to bet on yourself. What's really holding you back?"},
+      {label:'Set Callback',text:"I respect that. Let's set a time — how about I check in with you Thursday at 7pm? That way you've had time and I can answer any last questions."}
+    ],
+    killShot:"Most people who say they need to think about it never come back. I don't want that to be you. What's the ONE thing stopping you right now?",
+    note:'23.4% convert — HIGH win rate. Almost always masks another objection. NEVER say "take your time."'},
+  timing: {emoji:'⏰',name:'Timing / Not Right Now',rate:4.1,convos:'8,144',priority:6,
+    scripts:[
+      {label:'Urgency',text:"When IS the right time? Because the market is open every day and every day you're not learning is money left on the table."},
+      {label:'Reality Check',text:"I hear that a lot. And honestly? There's never a perfect time. The people who win are the ones who start before they're ready."},
+      {label:'Scarcity',text:"We only take a limited number per intake and spots are filling fast. I don't want you to miss out."},
+      {label:'Future Pain',text:"Where will you be in 6 months if nothing changes? Same job, same frustrations, same results? The best time to start was yesterday."}
+    ],
+    killShot:"Six months from now, you'll wish you started today.",
+    note:'4.1% conversion. ALWAYS book a specific callback. Never leave open-ended.'},
+  spouse: {emoji:'👫',name:'Spouse Approval',rate:78.4,convos:'37',priority:7,
+    scripts:[
+      {label:'Involve Spouse',text:"I can be your accountable buddy. Would it help if I spoke to your partner about the program? I'm happy to answer any questions they have."},
+      {label:'Family Frame',text:"This isn't an expense — it's an investment in your family's future. You're learning a skill that can generate income for life."},
+      {label:'Vision',text:"Imagine being able to tell your partner you made $500 from your phone this morning. That's what we're building towards."},
+      {label:'Joint Call',text:"Would a 10-minute call with both of you help? I want your partner to feel just as confident about this as you do."}
+    ],
+    killShot:"Would a 10-minute call with both of you help? I want your partner to feel just as confident about this as you do.",
+    note:'78.4% when handled right. Involve the spouse — never bypass them. Hard no from spouse = 0% — walk away.'},
+  skill_doubt: {emoji:'🔰',name:'Beginner / Skill Doubt',rate:13.1,convos:'2,696',priority:8,
+    scripts:[
+      {label:'Flip Script',text:"I actually love working with beginners. Nothing to unlearn so you can level up faster than anyone else."},
+      {label:'Belief',text:"Even if you're not there yet, I believe you have what it takes. That's exactly why the program exists — to take you from zero to confident."},
+      {label:'Structure',text:"You don't need to know anything going in. The modules take you from zero to executing trades with confidence. Step by step."},
+      {label:'Social Proof',text:"Every single one of our successful students started exactly where you are. The difference is they took the leap."}
+    ],
+    killShot:"I've seen people with zero experience go from knowing nothing to making consistent money in weeks. That could be you. All you need is the willingness to learn.",
+    note:'13.1% conversion. This is about CONFIDENCE not information. Don\'t use jargon.'},
+  bad_past: {emoji:'😤',name:'Bad Past Experience',rate:5.9,convos:'305',priority:9,
+    scripts:[
+      {label:'Validate',text:"I'm sorry that happened. There are a LOT of programs out there that over-promise and under-deliver. That's exactly why we let our results speak."},
+      {label:'Differentiate',text:"Unlike other programs, Kay trades live every single day — you see the real thing, wins AND losses. Red days included. That's transparency you won't find anywhere else."},
+      {label:'Proof',text:"Check our results page — real screenshots, real students, real P&L. We're not hiding anything. And you get 6 months of daily live trading, not just pre-recorded videos."},
+      {label:'Empathy',text:"The fact that you're still here tells me you haven't given up on trading — you've just given up on bad programs. This isn't one of those."}
+    ],
+    killShot:"I get why you're cautious. But the fact that you're still here tells me you haven't given up on trading — you've just given up on bad programs. This isn't one of those.",
+    note:'5.9% conversion. Heavy empathy first, then proof. Don\'t bash other programs by name.'},
+  payment_method: {emoji:'💳',name:'Payment Method (READY TO BUY)',rate:96.8,convos:'280',priority:0,
+    scripts:[
+      {label:'Options',text:"We accept PayPal, Payva (like Afterpay), credit card, and bank transfer. What works best for you?"},
+      {label:'Hand-Hold',text:"I'll walk you through it right now. It takes about 2 minutes. Which payment method would you prefer?"},
+      {label:'Payva',text:"Payva is the easiest — it splits your payment automatically. No interest, no hassle. Want me to send you the link?"},
+      {label:'Urgency',text:"Let me send you the payment link right now. You'll have full access within minutes. Ready?"}
+    ],
+    killShot:"Let me send you the payment link right now. You'll have full access within minutes. Ready? 🔥",
+    note:'96.8% CONVERSION. This person wants to buy! Drop everything. Walk them through payment NOW.'},
+  ghost: {emoji:'👻',name:'Ghost / Went Silent',rate:0,convos:'1,811',priority:10,
+    scripts:[
+      {label:'24hr Soft',text:"Hey! Just circling back — had a chance to think about what we discussed? 🙂"},
+      {label:'48hr Value',text:"Quick thought — one of our students just hit their first $1K day this week. Reminded me of our conversation. The market's been moving and I'd hate for you to miss this momentum 📈"},
+      {label:'72hr Direct',text:"I'll be straight with you — I can only hold your spot for so long. Are you still serious about learning to trade? If the price was the issue, I might be able to work something out for you 💪"},
+      {label:'1 Week Final',text:"Last message from me on this. I genuinely believe you have what it takes, but I can't want it more than you do. If trading is something you're serious about, let's talk this week. If not, no hard feelings at all 🤝"}
+    ],
+    killShot:"Last message from me on this. I genuinely believe you have what it takes, but I can't want it more than you do. 🤝",
+    note:'Follow Ghost Recovery Sequence: 24hr → 48hr → 72hr → 1 week. Max 4 touches then archive.'},
+  trust: {emoji:'🛡️',name:'Trust / "Is This Legit?"',rate:20.8,convos:'2,321',priority:1,
+    scripts:[
+      {label:'Flip It',text:"I love this question because it means you're smart enough to ask. Most people just hand their money to anyone with a nice Instagram."},
+      {label:'Transparency',text:"Have you watched my YouTube? I show every trade, red and green. I show my losses. Does that sound like a scam to you?"},
+      {label:'Track Record',text:"We've been operating for years. Over a thousand students. If we were a scam, we'd be shut down by now. But here we are, growing every month."},
+      {label:'Proof Stack',text:"Check out our results page — real screenshots from real students. No fake testimonials, just actual trading P&Ls."}
+    ],
+    killShot:"Look, I can tell you we're legit all day long, but words are cheap. Go check the results page, the YouTube, the student testimonials. Let the proof speak. I'll be here when you're ready.",
+    note:'20.8% conversion — WINNABLE with social proof. Send results page + YouTube immediately.'},
+  friend: {emoji:'👥',name:'Friend Warning',rate:3.4,convos:'1,530',priority:11,
+    scripts:[
+      {label:'The Question',text:"Is your friend a profitable trader?"},
+      {label:'Reframe',text:"I respect that your friend cares about you. But has your friend tried KCU? Or are they just repeating what they read online?"},
+      {label:'Truth Bomb',text:"Here's the thing — the people who warn you about trading education are usually the ones who've never invested in themselves. They're comfortable being broke."},
+      {label:'Redirect',text:"Tell your friend to check the results page. Then ask them if they can show you those kinds of gains."}
+    ],
+    killShot:"Your friend means well. But are they going to pay your bills? Or are you going to learn how to change your own life?",
+    note:'Same dynamics as scam fear. Proof + redirect to their goals.'},
+  fear: {emoji:'😰',name:'Fear / Scared of Losing',rate:0,convos:'2,266',priority:1,
+    scripts:[
+      {label:'Reframe Risk',text:"What's the worst case? You learn risk management and become more disciplined with money. What's the best case? You change your entire life."},
+      {label:'Emotional Bridge',text:"I get the fear. Every student felt it before they started. The ones who pushed through are the ones sending me screenshots of their wins now."},
+      {label:'Future-Pace',text:"The fear of staying where you are should be bigger than the fear of trying something new. Where will you be in a year if nothing changes?"},
+      {label:'Empathy',text:"What specifically scares you most? Let's talk through it. I'd rather address it now than have it hold you back from changing your life."}
+    ],
+    killShot:"Every successful person you admire was scared at some point. The difference is they did it anyway. I'm here with you — you won't be doing this alone.",
+    note:'0% conversion when unresolved. THE #1 DEAL KILLER. Must address fear head-on or deal is dead.'},
+  technical: {emoji:'🔧',name:'Technical / Not Tech-Savvy',rate:16.4,convos:'165',priority:12,
+    scripts:[
+      {label:'Hand-Hold',text:"I'll walk you through everything step by step. Most students are set up and ready to go within 30 minutes."},
+      {label:'Support',text:"You'll have access to our Discord community and support team. If you get stuck, someone is always there to help. You're never alone."},
+      {label:'Simplify',text:"All you need is a phone or laptop and an internet connection. We handle the rest. The platform setup is part of the onboarding."}
+    ],
+    killShot:"If setting up a phone app was the only thing between you and a life-changing skill, wouldn't you want someone to walk you through it? That's exactly what we do.",
+    note:'16.4% conversion. Quick reassurance + offer to walk through it personally.'}
+};
+
+// --- Objection Keyword Map (for text analysis modes) ---
+const cpKeywordMap = {
+  price: ['expensive','cost','afford','price','how much','too much','money','budget','worth it','a lot of money','pricey','costs','pricing','3000','3k','three thousand','2984'],
+  affordability: ['can\'t pay','broke','tight','paycheck','poor','debt','bills','can\'t afford','don\'t have the money','struggling','finances','save up','savings'],
+  scam_reddit: ['scam','reddit','rip off','fraud','too good to be true','ponzi','scheme','fake guru','exposed'],
+  bad_reviews: ['bad reviews','reviews','negative','complaints','heard bad things','read about'],
+  think: ['think about it','sleep on it','need time','let me think','consider','mull','sit on it','give me a couple days','need to think','thinking'],
+  timing: ['not now','later','next month','busy','not the right time','maybe later','few months','not ready','down the road','next year','after','wait'],
+  spouse: ['wife','husband','partner','spouse','significant other','we need to discuss','talk to my','married','other half','better half'],
+  skill_doubt: ['beginner','no experience','don\'t know','never traded','complicated','hard','can i even','what if i fail','dumb','stupid','smart enough','new to this','no idea','zero experience','newbie'],
+  bad_past: ['tried before','other program','didn\'t work','lost money trading','been burned','other course','another discord','waste of money','got scammed','been scammed'],
+  payment_method: ['how do i pay','payment options','credit card','paypal','installment','payment plan','how to pay','accept','pay with','payment link','checkout','sign up','get started','enroll','join','ready'],
+  ghost: [],
+  trust: ['how do i know','prove it','show me','results','testimonials','guarantee','legit','legitimate','real','verified','proof'],
+  friend: ['friend told me','friend said','someone told me','people say','warned me','told me not to'],
+  fear: ['scared','afraid','worried','risk','lose money','what if','nervous','anxiety','terrified','fear','risky','dangerous'],
+  technical: ['tech','computer','platform','software','app','download','setup','technical','how does it work','what do i need']
+};
+
+// --- Temperature Config ---
+const cpTempConfig = {
+  hot:      {score:90, label:'🔥🔥🔥 HOT',       color:'#E74C3C', desc:'This lead is ready to buy. Close NOW.'},
+  warm:     {score:65, label:'🔥🔥 WARM',         color:'#E67E22', desc:'Interest is there but they need more convincing.'},
+  lukewarm: {score:37, label:'🔥 LUKEWARM',       color:'#F1C40F', desc:'They\'re exploring. Build urgency.'},
+  cold:     {score:17, label:'🧊 COLD',            color:'#3498DB', desc:'Low intent. Qualify harder or move on.'},
+  ghost:    {score:5,  label:'💀 GHOST RISK',      color:'#6B6B80', desc:'About to ghost. Send recovery message immediately.'}
+};
+
+// --- Testimonial Matcher ---
+function cpMatchTestimonial(objKeys, traits) {
+  if (typeof twData === 'undefined' || !twData.length) return null;
+  const tagMap = {
+    female:['female'], male:['male'], has_kids:['family-motivation','single-parent'],
+    single_parent:['single-parent'], nine_to_five:['9-5-job','career-change'],
+    beginner:['beginner'], lost_money:['lost-money-before'], young:['student'],
+    older:['older'], immigrant:['immigrant']
+  };
+  const objToOvercome = {
+    price:['price','value'], affordability:['price','value'], scam_reddit:['scam_fear','skepticism'],
+    bad_reviews:['scam_fear','skepticism'], think:['hesitation'], timing:['time'],
+    spouse:['time'], skill_doubt:['skill_doubt','skill_level'], bad_past:['past_failure','past_program'],
+    trust:['trust','skepticism'], friend:['scam_fear','skepticism'], fear:['confidence','early_losses'],
+    payment_method:['value'], ghost:['trust'], technical:['skill_doubt']
+  };
+  const wantTags = [];
+  traits.forEach(tr => { if (tagMap[tr]) wantTags.push(...tagMap[tr]); });
+  const wantOvercome = [];
+  objKeys.forEach(ok => { if (objToOvercome[ok]) wantOvercome.push(...objToOvercome[ok]); });
+
+  let best = null, bestScore = -1;
+  twData.forEach(t => {
+    let score = t.persuasion_score * 2;
+    const tTags = t.tags || [];
+    const tOver = t.objections_overcome || [];
+    wantTags.forEach(wt => { if (tTags.includes(wt)) score += 5; });
+    wantOvercome.forEach(wo => { if (tOver.includes(wo)) score += 8; });
+    if (score > bestScore) { bestScore = score; best = t; }
+  });
+  return best;
+}
+
+function cpWhyMatch(t, objKeys, traits) {
+  const reasons = [];
+  const tTags = t.tags || [];
+  if (traits.includes('female') && tTags.includes('female')) reasons.push('female student');
+  if (traits.includes('nine_to_five') && tTags.includes('9-5-job')) reasons.push('had a 9-5 job');
+  if (traits.includes('beginner') && tTags.includes('beginner')) reasons.push('was a complete beginner');
+  if (traits.includes('lost_money') && tTags.includes('lost-money-before')) reasons.push('lost money before KCU');
+  if (traits.includes('has_kids') && tTags.includes('family-motivation')) reasons.push('motivated by family');
+  if (traits.includes('single_parent') && tTags.includes('single-parent')) reasons.push('is a single parent');
+  if (traits.includes('immigrant') && tTags.includes('immigrant')) reasons.push('immigrant background');
+  if (objKeys.includes('scam_reddit') && (t.objections_overcome||[]).includes('scam_fear')) reasons.push('overcame scam skepticism');
+  if (objKeys.includes('skill_doubt') && (t.objections_overcome||[]).includes('skill_doubt')) reasons.push('overcame skill doubt');
+  if (objKeys.includes('bad_past') && (t.objections_overcome||[]).includes('past_failure')) reasons.push('had bad past experiences');
+  if (objKeys.includes('trust') && (t.objections_overcome||[]).includes('trust')) reasons.push('had trust concerns');
+  if (reasons.length) return 'This student ' + reasons.join(', ') + ' — just like your lead.';
+  return 'Top-rated testimonial with ' + t.persuasion_score + '/10 persuasion score.';
+}
+
+// --- Response Generator ---
+function cpBuildResponse(primaryObj, objKeys, temp, name, traits) {
+  const n = name || '';
+  const greeting = n ? ('Hey ' + n + ', ') : '';
+  const db = cpObjDB[primaryObj];
+  if (!db) return {main:'',alts:[]};
+
+  // Pick best script based on temperature
+  let mainIdx = 0;
+  if (temp === 'hot' || temp === 'warm') mainIdx = db.scripts.length - 1; // go for close
+  if (temp === 'cold' || temp === 'ghost') mainIdx = 0; // start gentle
+
+  let mainText = greeting + db.scripts[mainIdx].text;
+
+  // Append testimonial mention for warm+
+  if (temp === 'hot' || temp === 'warm') {
+    mainText += '\n\nLet me know and I\'ll get you set up right now 🔥';
+  }
+
+  // For payment_method, go straight to close
+  if (primaryObj === 'payment_method') {
+    mainText = greeting + 'We accept PayPal, Payva (like Afterpay), credit card, and bank transfer. Which works best for you? I\'ll walk you through it right now — takes about 2 minutes.';
+    if (temp === 'hot') mainText += '\n\nLet me send you the payment link right now. You\'ll have full access within minutes 🔥';
+  }
+
+  // For ghost, use the recovery sequence
+  if (primaryObj === 'ghost') {
+    mainText = (n ? (n + ' — ') : '') + 'Hey! Just circling back — had a chance to think about what we discussed? 🙂';
+  }
+
+  // Build alternates
+  const alts = [];
+  db.scripts.forEach((s, i) => {
+    if (i !== mainIdx) {
+      alts.push({label: s.label, text: greeting + s.text});
+    }
+  });
+  // Always add kill shot as an alternate
+  alts.push({label:'Kill Shot 💥', text: greeting + db.killShot});
+
+  // If multiple objections, add cross-objection response
+  if (objKeys.length > 1) {
+    const secondary = objKeys.find(k => k !== primaryObj);
+    if (secondary && cpObjDB[secondary]) {
+      const sDb = cpObjDB[secondary];
+      alts.push({label: sDb.emoji + ' ' + sDb.name + ' (secondary)', text: greeting + sDb.scripts[0].text});
+    }
+  }
+
+  return {main: mainText, alts: alts.slice(0, 3)};
+}
+
+// --- Scorecard (for full convo mode) ---
+function cpBuildScorecard(text) {
+  const lower = text.toLowerCase();
+  const scores = [];
+
+  // Close attempts
+  const closeSignals = ['ready to get started','let\'s do this','lock in your spot','sign up','payment link','get you set up','get started','enroll','bet on yourself'];
+  const closeCount = closeSignals.filter(s => lower.includes(s)).length;
+  const closeStar = closeCount >= 2 ? 5 : closeCount === 1 ? 3 : 1;
+  scores.push({label:'Close Attempts', stars:closeStar,
+    feedback: closeStar >= 4 ? '✅ Strong close attempt detected. Nice work.' :
+              closeStar >= 2 ? '⚠️ Weak close attempt. Be more direct — ask for the sale.' :
+              '❌ No close attempt detected. You MUST ask for the sale. Strong close = 62.5% conversion.'});
+
+  // Personalization
+  const nameUsed = /\bhey\s+[A-Z][a-z]+/i.test(text) || /\b(your|you're|you've)\b/gi.test(text);
+  const situationRef = /(your job|your situation|your goal|you mentioned|you said|you told me)/i.test(text);
+  const persStar = nameUsed && situationRef ? 5 : nameUsed ? 3 : 1;
+  scores.push({label:'Personalization', stars:persStar,
+    feedback: persStar >= 4 ? '✅ Good personalization — you referenced their situation.' :
+              persStar >= 2 ? '⚠️ You used their name but didn\'t reference their specific situation. Dig deeper.' :
+              '❌ No personalization detected. High personalization = 68.6% vs 0.6% without. Use their name and reference their WHY.'});
+
+  // Objection handling
+  const objDetected = Object.keys(cpKeywordMap).some(k => cpKeywordMap[k].some(kw => lower.includes(kw)));
+  const objHandled = closeSignals.some(s => lower.includes(s)) || /(i hear you|i get that|i understand|i appreciate|let me|here's the thing|that's exactly)/i.test(lower);
+  const objStar = !objDetected ? 4 : objHandled ? 5 : 1;
+  scores.push({label:'Objection Handling', stars:objStar,
+    feedback: objStar >= 4 ? '✅ Objections were addressed.' :
+              '❌ Objections were detected but not addressed. Strong resolution = 98.2% conversion.'});
+
+  // Urgency
+  const urgencySignals = ['money on the table','spots are filling','limited','don\'t miss','6 months from now','leaving money','every day you wait','the market doesn\'t wait'];
+  const urgStar = urgencySignals.some(s => lower.includes(s)) ? 5 : 2;
+  scores.push({label:'Urgency Building', stars:urgStar,
+    feedback: urgStar >= 4 ? '✅ Urgency was created. Good.' :
+              '⚠️ No urgency signals detected. Urgency = 16.6% conversion vs 7.3% without.'});
+
+  // Value building
+  const valueSignals = ['students','results','skill','$','grand a day','made more than','invest in yourself','freedom','life-changing','transform'];
+  const valCount = valueSignals.filter(s => lower.includes(s)).length;
+  const valStar = valCount >= 3 ? 5 : valCount >= 1 ? 3 : 1;
+  scores.push({label:'Value Building', stars:valStar,
+    feedback: valStar >= 4 ? '✅ Strong value proposition with proof points.' :
+              valStar >= 2 ? '⚠️ Some value mentioned but could be stronger. Add student results, specific numbers.' :
+              '❌ No value building detected. Mention results, students, transformation.'});
+
+  // Follow-up
+  const fuSignals = ['check in','follow up','thursday','tomorrow','let\'s set a time','callback','circle back'];
+  const fuStar = fuSignals.some(s => lower.includes(s)) ? 5 : 2;
+  scores.push({label:'Follow-Up', stars:fuStar,
+    feedback: fuStar >= 4 ? '✅ Follow-up was booked.' :
+              '⚠️ No specific follow-up time set. ALWAYS book a specific time. 602 deals lost in follow-up.'});
+
+  return scores;
+}
+
+// --- Render Results ---
+function cpRenderResults(objKeys, temp, name, traits, fullConvoText) {
+  const results = document.getElementById('cpResults');
+  results.classList.add('active');
+
+  // Sort objections by priority
+  const sortedObjs = [...objKeys].sort((a, b) => (cpObjDB[a]?.priority ?? 99) - (cpObjDB[b]?.priority ?? 99));
+  const primaryObj = sortedObjs[0] || 'trust';
+
+  // 2A: Temperature
+  const tc = cpTempConfig[temp] || cpTempConfig.lukewarm;
+  document.getElementById('cpTempScore').textContent = tc.score + '%';
+  document.getElementById('cpTempScore').style.color = tc.color;
+  document.getElementById('cpTempLabel').textContent = tc.label;
+  document.getElementById('cpTempLabel').style.color = tc.color;
+  document.getElementById('cpTempDesc').textContent = tc.desc;
+  document.getElementById('cpTempMarker').style.left = tc.score + '%';
+
+  // 2B: Objections
+  const objContainer = document.getElementById('cpObjections');
+  objContainer.innerHTML = '';
+  sortedObjs.forEach((key, idx) => {
+    const o = cpObjDB[key];
+    if (!o) return;
+    const card = document.createElement('div');
+    card.className = 'cp-obj-card glass';
+    card.innerHTML = `
+      <span class="cp-obj-priority">${idx === 0 ? '⚡ ADDRESS FIRST' : '#' + (idx+1)}</span>
+      <span class="cp-obj-icon">${o.emoji}</span>
+      <div class="cp-obj-name">${o.name}</div>
+      <div class="cp-obj-confidence">${o.convos} conversations analyzed</div>
+      <div class="cp-obj-stat">${o.name}: <strong>${o.rate}%</strong> convert${o.note ? '<br><em style="font-size:.78rem;color:var(--text3)">' + o.note + '</em>' : ''}</div>`;
+    objContainer.appendChild(card);
+  });
+
+  // 2F: Priority list (if multiple)
+  const prioSection = document.getElementById('cpPrioritySection');
+  if (sortedObjs.length > 1) {
+    prioSection.style.display = 'block';
+    const prioList = document.getElementById('cpPriorityList');
+    prioList.innerHTML = '';
+    sortedObjs.forEach((key) => {
+      const o = cpObjDB[key];
+      if (!o) return;
+      const item = document.createElement('div');
+      item.className = 'cp-priority-item glass';
+      item.innerHTML = `<div class="cp-priority-info"><h4>${o.emoji} ${o.name} (${o.rate}% conversion)</h4><p>${o.note || ''}</p></div>`;
+      prioList.appendChild(item);
+    });
+    document.getElementById('cpPriorityNote').textContent = 'Based on 13,196 conversations, addressing ' + cpObjDB[sortedObjs[0]]?.name + ' first gives you the best chance of closing.';
+  } else {
+    prioSection.style.display = 'none';
+  }
+
+  // 2C: Next message
+  const resp = cpBuildResponse(primaryObj, objKeys, temp, name, traits);
+  document.getElementById('cpMsgText').textContent = resp.main;
+  const altContainer = document.getElementById('cpAltMsgs');
+  altContainer.innerHTML = '';
+  resp.alts.forEach(alt => {
+    const div = document.createElement('div');
+    div.className = 'cp-alt-msg glass';
+    div.innerHTML = `<button class="cp-alt-copy" onclick="navigator.clipboard.writeText(this.parentElement.querySelector('.cp-alt-text').textContent);showToast('Copied ✓')">Copy</button><div class="cp-alt-label">Or try: ${alt.label}</div><div class="cp-alt-text">${alt.text}</div>`;
+    altContainer.appendChild(div);
+  });
+
+  // 2D: Testimonial
+  const tMatch = cpMatchTestimonial(objKeys, traits);
+  const tContainer = document.getElementById('cpTestimonial');
+  if (tMatch) {
+    const why = cpWhyMatch(tMatch, objKeys, traits);
+    tContainer.innerHTML = `
+      <div class="cp-testimonial glass">
+        <div class="cp-why-match">${why}</div>
+        <div class="tw-name-row"><span class="tw-name">${tMatch.first_name}</span>
+          ${tMatch.occupation && tMatch.occupation!=='unknown' ? '<span class="tw-occ-badge">'+tMatch.occupation+'</span>' : ''}
+          <span class="tw-gender-badge ${tMatch.gender==='female'?'female':'male'}">${tMatch.gender}</span>
+          <span style="margin-left:auto;font-size:.82rem;color:var(--green);font-weight:700">${tMatch.persuasion_score}/10 Persuasion</span>
+        </div>
+        <div class="tw-quote">${tMatch.best_quote}</div>
+        ${tMatch.results_mentioned ? '<div class="tw-results-mentioned">'+tMatch.results_mentioned+'</div>' : ''}
+        <div class="tw-intro-block">
+          <div class="tw-intro-label">📋 Pre-written intro (copy & send before video)</div>
+          <div class="tw-intro-text">${tMatch.intro_message}</div>
+          <button class="tw-copy-btn" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent);showToast('Intro copied ✓');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1500)">Copy</button>
+        </div>
+        ${tMatch.dropbox_url ? '<a href="'+tMatch.dropbox_url+'" target="_blank" rel="noopener" class="tw-send-btn" style="margin-top:12px">▶ Open Video Link</a>' : ''}
+      </div>`;
+  } else {
+    tContainer.innerHTML = '<p style="color:var(--text3);text-align:center">No testimonial data available</p>';
+  }
+
+  // 2E: Scorecard (only for full convo mode)
+  const scContainer = document.getElementById('cpScorecard');
+  if (fullConvoText) {
+    const scores = cpBuildScorecard(fullConvoText);
+    scContainer.innerHTML = '';
+    scores.forEach(s => {
+      const stars = '★'.repeat(s.stars) + '☆'.repeat(5 - s.stars);
+      const starColor = s.stars >= 4 ? 'var(--green)' : s.stars >= 3 ? 'var(--yellow)' : 'var(--red)';
+      const item = document.createElement('div');
+      item.className = 'cp-score-item glass';
+      item.innerHTML = `<div class="cp-score-label">${s.label}</div><div class="cp-score-stars" style="color:${starColor}">${stars}</div><div class="cp-score-feedback">${s.feedback}</div>`;
+      scContainer.appendChild(item);
+    });
+  } else {
+    scContainer.innerHTML = '<p style="color:var(--text3);text-align:center;padding:16px;font-size:.85rem">📋 Paste a full conversation (Mode 4) to get a detailed rep scorecard</p>';
+  }
+
+  // 2G: Ghost recovery
+  const ghostSection = document.getElementById('cpGhostSection');
+  if (temp === 'ghost' || objKeys.includes('ghost')) {
+    ghostSection.style.display = 'block';
+    const n2 = name || '[name]';
+    document.getElementById('cpGhostSeq').innerHTML = `
+      <div class="cp-ghost-step glass"><div class="cp-ghost-when">📤 Send NOW</div><div class="cp-ghost-text">"Hey ${n2}! Just circling back — had a chance to think about what we discussed? 🙂"</div><button class="cp-alt-copy" style="margin-top:8px" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent.slice(1,-1));showToast('Copied ✓')">Copy</button></div>
+      <div class="cp-ghost-step glass"><div class="cp-ghost-when">⏰ If no response in 24hr</div><div class="cp-ghost-text">"Hey ${n2}, quick thought — one of our students just hit their first $1K day this week. Reminded me of our conversation. The market's been moving 📈"</div><button class="cp-alt-copy" style="margin-top:8px" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent.slice(1,-1));showToast('Copied ✓')">Copy</button></div>
+      <div class="cp-ghost-step glass"><div class="cp-ghost-when">⏰ If no response in 48hr</div><div class="cp-ghost-text">"${n2} — I'll be straight with you. I can only hold your spot for so long. Are you still serious about learning to trade? If the price was the issue, I might be able to work something out 💪"</div><button class="cp-alt-copy" style="margin-top:8px" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent.slice(1,-1));showToast('Copied ✓')">Copy</button></div>
+      <div class="cp-ghost-step glass"><div class="cp-ghost-when">🛑 Final attempt — 1 week</div><div class="cp-ghost-text">"${n2} — last message from me on this. I genuinely believe you have what it takes, but I can't want it more than you do. If trading is something you're serious about, let's talk this week. If not, no hard feelings at all 🤝"</div><button class="cp-alt-copy" style="margin-top:8px" onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent.slice(1,-1));showToast('Copied ✓')">Copy</button></div>`;
+  } else {
+    ghostSection.style.display = 'none';
+  }
+
+  // Scroll to results
+  results.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// --- Quick Select Handler ---
+function cpQuickSelect() {
+  const objKeys = [];
+  document.querySelectorAll('#cpQsObjections .cp-qs-option.selected').forEach(o => objKeys.push(o.dataset.val));
+  const tempEl = document.querySelector('#cpQsTemp .cp-qs-option.selected');
+  const temp = tempEl ? tempEl.dataset.val : 'lukewarm';
+  const name = document.getElementById('cpLeadName').value.trim();
+  const traits = [];
+  document.querySelectorAll('#cpQsTraits .cp-qs-option.selected').forEach(o => traits.push(o.dataset.val));
+
+  if (!objKeys.length && temp === 'lukewarm') {
+    showToast('Select at least one objection or temperature');
+    return;
+  }
+  if (!objKeys.length) {
+    // No objection selected, infer from temperature
+    if (temp === 'hot') objKeys.push('payment_method');
+    else if (temp === 'ghost') objKeys.push('ghost');
+    else objKeys.push('think');
+  }
+
+  cpRenderResults(objKeys, temp, name, traits, null);
+}
+
+// --- Single Message Handler ---
+function cpSingleAnalyze() {
+  const input = document.getElementById('cpSingleInput').value.trim();
+  if (!input) { showToast('Enter a message to analyze'); return; }
+  const detected = cpDetectFromText(input);
+  const temp = cpGuessTempFromText(input);
+  const name = cpExtractName(input);
+  cpRenderResults(detected.length ? detected : ['think'], temp, name, [], null);
+}
+
+// --- Full Convo Handler ---
+function cpFullConvoAnalyze() {
+  const text = document.getElementById('cpConvoInput').value.trim();
+  if (!text) { showToast('Paste a conversation to analyze'); return; }
+  const detected = cpDetectFromText(text);
+  const temp = cpCalcTempFromConvo(text);
+  const name = cpExtractName(text);
+  const traits = cpGuessTraits(text);
+  cpRenderResults(detected.length ? detected : ['think'], temp, name, traits, text);
+}
+
+// --- Text Analysis Helpers ---
+function cpDetectFromText(text) {
+  const lower = text.toLowerCase();
+  const found = [];
+  Object.keys(cpKeywordMap).forEach(key => {
+    if (cpKeywordMap[key].some(kw => lower.includes(kw))) found.push(key);
+  });
+  return [...new Set(found)];
+}
+
+function cpGuessTempFromText(text) {
+  const lower = text.toLowerCase();
+  const hotSignals = ['sign up','get started','how do i pay','let\'s do it','ready','enroll','i\'m in','send me the link','payment link','i want in'];
+  const coldSignals = ['not interested','no thanks','stop','unsubscribe','don\'t contact','leave me alone','not for me'];
+  const ghostSignals = ['...','ok','k','sure','maybe','idk'];
+  if (hotSignals.some(s => lower.includes(s))) return 'hot';
+  if (coldSignals.some(s => lower.includes(s))) return 'cold';
+  if (ghostSignals.includes(lower.trim())) return 'ghost';
+  if (lower.length < 10) return 'cold';
+  if (lower.length > 100) return 'warm';
+  return 'lukewarm';
+}
+
+function cpCalcTempFromConvo(text) {
+  const lower = text.toLowerCase();
+  let score = 50;
+  // Positive
+  const pos = ['interested','how much','how do i','sign up','get started','payment','tell me more','sounds good','i want','i\'m ready','let\'s do','excited','goals','dream','freedom','learn'];
+  const neg = ['think about it','not right now','too expensive','can\'t afford','scam','reddit','not sure','maybe later','scared','afraid','no thanks','idk'];
+  pos.forEach(p => { if (lower.includes(p)) score += 6; });
+  neg.forEach(n => { if (lower.includes(n)) score -= 8; });
+  // Message length analysis (long lead messages = engaged)
+  const lines = text.split('\n').filter(l => l.trim());
+  const leadLines = lines.filter(l => /^(lead|them|customer|prospect)/i.test(l.trim()));
+  if (leadLines.length > 0) {
+    const avgLen = leadLines.reduce((s, l) => s + l.length, 0) / leadLines.length;
+    if (avgLen > 80) score += 10;
+    if (avgLen < 20) score -= 10;
+  }
+  score = Math.max(0, Math.min(100, score));
+  if (score >= 80) return 'hot';
+  if (score >= 50) return 'warm';
+  if (score >= 25) return 'lukewarm';
+  if (score >= 10) return 'cold';
+  return 'ghost';
+}
+
+function cpExtractName(text) {
+  const patterns = [
+    /(?:i'm|i am|my name is|name's|this is|hey i'm)\s+([A-Z][a-z]{1,15})/i,
+    /^(?:hey|hi|hello)\s+([A-Z][a-z]{1,15})/im
+  ];
+  for (const p of patterns) {
+    const m = text.match(p);
+    if (m && !['Hey','The','This','What','How','Just','Not','Yes','No','And','But','For','I\'m'].includes(m[1])) return m[1];
+  }
+  return '';
+}
+
+function cpGuessTraits(text) {
+  const lower = text.toLowerCase();
+  const traits = [];
+  if (/\b(wife|husband|kids|son|daughter|baby|family|children|mother|father|parent)\b/.test(lower)) traits.push('has_kids');
+  if (/\b(single mom|single dad|single parent)\b/.test(lower)) traits.push('single_parent');
+  if (/\b(9.to.5|job|work|office|shift|boss|corporate|employed|salary|paycheck)\b/.test(lower)) traits.push('nine_to_five');
+  if (/\b(beginner|new to|never traded|no experience|don't know anything)\b/.test(lower)) traits.push('beginner');
+  if (/\b(lost money|lost \$|lost [\d,]+|been burned|tried before|other program|got scammed)\b/.test(lower)) traits.push('lost_money');
+  if (/\b(she|her|girl|woman|mom|mother|lady)\b/.test(lower) && !/\b(he|his|man|guy|dude|bro)\b/.test(lower)) traits.push('female');
+  else if (/\b(he|his|man|guy|dude|bro|father)\b/.test(lower)) traits.push('male');
+  return traits;
+}
+
+// --- Copy Main Message ---
+function cpCopyMain() {
+  const text = document.getElementById('cpMsgText').textContent;
+  navigator.clipboard.writeText(text).then(() => showToast('Message copied to clipboard ✓'));
+}
+
+// --- OCR Screenshot Handler ---
+function cpHandleFiles(files) {
+  if (!files || !files.length) return;
+  const loading = document.getElementById('cpOcrLoading');
+  loading.classList.add('active');
+  const promises = Array.from(files).slice(0, 3).map(file => {
+    return Tesseract.recognize(file, 'eng', {}).then(r => r.data.text);
+  });
+  Promise.all(promises).then(texts => {
+    loading.classList.remove('active');
+    const combined = texts.join('\n\n');
+    if (!combined.trim()) { showToast('Could not extract text from image'); return; }
+    const detected = cpDetectFromText(combined);
+    const temp = cpCalcTempFromConvo(combined);
+    const name = cpExtractName(combined);
+    const traits = cpGuessTraits(combined);
+    cpRenderResults(detected.length ? detected : ['think'], temp, name, traits, combined);
+  }).catch(err => {
+    loading.classList.remove('active');
+    showToast('OCR error: ' + err.message);
+  });
+}
+
+// Drop zone events
+(function(){
+  const dz = document.getElementById('cpDropZone');
+  if (!dz) return;
+  ['dragenter','dragover'].forEach(e => dz.addEventListener(e, ev => { ev.preventDefault(); dz.classList.add('dragover'); }));
+  ['dragleave','drop'].forEach(e => dz.addEventListener(e, ev => { ev.preventDefault(); dz.classList.remove('dragover'); }));
+  dz.addEventListener('drop', ev => { if (ev.dataTransfer.files.length) cpHandleFiles(ev.dataTransfer.files); });
+})();
+
+// --- Add Co-Pilot to global search index ---
+searchIndex.push({type:'Tab',name:'📍 AI Co-Pilot',sub:'Navigate to tab',text:'ai copilot co-pilot analyze conversation objection response',action:()=>switchTab('copilot')});
+Object.keys(cpObjDB).forEach(key => {
+  const o = cpObjDB[key];
+  searchIndex.push({type:'Co-Pilot',name:o.emoji+' '+o.name+' (Co-Pilot)',sub:'Get instant response for this objection',
+    text:(o.name+' '+o.scripts.map(s=>s.text).join(' ')+' '+o.killShot).toLowerCase(),
+    action:()=>{switchTab('copilot');setTimeout(()=>{
+      document.querySelectorAll('#cpQsObjections .cp-qs-option').forEach(opt=>{opt.classList.toggle('selected',opt.dataset.val===key)});
+      cpQuickSelect();
+    },150)}});
+});
+
+// [Co-Pilot JS loaded above - removing duplicate block]
+// Skip to RE-OBSERVE
+void 0;
 // ===== RE-OBSERVE ON LOAD =====
 setTimeout(()=>{document.querySelectorAll('.reveal:not(.visible)').forEach(el=>observer.observe(el))},100);
 </script>
