@@ -353,6 +353,50 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
   .objection-body{transition:none}
 }
 
+/* ===== TAB 3: REDDIT & REVIEWS ===== */
+.reddit-stat-hero{padding:32px;text-align:center;border:1px solid rgba(231,76,60,.3);background:linear-gradient(135deg,rgba(231,76,60,.08),rgba(212,168,67,.06));border-radius:var(--radius);margin-bottom:40px}
+.reddit-stat-hero .big-num{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;background:linear-gradient(135deg,var(--red),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.reddit-stat-hero p{color:var(--text2);font-size:1rem;max-width:700px;margin:8px auto 0;line-height:1.7}
+.reddit-stat-hero .highlight{color:var(--gold-light);font-weight:700}
+
+.reddit-card{padding:24px;margin:16px 0;border:1px solid var(--glass-border);border-radius:var(--radius);background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);overflow:hidden;transition:all .3s}
+.reddit-card:hover{border-color:rgba(231,76,60,.25);box-shadow:0 4px 30px rgba(0,0,0,.2)}
+.reddit-card-header{display:flex;justify-content:space-between;align-items:center;gap:12px;cursor:pointer;-webkit-user-select:none;user-select:none}
+.reddit-card-header h3{font-size:1.1rem;margin:0}
+.reddit-card-header .meaning{font-size:.88rem;color:var(--text2);margin-top:4px}
+.reddit-card-body{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.25,.46,.45,.94)}
+.reddit-card.open .reddit-card-body{max-height:5000px}
+.reddit-card.open .expand-icon{transform:rotate(180deg)}
+.reddit-card-content{padding-top:20px}
+
+/* Framework steps */
+.framework-steps{display:flex;flex-direction:column;gap:0;position:relative;max-width:700px;margin:0 auto}
+.framework-step{display:flex;align-items:flex-start;gap:20px;position:relative;padding:20px 0}
+.framework-step-num{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.1rem;flex-shrink:0;position:relative;z-index:2}
+.framework-step-num.red-gold{background:linear-gradient(135deg,var(--red),var(--gold));color:var(--bg)}
+.framework-step-content{flex:1}
+.framework-step-content h4{font-size:1rem;margin-bottom:4px}
+.framework-step-content p{font-size:.88rem;color:var(--text2)}
+.framework-connector{position:absolute;left:23px;top:68px;bottom:0;width:2px;background:linear-gradient(180deg,var(--gold),rgba(231,76,60,.3));z-index:1}
+.framework-step:last-child .framework-connector{display:none}
+
+.reddit-section-label{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin:20px 0 12px;padding-left:4px}
+.reddit-section-label.red{color:var(--red)}
+.reddit-section-label.gold{color:var(--gold)}
+.reddit-section-label.green{color:var(--green)}
+.reddit-section-label.orange{color:var(--orange)}
+.reddit-section-label.blue{color:var(--blue)}
+
+.reddit-quick-scripts{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;margin-top:16px}
+
+@media(max-width:768px){
+  .framework-steps{max-width:100%}
+  .framework-step{gap:14px}
+  .framework-step-num{width:38px;height:38px;font-size:.95rem}
+  .framework-connector{left:18px;top:58px}
+  .reddit-quick-scripts{grid-template-columns:1fr}
+}
+
 /* PRINT */
 @media print{
   body{background:#fff;color:#000}
@@ -376,6 +420,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
     <div class="tab-nav" id="tabNav">
       <button class="tab-btn active" data-tab="dashboard">📊 Dashboard</button>
       <button class="tab-btn" data-tab="objections">🎯 Objections</button>
+      <button class="tab-btn" data-tab="reddit">🔴 Reddit & Reviews</button>
       <button class="tab-btn" data-tab="payment">💳 Payment Plans</button>
       <button class="tab-btn" data-tab="deathpoints">💀 Where Deals Die</button>
       <button class="tab-btn" data-tab="scripts">✨ Golden Scripts</button>
@@ -462,7 +507,247 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
 </div>
 </div>
 
-<!-- ==================== TAB 3: PAYMENT PLANS ==================== -->
+<!-- ==================== TAB 3: REDDIT & REVIEWS ==================== -->
+<div class="tab-content" id="tab-reddit">
+<div class="container">
+
+  <!-- Section 1: THE REALITY -->
+  <section>
+    <div class="section-title reveal"><h2>The Reality</h2><p>What the data actually says about scam fear & Reddit objections</p></div>
+    <div class="reddit-stat-hero reveal">
+      <div class="big-num">1,530 leads mentioned scam fear → 52 still bought (3.4%)</div>
+      <p style="margin-top:16px">That means for every <span class="highlight">30 leads</span> who bring up Reddit, you <strong>WILL</strong> close 1. Don't write them off.</p>
+      <p style="margin-top:12px;font-size:.92rem">The fact they're still talking to you means they <span class="highlight">WANT to be convinced</span>. They're looking for <span class="highlight">permission to trust you</span>.</p>
+    </div>
+    <div class="insights-grid reveal">
+      <div class="insight-card glass"><span class="insight-num">01</span><h3>They Haven't Left Yet</h3><p>If they're bringing up Reddit or scam fears, they're still engaged. Someone who doesn't care just ghosts. They're giving you a chance to prove them wrong.</p></div>
+      <div class="insight-card glass"><span class="insight-num">02</span><h3>Fear ≠ Rejection</h3><p>Scam fear is not a "no." It's "I'm scared to say yes." That's a completely different conversation — and one you can win.</p></div>
+      <div class="insight-card glass"><span class="insight-num">03</span><h3>Proof Beats Words</h3><p>You will never talk someone out of scam fear. You can only show them out of it. Results page, YouTube, student testimonials — proof is your only weapon.</p></div>
+    </div>
+  </section>
+
+  <!-- Section 2: WHAT THEY SAY → WHAT THEY MEAN -->
+  <section>
+    <div class="section-title reveal"><h2>What They Say → What They Mean</h2><p>Every variation of the scam/Reddit objection and exactly how to handle it</p></div>
+
+    <div class="objection-list" id="redditCards">
+
+      <!-- Reddit Card 1 -->
+      <div class="reddit-card glass reveal" data-search="reddit stuff saw some stuff on reddit about you guys interested scared homework">
+        <div class="reddit-card-header" onclick="this.parentElement.classList.toggle('open')">
+          <div>
+            <h3>🟠 "I saw some stuff on Reddit about you guys"</h3>
+            <div class="meaning">What they mean: <em>"I'm interested but scared. Give me a reason to trust you."</em></div>
+          </div>
+          <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;transition:transform .3s;color:var(--text3);flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="reddit-card-body"><div class="reddit-card-content">
+          <div class="reddit-section-label gold">🎯 THE PLAY</div>
+          <div class="script-block"><div class="script-label">Step 1 — Validate</div><div class="script-text">"I appreciate you bringing that up — most people don't, and it tells me you're doing your homework. That's exactly the kind of person we want in KCU."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">Step 2 — Reframe</div><div class="script-text">"Have you ever noticed how on Reddit, the loudest voices are always the people who failed? Nobody who's making money sits on Reddit writing reviews. They're too busy trading."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">Step 3 — Proof</div><div class="script-text">"I'll be straight with you — we've mentored over a thousand students. Not everyone makes it. The ones who fail? They blame the program. The ones who succeed? They're posting gains in our Discord. Same program, different effort."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">Step 4 — Evidence</div><div class="script-text">"Let me send you something real — actual P&L screenshots from our students. Not testimonials we wrote. Real numbers."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+
+          <div class="reddit-section-label orange">🔄 FOLLOW-UP</div>
+          <div class="script-block" style="border-left-color:var(--orange)"><div class="script-text">"Look, I show my red days too. I'm not selling a dream. I'm selling a skill. Check my YouTube — I'm transparent about everything."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+
+          <div class="reddit-section-label green">💥 KILL SHOT</div>
+          <div class="script-block" style="border-left-color:var(--green)"><div class="script-text">"The question isn't whether some random person on Reddit thinks I'm legit. The question is — are YOU going to keep losing money on your own, or are you going to learn how to do this properly?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+
+          <div class="reddit-section-label red">🚫 WHAT NOT TO SAY</div>
+          <div class="dont-block"><div class="script-text">Never say "Reddit is fake" or "those people are lying."</div></div>
+          <div class="dont-block"><div class="script-text">Never get defensive. It confirms their suspicion.</div></div>
+          <div class="dont-block"><div class="script-text">Never dismiss their concern. Acknowledge it, then redirect.</div></div>
+        </div></div>
+      </div>
+
+      <!-- Reddit Card 2 -->
+      <div class="reddit-card glass reveal" data-search="bad reviews read some bad reviews social proof negative">
+        <div class="reddit-card-header" onclick="this.parentElement.classList.toggle('open')">
+          <div>
+            <h3>📝 "I read some bad reviews"</h3>
+            <div class="meaning">What they mean: <em>"I need social proof to override the negative"</em></div>
+          </div>
+          <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;transition:transform .3s;color:var(--text3);flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="reddit-card-body"><div class="reddit-card-content">
+          <div class="reddit-section-label gold">🎯 THE PLAY</div>
+          <div class="script-block"><div class="script-label">Step 1 — Curiosity</div><div class="script-text">"Which reviews? I'm curious because I want to know what you saw."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">Step 2 — Counter with Proof</div><div class="script-text">"I'll tell you something — anyone can write anything on the internet. What you can't fake is real student results. These are real students, real P&L screenshots, real money."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">Step 3 — Authority</div><div class="script-text">"I've been public about my trading for years. 1 million followers didn't come from being a scam. But don't take my word for it — here are students on video sharing their experience."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+
+          <div class="reddit-section-label orange">🔄 FOLLOW-UP</div>
+          <div class="script-block" style="border-left-color:var(--orange)"><div class="script-text">"At the end of the day, you're not investing in a review — you're investing in a skill. Would you rather listen to anonymous strangers or see real results?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div></div>
+      </div>
+
+      <!-- Reddit Card 3 -->
+      <div class="reddit-card glass reveal" data-search="is this legit is this a scam convince me real">
+        <div class="reddit-card-header" onclick="this.parentElement.classList.toggle('open')">
+          <div>
+            <h3>🛡️ "Is this legit?" / "Is this a scam?"</h3>
+            <div class="meaning">What they mean: <em>"I want this to be real. Convince me."</em></div>
+          </div>
+          <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;transition:transform .3s;color:var(--text3);flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="reddit-card-body"><div class="reddit-card-content">
+          <div class="reddit-section-label gold">🎯 THE PLAY</div>
+          <div class="script-block"><div class="script-label">Step 1 — Flip It</div><div class="script-text">"I love this question because it means you're smart enough to ask. Most people just hand their money to anyone with a nice Instagram."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">Step 2 — Transparency</div><div class="script-text">"Let me ask you this — have you watched my YouTube? I show every trade, red and green. I show my losses. Does that sound like a scam to you?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">Step 3 — Track Record</div><div class="script-text">"We've been operating for years. Over a thousand students. If we were a scam, we'd be shut down by now. But here we are, growing every month."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+
+          <div class="reddit-section-label green">💥 KILL SHOT</div>
+          <div class="script-block" style="border-left-color:var(--green)"><div class="script-text">"Look, I get it. The trading education space is full of frauds. That's exactly why KCU exists — to be the real thing. I can't make you trust me over text. But I CAN show you the results."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div></div>
+      </div>
+
+      <!-- Reddit Card 4 -->
+      <div class="reddit-card glass reveal" data-search="friend told me not to sign up projecting fear never tried">
+        <div class="reddit-card-header" onclick="this.parentElement.classList.toggle('open')">
+          <div>
+            <h3>👥 "A friend told me not to sign up"</h3>
+            <div class="meaning">What they mean: <em>"Someone who never tried it is projecting their fear onto me"</em></div>
+          </div>
+          <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;transition:transform .3s;color:var(--text3);flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="reddit-card-body"><div class="reddit-card-content">
+          <div class="reddit-section-label gold">🎯 THE PLAY</div>
+          <div class="script-block"><div class="script-label">Step 1 — The Question</div><div class="script-text">"Is your friend a profitable trader?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">Step 2 — Reframe</div><div class="script-text">"I respect that your friend cares about you. But has your friend tried KCU? Or are they just repeating what they read online?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">Step 3 — Truth Bomb</div><div class="script-text">"Here's the thing — the people who warn you about trading education are usually the ones who've never invested in themselves. They're comfortable being broke."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+
+          <div class="reddit-section-label orange">🔄 FOLLOW-UP</div>
+          <div class="script-block" style="border-left-color:var(--orange)"><div class="script-text">"Tell your friend to check the results page. Then ask them if they can show you those kinds of gains."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div></div>
+      </div>
+
+    </div><!-- /redditCards -->
+  </section>
+
+  <!-- Section 3: I CAN'T DO THIS RIGHT NOW -->
+  <section>
+    <div class="section-title reveal"><h2>"I Can't Do This Right Now"</h2><p>Timing objections that feel final — but aren't</p></div>
+
+    <div class="objection-list">
+
+      <!-- Timing Card 1 -->
+      <div class="reddit-card glass reveal" data-search="not the right time timing start later">
+        <div class="reddit-card-header" onclick="this.parentElement.classList.toggle('open')">
+          <div>
+            <h3>⏳ "Not the right time"</h3>
+            <div class="meaning">Translation: <em>"I'm scared and delay feels safer than commitment"</em></div>
+          </div>
+          <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;transition:transform .3s;color:var(--text3);flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="reddit-card-body"><div class="reddit-card-content">
+          <div class="reddit-section-label gold">🎯 THE PLAY</div>
+          <div class="script-block"><div class="script-label">Urgency</div><div class="script-text">"When IS the right time? Because the market is open every day and every day you're not learning is money left on the table."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">Reality Check</div><div class="script-text">"I hear that a lot. And honestly? There's never a perfect time. The people who win are the ones who start before they're ready."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">Open Question</div><div class="script-text">"What would need to change for it to be the right time?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="reddit-section-label green">💥 KILL SHOT</div>
+          <div class="script-block" style="border-left-color:var(--green)"><div class="script-text">"Six months from now, you'll wish you started today."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+        </div></div>
+      </div>
+
+      <!-- Timing Card 2 -->
+      <div class="reddit-card glass reveal" data-search="save up first money afford payment plan">
+        <div class="reddit-card-header" onclick="this.parentElement.classList.toggle('open')">
+          <div>
+            <h3>💸 "I need to save up first"</h3>
+            <div class="meaning">Translation: <em>"I want in but the lump sum scares me"</em></div>
+          </div>
+          <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;transition:transform .3s;color:var(--text3);flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="reddit-card-body"><div class="reddit-card-content">
+          <div class="reddit-section-label gold">🎯 THE PLAY</div>
+          <div class="script-block"><div class="script-label">Payment Plan Bridge</div><div class="script-text">"I get that. That's exactly why we have payment plans. First payment of $1,100 gets you full access — you can start learning and earning while you pay."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">ROI Frame</div><div class="script-text">"What if the money you'd make in the first month covers the rest of the program? That's what happened for a lot of our students."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="timing-note">💳 <strong>Follow-Up:</strong> Transition to the Payment Plans tab for detailed pricing scripts and the payment plan finder.</div>
+        </div></div>
+      </div>
+
+      <!-- Timing Card 3 -->
+      <div class="reddit-card glass reveal" data-search="maybe next month let me think about it think hold spot">
+        <div class="reddit-card-header" onclick="this.parentElement.classList.toggle('open')">
+          <div>
+            <h3>🗓️ "Maybe next month" / "Let me think about it"</h3>
+            <div class="meaning">Translation: <em>"I need a nudge and a reason to act now"</em></div>
+          </div>
+          <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;transition:transform .3s;color:var(--text3);flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="reddit-card-body"><div class="reddit-card-content">
+          <div class="reddit-section-label gold">🎯 THE PLAY</div>
+          <div class="script-block"><div class="script-label">Uncover the Real Blocker</div><div class="script-text">"I want to respect your process. But can I ask — what specifically needs to happen between now and next month for you to be ready?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">Scarcity</div><div class="script-text">"The intake is closing soon and I can't guarantee your spot. If you're serious, let's lock it in now and you can start whenever you're comfortable."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">Belief Close</div><div class="script-text">"I am willing to bet on you if you are willing to bet on yourself 💪"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="timing-note">📅 <strong>Follow-Up:</strong> Set a specific callback: "How about I check in with you on [specific day]? I'll hold your spot until then."</div>
+        </div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Section 4: THE REDDIT RECOVERY FRAMEWORK -->
+  <section>
+    <div class="section-title reveal"><h2>The Reddit Recovery Framework</h2><p>5 steps to turn scam fear into a sale</p></div>
+    <div class="framework-steps reveal">
+      <div class="framework-step">
+        <div class="framework-step-num red-gold">1</div>
+        <div class="framework-step-content glass" style="padding:20px;border-left:3px solid var(--gold)">
+          <h4 style="color:var(--gold-light)">ACKNOWLEDGE</h4>
+          <p>"I appreciate you bringing that up"</p>
+          <p style="color:var(--text3);font-size:.82rem;margin-top:4px">Never dismiss. Never get defensive. Validate their concern — it earns trust immediately.</p>
+        </div>
+        <div class="framework-connector"></div>
+      </div>
+      <div class="framework-step">
+        <div class="framework-step-num red-gold">2</div>
+        <div class="framework-step-content glass" style="padding:20px;border-left:3px solid var(--red)">
+          <h4 style="color:var(--red)">REFRAME</h4>
+          <p>"The loudest voices are the ones who failed"</p>
+          <p style="color:var(--text3);font-size:.82rem;margin-top:4px">Shift their perspective. Help them see who writes negative reviews — and who doesn't.</p>
+        </div>
+        <div class="framework-connector"></div>
+      </div>
+      <div class="framework-step">
+        <div class="framework-step-num red-gold">3</div>
+        <div class="framework-step-content glass" style="padding:20px;border-left:3px solid var(--blue)">
+          <h4 style="color:var(--blue)">PROVE</h4>
+          <p>Send results page, YouTube, real screenshots</p>
+          <p style="color:var(--text3);font-size:.82rem;margin-top:4px">Words mean nothing here. Only evidence works. Stack proof until there's nothing left to question.</p>
+        </div>
+        <div class="framework-connector"></div>
+      </div>
+      <div class="framework-step">
+        <div class="framework-step-num red-gold">4</div>
+        <div class="framework-step-content glass" style="padding:20px;border-left:3px solid var(--purple)">
+          <h4 style="color:var(--purple)">REDIRECT</h4>
+          <p>"The real question is..."</p>
+          <p style="color:var(--text3);font-size:.82rem;margin-top:4px">Bring the conversation back to THEIR goals. Make it about their future, not anonymous internet strangers.</p>
+        </div>
+        <div class="framework-connector"></div>
+      </div>
+      <div class="framework-step">
+        <div class="framework-step-num red-gold">5</div>
+        <div class="framework-step-content glass" style="padding:20px;border-left:3px solid var(--green)">
+          <h4 style="color:var(--green)">CLOSE</h4>
+          <p>"Are you going to let anonymous strangers decide your future?"</p>
+          <p style="color:var(--text3);font-size:.82rem;margin-top:4px">Create urgency. The cost of inaction > the cost of the program. Make them choose their future self.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: QUICK COPY SCRIPTS -->
+  <section>
+    <div class="section-title reveal"><h2>Quick Copy Scripts</h2><p>Every script from above — one click to copy</p></div>
+    <div class="reddit-quick-scripts reveal" id="redditScriptsGrid"></div>
+  </section>
+
+</div>
+</div>
+
+<!-- ==================== TAB 4: PAYMENT PLANS ==================== -->
 <div class="tab-content" id="tab-payment">
 <div class="container">
   <div class="section-title reveal"><h2>Payment Plan Playbook</h2><p>Every pricing option, when to use it, and the exact scripts</p></div>
@@ -1266,6 +1551,54 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape')document.getElementById('quickFind').classList.remove('open');
   if((e.key==='k'||e.key==='K')&&(e.metaKey||e.ctrlKey)){e.preventDefault();openQuickFind()}
 });
+
+// ===== REDDIT QUICK SCRIPTS =====
+const redditQuickScripts=[
+  {cat:'Reddit',text:"I appreciate you bringing that up — most people don't, and it tells me you're doing your homework. That's exactly the kind of person we want in KCU."},
+  {cat:'Reddit',text:"Have you ever noticed how on Reddit, the loudest voices are always the people who failed? Nobody who's making money sits on Reddit writing reviews. They're too busy trading."},
+  {cat:'Reddit',text:"I'll be straight with you — we've mentored over a thousand students. Not everyone makes it. The ones who fail? They blame the program. The ones who succeed? They're posting gains in our Discord. Same program, different effort."},
+  {cat:'Reddit',text:"Let me send you something real — actual P&L screenshots from our students. Not testimonials we wrote. Real numbers."},
+  {cat:'Reddit',text:"Look, I show my red days too. I'm not selling a dream. I'm selling a skill. Check my YouTube — I'm transparent about everything."},
+  {cat:'Reddit Kill Shot',text:"The question isn't whether some random person on Reddit thinks I'm legit. The question is — are YOU going to keep losing money on your own, or are you going to learn how to do this properly?"},
+  {cat:'Bad Reviews',text:"Which reviews? I'm curious because I want to know what you saw."},
+  {cat:'Bad Reviews',text:"I'll tell you something — anyone can write anything on the internet. What you can't fake is real student results. These are real students, real P&L screenshots, real money."},
+  {cat:'Bad Reviews',text:"I've been public about my trading for years. 1 million followers didn't come from being a scam. But don't take my word for it — here are students on video sharing their experience."},
+  {cat:'Bad Reviews',text:"At the end of the day, you're not investing in a review — you're investing in a skill. Would you rather listen to anonymous strangers or see real results?"},
+  {cat:'Scam Fear',text:"I love this question because it means you're smart enough to ask. Most people just hand their money to anyone with a nice Instagram."},
+  {cat:'Scam Fear',text:"Let me ask you this — have you watched my YouTube? I show every trade, red and green. I show my losses. Does that sound like a scam to you?"},
+  {cat:'Scam Fear',text:"We've been operating for years. Over a thousand students. If we were a scam, we'd be shut down by now. But here we are, growing every month."},
+  {cat:'Scam Kill Shot',text:"Look, I get it. The trading education space is full of frauds. That's exactly why KCU exists — to be the real thing. I can't make you trust me over text. But I CAN show you the results."},
+  {cat:'Friend Warning',text:"Is your friend a profitable trader?"},
+  {cat:'Friend Warning',text:"I respect that your friend cares about you. But has your friend tried KCU? Or are they just repeating what they read online?"},
+  {cat:'Friend Warning',text:"Here's the thing — the people who warn you about trading education are usually the ones who've never invested in themselves. They're comfortable being broke."},
+  {cat:'Friend Warning',text:"Tell your friend to check the results page. Then ask them if they can show you those kinds of gains."},
+  {cat:'Timing',text:"When IS the right time? Because the market is open every day and every day you're not learning is money left on the table."},
+  {cat:'Timing',text:"I hear that a lot. And honestly? There's never a perfect time. The people who win are the ones who start before they're ready."},
+  {cat:'Timing Kill Shot',text:"Six months from now, you'll wish you started today."},
+  {cat:'Save Up',text:"I get that. That's exactly why we have payment plans. First payment of $1,100 gets you full access — you can start learning and earning while you pay."},
+  {cat:'Save Up',text:"What if the money you'd make in the first month covers the rest of the program? That's what happened for a lot of our students."},
+  {cat:'Think About It',text:"I want to respect your process. But can I ask — what specifically needs to happen between now and next month for you to be ready?"},
+  {cat:'Think About It',text:"The intake is closing soon and I can't guarantee your spot. If you're serious, let's lock it in now and you can start whenever you're comfortable."},
+  {cat:'Think About It',text:"I am willing to bet on you if you are willing to bet on yourself 💪"}
+];
+
+(function renderRedditScripts(){
+  const grid=document.getElementById('redditScriptsGrid');
+  if(!grid)return;
+  redditQuickScripts.forEach((s,i)=>{
+    const card=document.createElement('div');
+    card.className='script-card glass';
+    card.style.animation=`fadeInUp .4s ${i*25}ms both`;
+    card.innerHTML=`<div class="script-cat">${s.cat}</div><div class="script-text">"${s.text}"</div><button class="copy-script" onclick="copyScript(this)">Copy</button>`;
+    grid.appendChild(card);
+  });
+})();
+
+// Add Reddit tab to search index
+redditQuickScripts.forEach(s=>{
+  searchIndex.push({type:'Script',name:'"'+s.text.substring(0,60)+'..."',sub:'Reddit & Reviews — '+s.cat,text:(s.text+' '+s.cat+' reddit reviews scam fear friend timing').toLowerCase(),action:()=>{switchTab('reddit');setTimeout(()=>{const el=document.getElementById('redditScriptsGrid');if(el)el.scrollIntoView({behavior:'smooth',block:'center'})},100)}});
+});
+searchIndex.push({type:'Tab',name:'📍 Reddit & Reviews',sub:'Navigate to tab',text:'reddit reviews scam fear friend timing save think',action:()=>switchTab('reddit')});
 
 // ===== RE-OBSERVE ON LOAD =====
 setTimeout(()=>{document.querySelectorAll('.reveal:not(.visible)').forEach(el=>observer.observe(el))},100);
