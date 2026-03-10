@@ -498,7 +498,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
 }
 
 /* ===== TAB 9: AI CO-PILOT ===== */
-.copilot-input-section{max-width:900px;margin:0 auto}
+.copilot-input-section{max-width:1100px;margin:0 auto}
 
 /* Mode Tabs */
 .cp-mode-tabs{display:flex;gap:0;margin-bottom:24px;border-bottom:2px solid var(--glass-border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -515,6 +515,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
 .cp-qs-group{margin-bottom:28px}
 .cp-qs-group-title{font-size:1rem;font-weight:700;color:var(--gold-light);margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .cp-qs-grid{display:grid;grid-template-columns:1fr;gap:8px}
+@media(min-width:768px){.cp-qs-grid{grid-template-columns:1fr 1fr}}
 .cp-qs-option{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--glass);border:2px solid var(--glass-border);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;min-height:52px}
 .cp-qs-option:hover{border-color:rgba(212,168,67,.25);background:rgba(212,168,67,.04)}
 .cp-qs-option.selected{border-color:var(--gold);background:rgba(212,168,67,.08);box-shadow:0 0 15px rgba(212,168,67,.1)}
@@ -567,7 +568,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
 
 /* Temperature Gauge */
 .cp-temp-gauge{padding:28px;text-align:center;margin-bottom:24px}
-.cp-temp-bar{height:16px;border-radius:8px;background:linear-gradient(90deg,#4a4a6a,#3498DB,#2ECC71,#F1C40F,#E67E22,#E74C3C);margin:20px auto;max-width:600px;position:relative;overflow:visible}
+.cp-temp-bar{height:16px;border-radius:8px;background:linear-gradient(90deg,#4a4a6a,#3498DB,#2ECC71,#F1C40F,#E67E22,#E74C3C);margin:20px auto;max-width:900px;position:relative;overflow:visible}
 .cp-temp-marker{position:absolute;top:-6px;width:28px;height:28px;background:var(--gold);border:3px solid var(--bg);border-radius:50%;transform:translateX(-50%);transition:left .8s cubic-bezier(.25,.46,.45,.94);box-shadow:0 0 15px rgba(212,168,67,.5)}
 .cp-temp-label{font-size:1.6rem;font-weight:900;margin-bottom:4px}
 .cp-temp-desc{color:var(--text2);font-size:1rem}
@@ -1396,7 +1397,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
 
 <!-- ==================== TAB 9: AI CO-PILOT ==================== -->
 <div class="tab-content" id="tab-copilot">
-<div class="container">
+<div class="container" style="max-width:1400px">
 
   <!-- SECTION 1: INPUT -->
   <section>
