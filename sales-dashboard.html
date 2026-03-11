@@ -5882,6 +5882,309 @@ searchIndex.push({type:'Tab',name:'💳 Payment Link Follow-Up',sub:'Follow up o
 
 // ===== RE-OBSERVE ON LOAD =====
 setTimeout(()=>{document.querySelectorAll('.reveal:not(.visible)').forEach(el=>observer.observe(el))},100);
+
+// ===== LOCALSTORAGE PERSISTENCE =====
+(function(){
+  var P='kc_dash_';
+  var _dTimers={};
+  function LS(k,v){if(arguments.length===1)return localStorage.getItem(P+k);if(v===null)localStorage.removeItem(P+k);else localStorage.setItem(P+k,v)}
+  function debSave(key,fn,ms){clearTimeout(_dTimers[key]);_dTimers[key]=setTimeout(fn,ms||300)}
+
+  // --- TAB 9: AI CO-PILOT ---
+  var cpHero=document.getElementById('cpHeroInput');
+  var cpName=document.getElementById('cpLeadName');
+  var cpConvo=document.getElementById('cpConvoInput');
+  var cpResults=document.getElementById('cpResults');
+
+  // Text inputs with debounce
+  if(cpHero)cpHero.addEventListener('input',function(){debSave('cpHero',function(){LS('cpHero',cpHero.value)})});
+  if(cpName)cpName.addEventListener('input',function(){debSave('cpName',function(){LS('cpName',cpName.value)})});
+  if(cpConvo)cpConvo.addEventListener('input',function(){debSave('cpConvo',function(){LS('cpConvo',cpConvo.value)})});
+
+  // Checkboxes (objections) - save selected values as JSON
+  function saveCheckGroup(containerId,key){
+    var el=document.getElementById(containerId);if(!el)return;
+    el.addEventListener('click',function(e){
+      var opt=e.target.closest('.cp-qs-option,.cp-qs-suboption');if(!opt)return;
+      setTimeout(function(){
+        var vals=[];
+        el.querySelectorAll('.cp-qs-option.selected,.cp-qs-suboption.selected').forEach(function(o){vals.push(o.dataset.val)});
+        LS(key,JSON.stringify(vals));
+      },50);
+    });
+  }
+  saveCheckGroup('cpQsObjections','cpObj');
+  saveCheckGroup('cpAffordSubs','cpAffSub');
+  saveCheckGroup('cpQsTraits','cpTraits');
+  saveCheckGroup('cpQsProofSent','cpProof');
+
+  // Radio-style groups (temperature)
+  function saveRadioGroup(containerId,key){
+    var el=document.getElementById(containerId);if(!el)return;
+    el.addEventListener('click',function(e){
+      var opt=e.target.closest('.cp-qs-option');if(!opt)return;
+      setTimeout(function(){
+        var sel=el.querySelector('.cp-qs-option.selected');
+        LS(key,sel?sel.dataset.val:'');
+      },50);
+    });
+  }
+  saveRadioGroup('cpQsTemp','cpTemp');
+
+  // Conversation stage
+  var cpStage=document.getElementById('cpQsStage');
+  if(cpStage)cpStage.addEventListener('click',function(e){
+    var opt=e.target.closest('.cp-stage-option');if(!opt)return;
+    setTimeout(function(){
+      var sel=cpStage.querySelector('.cp-stage-option.selected');
+      LS('cpStage',sel?sel.dataset.val:'opening');
+    },50);
+  });
+
+  // Save results HTML on mutation
+  if(cpResults){
+    var cpResObs=new MutationObserver(function(){
+      if(cpResults.classList.contains('active')){
+        debSave('cpRes',function(){LS('cpRes',cpResults.innerHTML)},500);
+        LS('cpResActive','1');
+      }
+    });
+    cpResObs.observe(cpResults,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+  }
+
+  // Restore Co-Pilot
+  function restoreCoPilot(){
+    var v;
+    if(cpHero&&(v=LS('cpHero')))cpHero.value=v;
+    if(cpName&&(v=LS('cpName')))cpName.value=v;
+    if(cpConvo&&(v=LS('cpConvo')))cpConvo.value=v;
+
+    // Restore checkbox groups
+    function restoreCheckGroup(containerId,key,selector){
+      var el=document.getElementById(containerId);if(!el)return;
+      var raw=LS(key);if(!raw)return;
+      try{var vals=JSON.parse(raw)}catch(e){return}
+      el.querySelectorAll(selector||'.cp-qs-option,.cp-qs-suboption').forEach(function(o){
+        if(vals.indexOf(o.dataset.val)>=0)o.classList.add('selected');
+      });
+      // Show afford subs if affordability selected
+      if(containerId==='cpQsObjections'){
+        var affOpt=el.querySelector('.cp-qs-option[data-val="affordability"]');
+        if(affOpt&&affOpt.classList.contains('selected')){
+          var affSubs=document.getElementById('cpAffordSubs');
+          if(affSubs)affSubs.classList.add('visible');
+        }
+      }
+    }
+    restoreCheckGroup('cpQsObjections','cpObj');
+    restoreCheckGroup('cpAffordSubs','cpAffSub');
+    restoreCheckGroup('cpQsTraits','cpTraits');
+    restoreCheckGroup('cpQsProofSent','cpProof');
+
+    // Restore temperature
+    v=LS('cpTemp');
+    if(v){
+      var tempEl=document.getElementById('cpQsTemp');
+      if(tempEl){
+        tempEl.querySelectorAll('.cp-qs-option').forEach(function(o){o.classList.remove('selected')});
+        var match=tempEl.querySelector('.cp-qs-option[data-val="'+v+'"]');
+        if(match)match.classList.add('selected');
+      }
+    }
+
+    // Restore stage
+    v=LS('cpStage');
+    if(v&&cpStage){
+      cpStage.querySelectorAll('.cp-stage-option').forEach(function(o){o.classList.remove('selected')});
+      var match=cpStage.querySelector('.cp-stage-option[data-val="'+v+'"]');
+      if(match)match.classList.add('selected');
+    }
+
+    // Restore results
+    if(cpResults&&LS('cpResActive')==='1'){
+      var html=LS('cpRes');
+      if(html){cpResults.innerHTML=html;cpResults.classList.add('active')}
+    }
+  }
+
+  // Clear Co-Pilot localStorage
+  function clearCoPilot(){
+    ['cpHero','cpName','cpConvo','cpObj','cpAffSub','cpTraits','cpProof','cpTemp','cpStage','cpRes','cpResActive'].forEach(function(k){LS(k,null)});
+  }
+
+  // Patch cpStartOver
+  var origCpStartOver=window.cpStartOver;
+  window.cpStartOver=function(){
+    clearCoPilot();
+    if(typeof origCpStartOver==='function')origCpStartOver();
+    // Also clear hero input which original doesn't reset
+    if(cpHero)cpHero.value='';
+    if(cpConvo)cpConvo.value='';
+  };
+
+  // --- TAB 10: GAINS ---
+  var gsSearch=document.getElementById('gsSearch');
+  var gsResult=document.getElementById('gsResult');
+
+  if(gsSearch)gsSearch.addEventListener('input',function(){debSave('gsSearch',function(){LS('gsSearch',gsSearch.value)})});
+
+  // Quick amount buttons
+  document.querySelectorAll('.gs-quick-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      setTimeout(function(){
+        var active=document.querySelector('.gs-quick-btn.active');
+        LS('gsQuickAmt',active?active.dataset.amount:'');
+      },50);
+    });
+  });
+
+  // Save gains result on mutation
+  if(gsResult){
+    var gsResObs=new MutationObserver(function(){
+      debSave('gsRes',function(){LS('gsRes',gsResult.innerHTML)},500);
+    });
+    gsResObs.observe(gsResult,{childList:true,subtree:true});
+  }
+
+  function restoreGains(){
+    var v;
+    if(gsSearch&&(v=LS('gsSearch')))gsSearch.value=v;
+    var amt=LS('gsQuickAmt');
+    if(amt){
+      document.querySelectorAll('.gs-quick-btn').forEach(function(b){
+        b.classList.toggle('active',b.dataset.amount===amt);
+      });
+    }
+    if(gsResult){var h=LS('gsRes');if(h)gsResult.innerHTML=h}
+  }
+
+  // --- TAB 12: COLD FEET ---
+  var cfNameEl=document.getElementById('cfName');
+  var cfMsg=document.getElementById('cfMessage');
+  var cfOut=document.getElementById('cfOutput');
+
+  if(cfNameEl)cfNameEl.addEventListener('input',function(){debSave('cfName',function(){LS('cfName',cfNameEl.value)})});
+  if(cfMsg)cfMsg.addEventListener('input',function(){debSave('cfMsg',function(){LS('cfMsg',cfMsg.value)})});
+
+  // Save cold feet output on mutation
+  if(cfOut){
+    var cfOutObs=new MutationObserver(function(){
+      debSave('cfOut',function(){
+        LS('cfOutHtml',cfOut.innerHTML);
+        LS('cfOutVis',cfOut.style.display==='none'?'0':'1');
+      },500);
+    });
+    cfOutObs.observe(cfOut,{childList:true,subtree:true,attributes:true,attributeFilter:['style']});
+  }
+
+  function restoreColdFeet(){
+    var v;
+    if(cfNameEl&&(v=LS('cfName')))cfNameEl.value=v;
+    if(cfMsg&&(v=LS('cfMsg')))cfMsg.value=v;
+    if(cfOut&&LS('cfOutVis')==='1'){
+      var h=LS('cfOutHtml');
+      if(h){cfOut.innerHTML=h;cfOut.style.display='block'}
+    }
+  }
+
+  // --- TAB 13: PAYMENT FOLLOW-UP ---
+  var fuNameEl=document.getElementById('fuName');
+  var fuIncomeEl=document.getElementById('fuIncome');
+  var fuStandoutOther=document.getElementById('fuStandoutOther');
+  var fuOutEl=document.getElementById('fuOutput');
+
+  // Text inputs
+  if(fuNameEl)fuNameEl.addEventListener('input',function(){debSave('fuName',function(){LS('fuName',fuNameEl.value)})});
+  if(fuIncomeEl)fuIncomeEl.addEventListener('input',function(){debSave('fuIncome',function(){LS('fuIncome',fuIncomeEl.value)})});
+  if(fuStandoutOther)fuStandoutOther.addEventListener('input',function(){debSave('fuStandoutOther',function(){LS('fuStandoutOther',fuStandoutOther.value)})});
+
+  // Radio groups
+  function saveRadio(name,key){
+    document.querySelectorAll('input[type=radio][name="'+name+'"]').forEach(function(r){
+      r.addEventListener('change',function(){LS(key,r.value)});
+    });
+  }
+  saveRadio('fuTime','fuTime');
+  saveRadio('fuExcitement','fuExcitement');
+  saveRadio('fuObjection','fuObjection');
+
+  // Checkboxes (standout)
+  var fuStandoutEl=document.getElementById('fuStandout');
+  if(fuStandoutEl)fuStandoutEl.addEventListener('change',function(){
+    var vals=[];
+    fuStandoutEl.querySelectorAll('input[type=checkbox]:checked').forEach(function(c){vals.push(c.value)});
+    LS('fuStandout',JSON.stringify(vals));
+    // Show/hide other input
+    if(fuStandoutOther){
+      var hasOther=vals.indexOf('other')>=0;
+      fuStandoutOther.style.display=hasOther?'block':'none';
+    }
+  });
+
+  // Save follow-up output on mutation
+  if(fuOutEl){
+    var fuOutObs=new MutationObserver(function(){
+      debSave('fuOut',function(){
+        LS('fuOutHtml',fuOutEl.innerHTML);
+        LS('fuOutVis',fuOutEl.style.display==='none'?'0':'1');
+      },500);
+    });
+    fuOutObs.observe(fuOutEl,{childList:true,subtree:true,attributes:true,attributeFilter:['style']});
+  }
+
+  function restoreFollowUp(){
+    var v;
+    if(fuNameEl&&(v=LS('fuName')))fuNameEl.value=v;
+    if(fuIncomeEl&&(v=LS('fuIncome')))fuIncomeEl.value=v;
+    if(fuStandoutOther&&(v=LS('fuStandoutOther'))){fuStandoutOther.value=v;fuStandoutOther.style.display=v?'block':'none'}
+
+    // Restore radios
+    function restoreRadio(name,key){
+      v=LS(key);if(!v)return;
+      var r=document.querySelector('input[type=radio][name="'+name+'"][value="'+v+'"]');
+      if(r)r.checked=true;
+    }
+    restoreRadio('fuTime','fuTime');
+    restoreRadio('fuExcitement','fuExcitement');
+    restoreRadio('fuObjection','fuObjection');
+
+    // Restore checkboxes
+    v=LS('fuStandout');
+    if(v&&fuStandoutEl){
+      try{var vals=JSON.parse(v)}catch(e){return}
+      fuStandoutEl.querySelectorAll('input[type=checkbox]').forEach(function(c){
+        c.checked=vals.indexOf(c.value)>=0;
+      });
+      if(fuStandoutOther&&vals.indexOf('other')>=0)fuStandoutOther.style.display='block';
+    }
+
+    // Restore output
+    if(fuOutEl&&LS('fuOutVis')==='1'){
+      var h=LS('fuOutHtml');
+      if(h){fuOutEl.innerHTML=h;fuOutEl.style.display='block'}
+    }
+  }
+
+  // --- RESTORE ALL ON PAGE LOAD ---
+  restoreCoPilot();
+  restoreGains();
+  restoreColdFeet();
+  restoreFollowUp();
+
+  // --- ALSO RESTORE ON TAB SWITCH ---
+  var origSwitch=window.switchTab;
+  window.switchTab=function(id){
+    if(typeof origSwitch==='function')origSwitch(id);
+    // Defer restore slightly so DOM is visible
+    setTimeout(function(){
+      if(id==='copilot')restoreCoPilot();
+      else if(id==='gains')restoreGains();
+      else if(id==='coldfeet')restoreColdFeet();
+      else if(id==='followup')restoreFollowUp();
+    },100);
+  };
+
+})();
 </script>
 </body>
 </html>
