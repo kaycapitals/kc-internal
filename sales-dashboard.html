@@ -2603,9 +2603,26 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
           <div id="fuAltContent"></div>
         </div>
 
-        <!-- E. Follow-Up Rules -->
+        <!-- E. Money-Back Guarantee -->
+        <div class="glass reveal" style="padding:28px;margin-bottom:24px;border:1px solid rgba(46,204,113,.2)" id="fuGuarantee">
+          <h3 style="color:var(--green);margin-bottom:20px;font-size:1.15rem">🛡️ E. The Money-Back Guarantee (Nuclear Confidence Builder)</h3>
+          <div style="padding:16px;background:rgba(46,204,113,.06);border:1px solid rgba(46,204,113,.15);border-radius:8px;margin-bottom:20px;font-size:.88rem;color:var(--text2)">
+            <strong style="color:var(--green)">USE THIS WHEN:</strong> They want to pay but fear is holding them back. This removes ALL risk from their decision. Drop this AFTER building value, not as your opener.
+          </div>
+          <div id="fuGuaranteeContent">
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 1: THE GUARANTEE DROP</div><div class="fu-msg-text">Look... I'm so confident in what we do that we offer a 6-month DOUBLE your money back guarantee. That means if you finish all the modules, trade live with me daily, don't miss the meetings, and do the strategy backtesting... and you STILL don't make money? I'll give you DOUBLE what you paid back. That's how much I believe in this system and in you.</div><button class="copy-btn" onclick="event.stopPropagation();cfCopy(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 2: THE RISK REVERSAL</div><div class="fu-msg-text">Let me put it this way... the risk is literally on ME, not you. We have a 6-month guarantee where if you do the work and still don't see results, you get double your investment back. I wouldn't offer that if people weren't succeeding. The people who follow the system... they crush it. Every single time.</div><button class="copy-btn" onclick="event.stopPropagation();cfCopy(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 3: THE LOGIC CLOSE</div><div class="fu-msg-text">Think about it... what's the worst case here? You do the modules, you trade with me live every day, you learn the strategies... and if it somehow doesn't work, you get double your money back. Best case? You learn a skill that pays you for the rest of your life. There's literally no scenario where you lose.</div><button class="copy-btn" onclick="event.stopPropagation();cfCopy(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 4: THE SHORT VERSION (for quick drops)</div><div class="fu-msg-text">Oh and btw... we do a double your money back guarantee if you put in the work and it doesn't work out. So there's literally zero risk on your end. Just saying 😉</div><button class="copy-btn" onclick="event.stopPropagation();cfCopy(this)">Copy</button></div>
+          </div>
+          <div style="margin-top:16px;padding:12px 16px;background:rgba(231,76,60,.06);border-left:3px solid var(--red);border-radius:0 8px 8px 0;font-size:.85rem;color:var(--text2)">
+            <strong>CONDITIONS (know these but don't lead with them):</strong> Must complete all modules, trade live daily, attend all meetings, complete strategy backtesting. Only mention specifics if they ask. The conditions exist because anyone who does them WILL succeed.
+          </div>
+        </div>
+
+        <!-- F. Follow-Up Rules -->
         <div class="glass-gold reveal" style="padding:28px;margin-bottom:24px" id="fuRules">
-          <h3 style="color:var(--gold-light);margin-bottom:16px;font-size:1.15rem">⚠️ E. Follow-Up Rules</h3>
+          <h3 style="color:var(--gold-light);margin-bottom:16px;font-size:1.15rem">⚠️ F. Follow-Up Rules</h3>
           <div style="display:flex;flex-direction:column;gap:12px">
             <div style="padding:12px 16px;background:rgba(212,168,67,.06);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;font-size:.92rem;color:var(--text)">🚫 NEVER send more than 1 follow-up per 6 hours</div>
             <div style="padding:12px 16px;background:rgba(52,152,219,.06);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;font-size:.92rem;color:var(--text)">🤖 If they respond with ANY objection, switch to the <a href="#" onclick="event.preventDefault();switchTab('copilot')" style="color:var(--gold);font-weight:700">AI Co-Pilot tab</a></div>
@@ -5890,7 +5907,8 @@ window.generateFollowUp = function(){
     {title:'⏳ The Scarcity Play', text:`${name}, heads up... I can only hold your spot for so long. We have people on the waitlist and I want to make sure you get in. If you're still in, complete the payment today and I'll personally make sure you're set up before the next live session.`},
     {title:'📸 The Social Proof Drop', text:`(Send a gain screenshot with NO text. Let it sit. If they respond, say: "That was from today. One of my students. Just following the system.")`},
     {title:'❓ The Direct Ask', text:`Hey ${name}, real talk... are you still in or should I give your spot to someone on the waitlist? No judgment either way. I just need to know.`},
-    {title:'🎤 Voice Note Suggestion', text:`Send them a voice message instead of text. It feels more personal and they're 3x more likely to respond. Keep it under 30 seconds. Just say you were thinking about them and wanted to check in.`}
+    {title:'🎤 Voice Note Suggestion', text:`Send them a voice message instead of text. It feels more personal and they're 3x more likely to respond. Keep it under 30 seconds. Just say you were thinking about them and wanted to check in.`},
+    {title:'🛡️ The Guarantee Drop', text:`${name}, I forgot to mention something. We actually have a double your money back guarantee. If you do the work... finish the modules, trade live with me, show up to the meetings, backtest the strategies... and you STILL don't make money after 6 months? You get double what you paid back. There's literally zero risk on your end.`}
   ];
   document.getElementById('fuAltContent').innerHTML = alts.map(a => `<div class="fu-msg-block"><div class="fu-msg-label">${a.title}</div><div class="fu-msg-text">${a.text}</div><button class="copy-btn" onclick="event.stopPropagation();cfCopy(this)">Copy</button></div>`).join('');
 
