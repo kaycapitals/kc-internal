@@ -597,7 +597,7 @@ Make each response feel personal and contextual to their specific situation.`;
 
         function getEnhancedResponses(message, objectionType, context) {
             const namePrefix = context.leadName ? `${context.leadName}, ` : '';
-            const problemRef = context.theirProblem ? ` You mentioned ${context.theirProblem.toLowerCase()}.` : '';
+            const problemRef = context.theirProblem ? ` You mentioned struggling with ${context.theirProblem.toLowerCase()} - that's exactly what we fix.` : '';
             
             if (objectionType === 'price' && context.income === 'high') {
                 return [
@@ -632,8 +632,59 @@ Make each response feel personal and contextual to their specific situation.`;
                 ];
             }
 
-            // Fallback responses
-            return getContextualResponses(objectionType, context.funnel, context.objective);
+            // MUCH BETTER fallback responses based on context
+            return getSmartFallbackResponse(message, context);
+        }
+
+        function getSmartFallbackResponse(message, context) {
+            const namePrefix = context.leadName ? `${context.leadName}, ` : '';
+            const problemRef = context.theirProblem ? ` You mentioned ${context.theirProblem.toLowerCase()} - I get it, that's frustrating.` : '';
+
+            // Hot lead fallback
+            if (context.funnel === 'hot') {
+                return [
+                    {
+                        strategyName: "Hot Lead Direct Address",
+                        response: `${namePrefix}I hear what you're saying.${problemRef}\n\nHere's the thing - you're a hot lead who's clearly serious about fixing your trading. You wouldn't be here asking these questions if you weren't.\n\nMost people who get to this point with me end up joining because they realize this is exactly what they've been looking for.\n\nSo let me ask you straight up: what would need to happen for you to feel confident moving forward today? Because I've got the solution you need, and you know it.\n\nWhat's really holding you back?`,
+                        confidence: 88,
+                        psychology: "Acknowledges their hot status, uses direct confrontation, and asks for the real objection to surface."
+                    }
+                ];
+            }
+
+            // Cold lead fallback  
+            if (context.funnel === 'cold') {
+                return [
+                    {
+                        strategyName: "Cold Lead Education",
+                        response: `${namePrefix}I understand your position.${problemRef}\n\nLook, you just found out about what I do, so I get that this might feel like a lot to process.\n\nBut here's what I want you to know: I've helped over 2,000 traders go from exactly where you are to consistently profitable. The difference between the ones who succeed and the ones who stay stuck?\n\nThe successful ones take action when they recognize opportunity.\n\nYou reached out for a reason. What was that reason?`,
+                        confidence: 79,
+                        psychology: "Educates them on social proof, creates urgency around decision-making, and redirects to their original motivation."
+                    }
+                ];
+            }
+
+            // Medium income fallback
+            if (context.income === 'medium') {
+                return [
+                    {
+                        strategyName: "Middle-Income Breakthrough",
+                        response: `${namePrefix}I get where you're coming from.${problemRef}\n\nYou're making decent money but probably feeling stuck in the middle, right? Not poor, but not where you want to be either.\n\nHere's what I see: you're smart enough to know there's more out there, but you're playing it safe. The problem is, playing it safe keeps you exactly where you are.\n\nTrading done right can take you from middle class to truly wealthy. But only if you stop thinking like middle class.\n\nWhat's it going to take for you to bet on yourself?`,
+                        confidence: 82,
+                        psychology: "Addresses the middle-class mindset, challenges their safety-seeking behavior, and frames it as betting on themselves."
+                    }
+                ];
+            }
+
+            // Generic but still contextual fallback
+            return [
+                {
+                    strategyName: "Direct Challenge Response",
+                    response: `${namePrefix}Look, I'm going to be straight with you.${problemRef}\n\nYou reached out because something isn't working. Whether it's your results, your consistency, or your approach - something needs to change.\n\nI've got the solution. The question is whether you're ready to do something different, or if you want to keep getting the same results you've been getting.\n\nSo what's it going to be? Are you ready to level up, or are you going to stay stuck where you are?`,
+                    confidence: 75,
+                    psychology: "Direct confrontation that forces them to choose between change and staying stuck. Creates urgency around taking action."
+                }
+            ];
         }
 
         function generateStrategy(message, context) {
