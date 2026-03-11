@@ -624,7 +624,7 @@ Make each response feel personal and contextual to their specific situation.`;
             if (objectionType === 'thinking' && context.funnel === 'hot' && context.leadName) {
                 return [
                     {
-                        strategyName: "Hot Lead Personal Push", 
+                        strategyName: "Personal Direct Approach", 
                         response: `${context.leadName}, let's be real here.\n\nYou didn't reach out asking about my program because you were just browsing around. You reached out because you're serious about changing your trading results.${problemRef}\n\nYou've done your research, you've seen what's possible, you're asking the right questions. People who actually need to "think about it" don't get this far.\n\nSo what's really going on? Is it the money? Timeline? Something else?\n\nBecause I've got 2 spots left this month, and if you don't take one, someone else will. And they'll be making money while you're still "thinking about it."\n\nWhat's it actually going to take for you to make a decision today?`,
                         confidence: 96,
                         psychology: "Uses their name and hot status to create direct confrontation. Forces them to reveal the real objection."
@@ -640,26 +640,26 @@ Make each response feel personal and contextual to their specific situation.`;
             const namePrefix = context.leadName ? `${context.leadName}, ` : '';
             const problemRef = context.theirProblem ? ` You mentioned ${context.theirProblem.toLowerCase()} - I get it, that's frustrating.` : '';
 
-            // Hot lead fallback
+            // Hot prospect fallback
             if (context.funnel === 'hot') {
                 return [
                     {
-                        strategyName: "Hot Lead Direct Address",
-                        response: `${namePrefix}I hear what you're saying.${problemRef}\n\nHere's the thing - you're a hot lead who's clearly serious about fixing your trading. You wouldn't be here asking these questions if you weren't.\n\nMost people who get to this point with me end up joining because they realize this is exactly what they've been looking for.\n\nSo let me ask you straight up: what would need to happen for you to feel confident moving forward today? Because I've got the solution you need, and you know it.\n\nWhat's really holding you back?`,
+                        strategyName: "Direct Help Approach",
+                        response: `${namePrefix}I hear what you're saying.${problemRef}\n\nLook, you're clearly serious about getting this right - that's why you're here asking the tough questions instead of just winging it like most people.\n\nI've been exactly where you are. The frustration, the inconsistency, wondering if you'll ever figure this out. I get it.\n\nHere's what I've learned after helping thousands of people: the ones who succeed aren't necessarily the smartest or most experienced. They're the ones who recognize when they've found the right solution and actually do something about it.\n\nSo let me ask you - what would need to happen for you to feel confident taking the next step? Because I genuinely want to help you get this handled.`,
                         confidence: 88,
-                        psychology: "Acknowledges their hot status, uses direct confrontation, and asks for the real objection to surface."
+                        psychology: "Shows empathy and personal connection, removes sales pressure while still asking for commitment."
                     }
                 ];
             }
 
-            // Cold lead fallback  
+            // New prospect fallback  
             if (context.funnel === 'cold') {
                 return [
                     {
-                        strategyName: "Cold Lead Education",
-                        response: `${namePrefix}I understand your position.${problemRef}\n\nLook, you just found out about what I do, so I get that this might feel like a lot to process.\n\nBut here's what I want you to know: I've helped over 2,000 traders go from exactly where you are to consistently profitable. The difference between the ones who succeed and the ones who stay stuck?\n\nThe successful ones take action when they recognize opportunity.\n\nYou reached out for a reason. What was that reason?`,
+                        strategyName: "New Contact Education",
+                        response: `${namePrefix}I understand your position.${problemRef}\n\nLook, I know this might be the first time you're really hearing about what I do, so I get that it's a lot to take in.\n\nBut here's what I want you to know: I've helped over 2,000 traders go from struggling and inconsistent to making consistent money. The difference between the ones who succeed and the ones who stay stuck?\n\nThe successful ones recognize when they've found something that works and they act on it.\n\nSomething made you reach out today. What was it?`,
                         confidence: 79,
-                        psychology: "Educates them on social proof, creates urgency around decision-making, and redirects to their original motivation."
+                        psychology: "Shows understanding of their position, provides social proof, and redirects to their motivation without sales jargon."
                     }
                 ];
             }
