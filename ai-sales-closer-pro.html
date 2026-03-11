@@ -632,6 +632,23 @@ Make each response feel personal and contextual to their specific situation.`;
                 ];
             }
 
+            if (objectionType === 'spouse') {
+                return [
+                    {
+                        strategyName: "Spouse Discussion Strategy",
+                        response: `${namePrefix}Absolutely - big financial decisions should be discussed together. I respect that.\n\nHere's what I'd suggest: take 10 minutes tonight to show them my results page and explain what this could mean for your family's financial future.${problemRef}\n\nMost partners get excited when they see the potential to add an extra $2,000-5,000 per month to the household income.\n\nIf they have questions, I'm happy to jump on a quick call with both of you tomorrow. Would that help get everyone on the same page?`,
+                        confidence: 92,
+                        psychology: "Respects the relationship dynamic while providing a clear next step and offering to include the spouse directly."
+                    },
+                    {
+                        strategyName: "Family Benefit Reframe",
+                        response: `${namePrefix}That makes total sense - decisions like this affect the whole family.\n\nLet me ask you this though: what would an extra $50,000-100,000 per year mean for your family? Better vacations, kids' college funds, paying off the mortgage early?${problemRef}\n\nThis isn't just about you learning to trade better - it's about giving your family financial freedom. When you frame it that way, what do you think their reaction would be?`,
+                        confidence: 88,
+                        psychology: "Reframes from cost to family benefit, helps them sell it to their spouse by focusing on outcomes."
+                    }
+                ];
+            }
+
             // MUCH BETTER fallback responses based on context
             return getSmartFallbackResponse(message, context);
         }
