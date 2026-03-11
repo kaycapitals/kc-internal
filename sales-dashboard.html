@@ -1083,7 +1083,8 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
       <button class="tab-btn" data-tab="copilot">🤖 AI Co-Pilot</button>
       <button class="tab-btn" data-tab="gains">📸 Gains</button>
       <button class="tab-btn" data-tab="playbook">🗺️ The Playbook</button>
-      <button class="tab-btn" data-tab="followup">💳 Payment Follow-Up</button>
+      <button class="tab-btn" data-tab="coldfeet">🧊 Cold Feet</button>
+      <button class="tab-btn" data-tab="followup">💳 Follow-Up</button>
     </div>
   </div>
 </div>
@@ -2302,19 +2303,12 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
 </div>
 
 <!-- ==================== TAB 12: PAYMENT FOLLOW-UP & COLD FEET ==================== -->
-<div class="tab-content" id="tab-followup">
+<div class="tab-content" id="tab-coldfeet">
 <div class="container">
   <section>
-    <div class="section-title reveal"><h2>💳 Payment Follow-Up</h2><p>They said yes. Now let's make sure we don't lose them.</p></div>
+    <div class="section-title reveal"><h2>🧊 Cold Feet</h2><p>They paid but now they're panicking. Kill the doubt before it kills the deal.</p></div>
 
-    <!-- SUB-TABS -->
-    <div class="fu-subtabs reveal">
-      <button class="fu-subtab active" onclick="fuSwitchSub('coldfeet')">🧊 Cold Feet</button>
-      <button class="fu-subtab" onclick="fuSwitchSub('followup')">💳 Payment Follow-Up</button>
-    </div>
-
-    <!-- ============ SUB-PANEL: COLD FEET ============ -->
-    <div class="fu-subpanel active" id="fuSub-coldfeet">
+    <div id="fuSub-coldfeet">
 
       <!-- Cold Feet Hero -->
       <div style="text-align:center;margin-bottom:36px" class="reveal">
@@ -2463,8 +2457,16 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
       </div>
     </div>
 
-    <!-- ============ SUB-PANEL: PAYMENT FOLLOW-UP ============ -->
-    <div class="fu-subpanel" id="fuSub-followup">
+  </section>
+</div>
+</div>
+
+<div class="tab-content" id="tab-followup">
+<div class="container">
+  <section>
+    <div class="section-title reveal"><h2>💳 Payment Follow-Up</h2><p>They got the link but haven't paid. Get them over the line.</p></div>
+
+    <div id="fuSub-followup">
 
       <!-- Follow-Up Hero -->
       <div style="text-align:center;margin-bottom:36px" class="reveal">
@@ -5850,11 +5852,11 @@ window.generateFollowUp = function(){
 
 // Add to search index
 searchIndex.push({type:'Tab',name:'📍 Payment Follow-Up & Cold Feet',sub:'Navigate to tab',text:'payment follow-up cold feet buyer remorse refund cancel spouse reddit scam chargeback',action:()=>switchTab('followup')});
-searchIndex.push({type:'Tab',name:'🧊 Cold Feet / Buyer\'s Remorse',sub:'Handle post-purchase panic',text:'cold feet buyer remorse refund cancel spouse wife husband reddit scam chargeback regret second thoughts',action:()=>{switchTab('followup');fuSwitchSub('coldfeet')}});
-searchIndex.push({type:'Tab',name:'💳 Payment Link Follow-Up',sub:'Follow up on unpaid links',text:'payment follow up link sent no payment ghost silent unpaid',action:()=>{switchTab('followup');fuSwitchSub('followup')}});
+searchIndex.push({type:'Tab',name:'🧊 Cold Feet / Buyer\'s Remorse',sub:'Handle post-purchase panic',text:'cold feet buyer remorse refund cancel spouse wife husband reddit scam chargeback regret second thoughts',action:()=>{switchTab('coldfeet')}});
+searchIndex.push({type:'Tab',name:'💳 Payment Link Follow-Up',sub:'Follow up on unpaid links',text:'payment follow up link sent no payment ghost silent unpaid',action:()=>{switchTab('followup')}});
 ['Spouse Anger','Reddit / Scam Fear','General Buyer\'s Remorse','Refund Request','Can\'t Afford After Paying'].forEach((name,i)=>{
   const ids = ['spouse','reddit','remorse','refund','afford'];
-  searchIndex.push({type:'Cold Feet',name:'🧊 '+name,sub:'Cold feet response scripts',text:('cold feet '+name+' '+ids[i]).toLowerCase(),action:()=>{switchTab('followup');fuSwitchSub('coldfeet');setTimeout(()=>{const el=document.getElementById('cfCat-'+ids[i]);if(el){el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'center'})}},150)}});
+  searchIndex.push({type:'Cold Feet',name:'🧊 '+name,sub:'Cold feet response scripts',text:('cold feet '+name+' '+ids[i]).toLowerCase(),action:()=>{switchTab('coldfeet');setTimeout(()=>{const el=document.getElementById('cfCat-'+ids[i]);if(el){el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'center'})}},150)}});
 });
 
 })();
