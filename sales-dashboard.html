@@ -1642,6 +1642,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
             <label class="cp-qs-option" data-val="fear"><span class="cp-qs-check"></span><span class="cp-qs-emoji">😰</span><span class="cp-qs-text">Scared / afraid of losing money</span></label>
             <label class="cp-qs-option" data-val="technical"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🔧</span><span class="cp-qs-text">Not tech-savvy / platform confused</span></label>
             <label class="cp-qs-option" data-val="trial"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🆓</span><span class="cp-qs-text">Asked for a trial / free access</span></label>
+            <label class="cp-qs-option" data-val="pay_from_profits"><span class="cp-qs-check"></span><span class="cp-qs-emoji">💸</span><span class="cp-qs-text">"Let me make money first then pay"</span></label>
           </div>
         </div>
 
@@ -3235,7 +3236,16 @@ const cpObjDB = {
       {label:'Social Proof',text:"Nobody who's actually in the program has ever said 'I wish I tried it first.' They all say 'I wish I started sooner.' Check out what our students say — they paid and within days they knew it was worth double."}
     ],
     killShot:"We don't offer trials because we know what we have. And the students who are serious — the ones who actually make money — they didn't need a trial. They needed a decision. Which one are you?",
-    note:"4.0% conversion — trial askers are often tire-kickers, but the ones you convert are committed. Address after trust/value is established. ⚠️ DON'T say 'we don't do free trials' and leave it there — always explain WHY. NEVER make them feel stupid for asking."}
+    note:"4.0% conversion — trial askers are often tire-kickers, but the ones you convert are committed. Address after trust/value is established. ⚠️ DON'T say 'we don't do free trials' and leave it there — always explain WHY. NEVER make them feel stupid for asking."},
+  pay_from_profits: {emoji:'💸',name:'Pay From Profits First',rate:2.5,convos:'420',priority:11,
+    scripts:[
+      {label:'Skin In The Game',text:"I hear you — but real talk, every single student who succeeded invested FIRST. That's what separates them. If you're not willing to bet on yourself, why would I invest my time mentoring you? The commitment IS the first lesson."},
+      {label:'University Angle',text:"Think about it this way — would you ask a university 'let me attend for free and pay you after I get a job'? That's not how investing in yourself works. The investment is what creates the urgency to actually do the work."},
+      {label:'Accountability Frame',text:"Here's what happens when people don't pay — they don't show up. They don't watch the modules. They don't follow the system. The investment creates accountability. Our most successful students will tell you the fact that they paid is exactly what made them take it seriously."},
+      {label:'Flip The Logic',text:"If you KNEW this was going to work — like 100% guaranteed — would you invest? Of course you would. So the real question isn't about paying from profits. It's whether you believe in yourself enough to commit. And I'm telling you, based on what our students do, the ROI is there."}
+    ],
+    killShot:"Everyone wants to win without risking anything. But that's not how it works — in trading OR in life. The students making $1K days invested first. They bet on themselves. That's the difference between someone who talks about trading and someone who actually does it.",
+    note:"2.5% conversion — very low. These leads want zero risk which means zero commitment. Reframe it: the investment IS the accountability. If they won't budge, offer payment plan as a middle ground. ⚠️ DON'T say 'that's not how it works' dismissively — validate first, then flip."}
 };
 
 // --- Objection Keyword Map (for text analysis modes) ---
@@ -3255,7 +3265,8 @@ const cpKeywordMap = {
   friend: ['friend told me','friend said','someone told me','people say','warned me','told me not to'],
   fear: ['scared','afraid','worried','risk','lose money','what if','nervous','anxiety','terrified','fear','risky','dangerous'],
   technical: ['tech','computer','platform','software','app','download','setup','technical','how does it work','what do i need'],
-  trial: ['trial','free trial','try it','test it','sample','free access','try before','money back','refund','guarantee','try for free','demo','test drive']
+  trial: ['trial','free trial','try it','test it','sample','free access','try before','money back','refund','guarantee','try for free','demo','test drive'],
+  pay_from_profits: ['pay from profits','make money first','pay after','pay you back','earn first','profit first','pay later from','pay once i make','pay when i make','pay you from my','pay from what i make','prove it works','show me it works then','results first']
 };
 
 var cpCurrentProofSent = [];
