@@ -2279,7 +2279,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
         <div class="pb-card glass-gold">
           <div class="pb-card-title">🔥 Lukewarm Lead</div>
           <div class="script-block"><div class="script-label">CLOSE 1</div><div class="script-text">"Tell you what . watch the VSL, see what Kay has to say, and let me know. I'll follow up tomorrow."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
-          <div class="script-block"><div class="script-label">CLOSE 2</div><div class="script-text">"I know it's a big decision. But every day you're not learning is money left on the table. Want to jump on a quick call?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+          <div class="script-block"><div class="script-label">CLOSE 2</div><div class="script-text">"I know it's a big decision. But every day you're not learning is money left on the table. Want me to break down exactly what you get?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
         </div>
       </div>
     </div>
@@ -2864,7 +2864,7 @@ const objections=[
       {label:'Family Frame',text:'This isn\'t an expense . it\'s an investment in your family\'s future. You\'re learning a skill that can generate income for life.'},
       {label:'Joint Vision',text:'Imagine being able to tell your partner you made $500 from your phone this morning. That\'s what we\'re building towards.'}
     ],
-    followUp:'"Did you have a chance to talk to your partner? I\'m happy to jump on a quick call with both of you to answer any questions."',
+    followUp:"Did you have a chance to talk to your partner? I can send some info for both of you to look at together. Happy to answer any questions right here.",
     killShot:'"Would a 10-minute call with both of you help? I want your partner to feel just as confident about this as you do."',
     redFlags:['Spouse is firmly against it AND won\'t talk = 0% conversion. Walk away gracefully.','They\'re using "spouse" as a polite excuse when the real issue is something else'],
     donts:['Don\'t dismiss the spouse . they\'re a decision maker.','Don\'t tell them to "just do it anyway."','Don\'t frame it as hiding something . always include the partner.'],
@@ -4149,7 +4149,7 @@ function cpGetFollowUpSchedule(objKeys, temp, name, stage) {
   }
 
   if (objKeys.includes('spouse')) {
-    items.push({when:'Follow up in 24 hours',text:`Hey ${n}! Did you get a chance to talk to your partner? I\'m happy to jump on a quick call with both of you to answer any questions 🙂`});
+    items.push({when:'Follow up in 24 hours',text:`Hey ${n}! Did you get a chance to talk to your partner? I can send some info for both of you to look at. Happy to answer any questions right here 🙂`});
     items.push({when:'If no reply in 3 days',text:`${n} . just wanted to check in. Would a 10-minute call with both of you help? I want your partner to feel just as confident about this as you do.`});
     return items;
   }
