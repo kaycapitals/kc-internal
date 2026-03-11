@@ -1014,6 +1014,52 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
   .cp-qs-option { min-height: 48px; }
   #tab-copilot { scroll-behavior: smooth; }
 }
+
+/* ===== TAB 12: PAYMENT FOLLOW-UP & COLD FEET ===== */
+.fu-subtabs{display:flex;gap:0;margin-bottom:32px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--glass-border);max-width:500px;margin-left:auto;margin-right:auto}
+.fu-subtab{flex:1;padding:14px 20px;text-align:center;font-size:.92rem;font-weight:700;cursor:pointer;background:var(--bg2);color:var(--text3);border:none;transition:all .3s;white-space:nowrap}
+.fu-subtab.active{background:linear-gradient(135deg,rgba(212,168,67,.15),rgba(212,168,67,.05));color:var(--gold-light);box-shadow:inset 0 -3px 0 var(--gold)}
+.fu-subtab:hover:not(.active){color:var(--text2);background:var(--bg3)}
+.fu-subpanel{display:none}.fu-subpanel.active{display:block}
+.fu-radio-grid,.fu-check-grid{display:flex;flex-direction:column;gap:8px}
+.fu-radio,.fu-check{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg2);border:1px solid var(--glass-border);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s;-webkit-user-select:none;user-select:none;font-size:.9rem;color:var(--text)}
+.fu-radio:hover,.fu-check:hover{border-color:rgba(212,168,67,.25);background:var(--bg3)}
+.fu-radio input,.fu-check input{accent-color:var(--gold);width:18px;height:18px;flex-shrink:0}
+.fu-radio input:checked+span,.fu-check input:checked+span{color:var(--gold-light);font-weight:600}
+.fu-radio:has(input:checked),.fu-check:has(input:checked){border-color:rgba(212,168,67,.35);background:rgba(212,168,67,.06)}
+.fu-msg-block{margin:12px 0;padding:16px;background:rgba(212,168,67,.04);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;position:relative}
+.fu-msg-block .fu-msg-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);margin-bottom:6px;font-weight:700}
+.fu-msg-block .fu-msg-text{font-size:.92rem;color:var(--text);font-style:italic;line-height:1.7}
+.fu-msg-block .copy-btn{position:absolute;top:8px;right:8px;background:rgba(212,168,67,.15);border:none;color:var(--gold);padding:6px 12px;border-radius:6px;font-size:.75rem;cursor:pointer;opacity:0;transition:opacity .2s}
+.fu-msg-block:hover .copy-btn{opacity:1}
+.fu-dont-block{margin:10px 0;padding:14px 16px;background:rgba(231,76,60,.05);border-left:3px solid var(--red);border-radius:0 8px 8px 0}
+.fu-dont-block .fu-msg-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--red);margin-bottom:4px;font-weight:700}
+.fu-dont-block .fu-msg-text{font-size:.88rem;color:var(--text2);line-height:1.6}
+.fu-category{margin-bottom:24px;overflow:hidden;border:1px solid var(--glass-border);border-radius:var(--radius);background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.fu-cat-header{padding:18px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;-webkit-user-select:none;user-select:none}
+.fu-cat-header h4{font-size:1rem;margin:0}
+.fu-cat-body{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.25,.46,.45,.94)}
+.fu-category.open .fu-cat-body{max-height:8000px}
+.fu-category.open .expand-icon{transform:rotate(180deg)}
+.fu-cat-content{padding:0 20px 20px}
+.fu-detect-tag{display:inline-block;padding:3px 10px;border-radius:50px;font-size:.72rem;font-weight:600;margin:2px;background:rgba(26,188,156,.1);color:var(--teal);border:1px solid rgba(26,188,156,.25)}
+.cf-textarea{width:100%;min-height:120px;padding:16px;background:var(--bg);border:1px solid var(--glass-border);border-radius:var(--radius-sm);color:var(--text);font-size:1rem;line-height:1.6;outline:none;resize:vertical;font-family:inherit;transition:border-color .3s}
+.cf-textarea:focus{border-color:var(--gold)}
+.cf-textarea::placeholder{color:var(--text3)}
+.cf-detected{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:50px;font-size:.82rem;font-weight:600;margin:4px;animation:fadeInUp .3s ease}
+.cf-detected.spouse{background:rgba(155,89,182,.12);color:var(--purple);border:1px solid rgba(155,89,182,.3)}
+.cf-detected.reddit{background:rgba(231,76,60,.1);color:var(--red);border:1px solid rgba(231,76,60,.3)}
+.cf-detected.remorse{background:rgba(241,196,15,.1);color:var(--yellow);border:1px solid rgba(241,196,15,.3)}
+.cf-detected.refund{background:rgba(230,126,34,.1);color:var(--orange);border:1px solid rgba(230,126,34,.3)}
+.cf-detected.afford{background:rgba(52,152,219,.1);color:var(--blue);border:1px solid rgba(52,152,219,.3)}
+@media(max-width:768px){
+  .fu-subtabs{max-width:100%}
+  .fu-subtab{padding:12px 10px;font-size:.82rem}
+  .fu-radio,.fu-check{padding:10px 12px;font-size:.85rem}
+  .fu-msg-block .copy-btn{opacity:1}
+  .fu-cat-header{padding:14px 16px}
+  .fu-cat-content{padding:0 16px 16px}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js" defer></script>
 </head>
@@ -1037,6 +1083,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
       <button class="tab-btn" data-tab="copilot">🤖 AI Co-Pilot</button>
       <button class="tab-btn" data-tab="gains">📸 Gains</button>
       <button class="tab-btn" data-tab="playbook">🗺️ The Playbook</button>
+      <button class="tab-btn" data-tab="followup">💳 Payment Follow-Up</button>
     </div>
   </div>
 </div>
@@ -2247,6 +2294,304 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
           <div class="script-block"><div class="script-label">EXPECTATION 1</div><div class="script-text">"Quick heads up . the first few weeks are about learning, not earning. Don't rush to trade live. The money comes after the knowledge."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
           <div class="script-block"><div class="script-label">EXPECTATION 2</div><div class="script-text">"Some students see red days early on. That's normal. Stick to the system and it compounds."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
         </div>
+      </div>
+    </div>
+
+  </section>
+</div>
+</div>
+
+<!-- ==================== TAB 12: PAYMENT FOLLOW-UP & COLD FEET ==================== -->
+<div class="tab-content" id="tab-followup">
+<div class="container">
+  <section>
+    <div class="section-title reveal"><h2>💳 Payment Follow-Up</h2><p>They said yes. Now let's make sure we don't lose them.</p></div>
+
+    <!-- SUB-TABS -->
+    <div class="fu-subtabs reveal">
+      <button class="fu-subtab active" onclick="fuSwitchSub('coldfeet')">🧊 Cold Feet</button>
+      <button class="fu-subtab" onclick="fuSwitchSub('followup')">💳 Payment Follow-Up</button>
+    </div>
+
+    <!-- ============ SUB-PANEL: COLD FEET ============ -->
+    <div class="fu-subpanel active" id="fuSub-coldfeet">
+
+      <!-- Cold Feet Hero -->
+      <div style="text-align:center;margin-bottom:36px" class="reveal">
+        <div style="font-size:3rem;margin-bottom:8px">🧊</div>
+        <h3 style="font-size:1.4rem;color:var(--gold-light);margin-bottom:8px">Post-Purchase Buyer's Remorse</h3>
+        <p style="color:var(--text2);max-width:600px;margin:0 auto;font-size:.95rem">They paid. Now they're panicking. This is normal. Every single student has felt this. Your job is to calm them down, give them direction, and keep them in.</p>
+      </div>
+
+      <!-- Cold Feet Input -->
+      <div class="glass-gold reveal" style="padding:28px;max-width:700px;margin:0 auto 36px">
+        <h4 style="margin-bottom:16px;font-size:1.05rem">Paste their message</h4>
+        <div style="margin-bottom:16px">
+          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:6px">Buyer's Name</label>
+          <input type="text" id="cfName" placeholder="Their name" style="width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--glass-border);border-radius:var(--radius-sm);color:var(--gold);font-size:1.05rem;font-weight:700;outline:none">
+        </div>
+        <div style="margin-bottom:16px">
+          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:6px">Their message <span style="color:var(--text3)">(paste exactly what they sent)</span></label>
+          <textarea class="cf-textarea" id="cfMessage" placeholder='e.g. "Hey I just paid but my wife is going to kill me... is there any way to get a refund?"'></textarea>
+        </div>
+        <div id="cfDetected" style="margin-bottom:16px;min-height:28px"></div>
+        <button class="copilot-analyze-btn" style="width:100%;padding:16px;font-size:1.05rem;font-weight:800" onclick="cfAnalyze()">🧊 ANALYZE &amp; GENERATE RESPONSE</button>
+      </div>
+
+      <!-- Cold Feet Output -->
+      <div id="cfOutput" style="display:none;max-width:800px;margin:0 auto">
+        <div id="cfResponseCards"></div>
+        <!-- Matched Testimonial -->
+        <div class="glass" style="padding:24px;margin-bottom:24px" id="cfTestimonial"></div>
+        <!-- What NOT to say -->
+        <div id="cfDontSay"></div>
+        <!-- Alternative Scripts -->
+        <div id="cfAlternatives"></div>
+      </div>
+
+      <!-- Cold Feet Reference (always visible) -->
+      <div style="max-width:800px;margin:48px auto 0">
+        <h3 style="color:var(--gold-light);margin-bottom:20px;text-align:center;font-size:1.15rem" class="reveal">📖 Cold Feet Playbook... All Categories</h3>
+
+        <!-- CATEGORY 1: SPOUSE ANGER -->
+        <div class="fu-category reveal" id="cfCat-spouse">
+          <div class="fu-cat-header" onclick="this.parentElement.classList.toggle('open')">
+            <div>
+              <h4>👫 Spouse Anger</h4>
+              <div style="margin-top:4px"><span class="fu-detect-tag">wife is mad</span><span class="fu-detect-tag">husband</span><span class="fu-detect-tag">partner</span><span class="fu-detect-tag">spouse</span><span class="fu-detect-tag">she's going to kill me</span><span class="fu-detect-tag">he found out</span></div>
+            </div>
+            <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="fu-cat-body"><div class="fu-cat-content">
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 1: THE REDIRECT</div><div class="fu-msg-text">"Hey [name], I hear you. And I get it. But here's what I want you to do tonight... open Module 1. Just the first one. When your [spouse] sees you sitting down and actually learning something real, actually investing in a skill... they're going to start seeing what you see. Action kills doubt."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 2: THE REFRAME</div><div class="fu-msg-text">"[name], your [spouse] isn't mad at you. They're scared. They're scared because they've never seen this work. And honestly? I respect that. But you didn't join to prove them wrong. You joined to prove yourself right. Start Module 1 tonight. Let the results do the talking."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 3: THE STUDENT STORY</div><div class="fu-msg-text">"Real talk [name]... one of my students, his wife was furious when he signed up. Wouldn't even talk to him for a day. Two months later she's asking HIM to teach her. He retired her from her job. The anger is temporary. The skill is permanent."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 4: THE PARTNERSHIP</div><div class="fu-msg-text">"Tell your [spouse] this... you didn't gamble the money. You invested in a 6 month mentorship with a system that's changed hundreds of people's lives. This isn't crypto. This isn't a lottery ticket. This is education. And I'm going to be here every single day making sure you get results."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 5: THE DIRECT</div><div class="fu-msg-text">"[name], I need you to hear me. Sit down with your [spouse] tonight and watch Module 1 together. Seriously. Show them what this actually is. If they still have concerns after seeing the content, tell them to DM me directly. I'll answer every question. I've done this before."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-dont-block"><div class="fu-msg-label">🚫 WHAT NOT TO SAY</div><div class="fu-msg-text">"Don't say 'That's between you and your wife' or 'Maybe you should have checked first.' NEVER take the spouse's side against the buyer. NEVER dismiss their concern. You're on THEIR team."</div></div>
+          </div></div>
+        </div>
+
+        <!-- CATEGORY 2: REDDIT/SCAM AFTER PAYING -->
+        <div class="fu-category reveal" id="cfCat-reddit">
+          <div class="fu-cat-header" onclick="this.parentElement.classList.toggle('open')">
+            <div>
+              <h4>🔴 Reddit / Scam Fear After Paying</h4>
+              <div style="margin-top:4px"><span class="fu-detect-tag">reddit</span><span class="fu-detect-tag">scam</span><span class="fu-detect-tag">reviews</span><span class="fu-detect-tag">looked it up</span><span class="fu-detect-tag">people saying</span><span class="fu-detect-tag">trustpilot</span><span class="fu-detect-tag">fake</span></div>
+            </div>
+            <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="fu-cat-body"><div class="fu-cat-content">
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 1: THE REALITY CHECK</div><div class="fu-msg-text">"[name], let me ask you something. Did those Reddit people finish the modules? Did they show up to a single live trading session? Did they follow the system? No. They joined, didn't put in the work, and then blamed the program. You're already ahead of every single one of them because you're actually here asking questions."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 2: THE PROOF DROP</div><div class="fu-msg-text">"I get it. You googled it after paying and saw some noise. Here's what Reddit won't show you... [send gain screenshot]. This student was skeptical too. Started Module 1 like you. Now look at them. Reddit is full of people who quit everything. Don't let quitters influence your decisions."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 3: THE TRANSPARENCY PLAY</div><div class="fu-msg-text">"[name], I show my red days. I show my losses. I show everything. You know why? Because this is real. Scammers hide losses. I put mine on Instagram for a million people to see. Judge me by what you see in the modules and the live sessions, not by anonymous people on the internet who never tried."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 4: THE CHALLENGE</div><div class="fu-msg-text">"Here's what I want you to do. Give me 7 days. That's it. Complete Module 1 through 6. Show up to one live session. If after 7 days of actually doing the work you still feel like this was a mistake... we'll talk. But I already know what's going to happen. You're going to wish you started sooner."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 5: THE SKEPTIC VIDEO</div><div class="fu-msg-text">"I hear you [name]. You know what? I've got a video from a student who literally said the same thing. Read Reddit, panicked, almost quit. [Send Shifa's testimonial]. She saw the Reddit posts. Joined anyway. Had an $11,000 day. The reviews are written by people who never finished Module 1."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-dont-block"><div class="fu-msg-label">🚫 WHAT NOT TO SAY</div><div class="fu-msg-text">"Never say 'Reddit is full of haters' or 'Don't believe everything you read.' That's dismissive and makes you sound defensive. Instead, redirect to PROOF. Screenshots, testimonials, results. Let the evidence speak."</div></div>
+          </div></div>
+        </div>
+
+        <!-- CATEGORY 3: GENERAL REMORSE -->
+        <div class="fu-category reveal" id="cfCat-remorse">
+          <div class="fu-cat-header" onclick="this.parentElement.classList.toggle('open')">
+            <div>
+              <h4>😰 General Buyer's Remorse</h4>
+              <div style="margin-top:4px"><span class="fu-detect-tag">second thoughts</span><span class="fu-detect-tag">regret</span><span class="fu-detect-tag">mistake</span><span class="fu-detect-tag">not sure</span><span class="fu-detect-tag">changed my mind</span><span class="fu-detect-tag">nervous</span><span class="fu-detect-tag">anxious</span></div>
+            </div>
+            <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="fu-cat-body"><div class="fu-cat-content">
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 1: NORMALIZE IT</div><div class="fu-msg-text">"[name], I'm going to be real with you. Every single student I've ever had felt EXACTLY what you're feeling right now. Every one. It's called buyer's remorse and it hits in the first 24 hours. You know what separates the ones who changed their lives from the ones who didn't? They opened Module 1 anyway."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 2: THE WHY</div><div class="fu-msg-text">"[name], remember why you said yes? That feeling you had when we talked... that was real. That wasn't me selling you. That was you recognizing an opportunity. The doubt you're feeling right now? That's just fear of change. And fear of change is the #1 thing that keeps people stuck exactly where they are."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 3: ACTION KILLS FEAR</div><div class="fu-msg-text">"Here's what I need you to do right now. Not tomorrow. Not this weekend. Right now. Open the program. Go to Module 1. Watch the first 20 minutes. That's all I'm asking. I promise you... within 20 minutes, you'll know this was the right decision. Action kills anxiety. Sitting and overthinking feeds it."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 4: THE FUTURE</div><div class="fu-msg-text">"[name], picture this. It's 6 months from now. You've completed the modules. You're trading live every day. You're making consistent income from a skill nobody can take from you. That's what's waiting on the other side of this feeling. Don't let 24 hours of nerves rob you of 6 months of transformation."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 5: THE PERSONAL TOUCH</div><div class="fu-msg-text">"[name], I genuinely believe you have what it takes. I wouldn't have spent time with you if I didn't. This feeling you're having? It's proof you care about your money, your future, your decisions. That's a good thing. Careless people don't second-guess investments. Smart people do. And smart people also follow through."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-dont-block"><div class="fu-msg-label">🚫 WHAT NOT TO SAY</div><div class="fu-msg-text">"Never say 'You'll be fine' or 'Don't worry about it.' That's dismissive. Never make them feel stupid for being scared. Acknowledge it, normalize it, then redirect to ACTION. Module 1 is always the answer."</div></div>
+          </div></div>
+        </div>
+
+        <!-- CATEGORY 4: REFUND REQUEST -->
+        <div class="fu-category reveal" id="cfCat-refund">
+          <div class="fu-cat-header" onclick="this.parentElement.classList.toggle('open')">
+            <div>
+              <h4>💸 Refund Request</h4>
+              <div style="margin-top:4px"><span class="fu-detect-tag">refund</span><span class="fu-detect-tag">money back</span><span class="fu-detect-tag">cancel</span><span class="fu-detect-tag">chargeback</span><span class="fu-detect-tag">reverse</span><span class="fu-detect-tag">undo</span></div>
+            </div>
+            <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="fu-cat-body"><div class="fu-cat-content">
+            <div style="padding:14px 16px;background:rgba(212,168,67,.08);border:1px solid rgba(212,168,67,.2);border-radius:var(--radius-sm);margin-bottom:16px;font-size:.88rem;color:var(--gold-light)">⚠️ <strong>CRITICAL ORDER:</strong> Always reassure FIRST. Give them an action (Module 1). Normalize the feeling. THEN address policy. Never lead with "no refunds."</div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 1: REASSURE FIRST</div><div class="fu-msg-text">"[name], hey. I hear you. First, take a breath. You're not the first person to feel this way and you won't be the last. Before we talk about anything else... have you opened Module 1 yet? I'm serious. Give me one week. Just one. Start the modules, show up to a live session. Let me prove to you that this was the right call."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 2: THE INVESTMENT REFRAME</div><div class="fu-msg-text">"I understand wanting to protect your money. That's actually what we teach... risk management. But think about it this way. You invested in a skill. Not a product. Not a subscription. A skill that can generate income for the rest of your life. Refunding means walking away from that. Starting Module 1 means moving toward it."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 3: THE STUDENT PARALLEL</div><div class="fu-msg-text">"[name], I had a student named Keith who lost $50,000 before joining. He was terrified of spending more money on anything trading related. He messaged me almost exactly what you just said. Know what happened? He stuck with it. Now he's making $1,000 to $2,000 days and he retired his wife. He'll tell you the hardest part was getting past the first week of doubt."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 4: ADDRESS POLICY (ONLY AFTER REASSURING)</div><div class="fu-msg-text">"Look [name], I'll be straight with you because I respect you. We don't do refunds for change of mind because I know this works. I've seen it work hundreds of times. But I'm not going to just take your money and disappear. Start Module 1. Give me one week. I'll personally check in on you. If you put in the work and still feel this way in 7 days, DM me and we'll figure it out."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 5: THE CHARGEBACK REDIRECT</div><div class="fu-msg-text">"[name], I don't want this to go sideways. I want you to succeed. A chargeback doesn't get you a skill. It just gets you back to square one... the same place you were before you made the decision to change your life. I'm here. The community is here. The modules are waiting. Let's make this work."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-dont-block"><div class="fu-msg-label">🚫 WHAT NOT TO SAY</div><div class="fu-msg-text">"NEVER open with 'We don't do refunds' or 'It says no refunds in the terms.' That's how you create a chargeback. NEVER be defensive or combative. NEVER say 'You agreed to the terms.' Always reassure first, give direction, normalize the feeling, THEN if needed, gently address policy."</div></div>
+          </div></div>
+        </div>
+
+        <!-- CATEGORY 5: CAN'T AFFORD AFTER PAYING -->
+        <div class="fu-category reveal" id="cfCat-afford">
+          <div class="fu-cat-header" onclick="this.parentElement.classList.toggle('open')">
+            <div>
+              <h4>🏦 Can't Afford It After Paying</h4>
+              <div style="margin-top:4px"><span class="fu-detect-tag">can't afford</span><span class="fu-detect-tag">broke</span><span class="fu-detect-tag">rent</span><span class="fu-detect-tag">bills</span><span class="fu-detect-tag">no money left</span><span class="fu-detect-tag">paycheck</span><span class="fu-detect-tag">overdraft</span><span class="fu-detect-tag">credit card</span></div>
+            </div>
+            <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="fu-cat-body"><div class="fu-cat-content">
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 1: THE SUNK COST TRUTH</div><div class="fu-msg-text">"[name], I hear you. And I'm not going to pretend that doesn't feel stressful. But here's the reality... the money is spent. You have two options right now. Option A: you walk away and have nothing to show for it. Option B: you start Module 1 tonight and begin building the skill to make that money back 10x. Which one makes more sense?"</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 2: THE RELATABILITY</div><div class="fu-msg-text">"[name], most of my best students were in tight spots when they joined. That's literally WHY they joined. They were tired of being broke. Tired of living paycheck to paycheck. The discomfort you're feeling right now? That's the same discomfort that's going to fuel you to actually do the work. Lean into it."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 3: THE MATH</div><div class="fu-msg-text">"Let me put it this way [name]. The program costs about $3,000. One of my students... she started with a $500 account and turned it into $3,000 in her first month. Another made $15,000 in his first full month. The math isn't hard. The skill pays for itself. But only if you start."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 4: THE PAYMENT PLAN</div><div class="fu-msg-text">"[name], if money is genuinely tight right now, let's talk about the payment plan. $1,100 times 3 monthly payments. You get FULL access from day one. That means you can start learning and trading before the second payment is even due. Some students make the next payment back from trading before it hits."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-msg-block"><div class="fu-msg-label">SCRIPT 5: THE BIGGER PICTURE</div><div class="fu-msg-text">"[name], you're stressed about money right now. I get it. But isn't that exactly why you joined? You joined because you don't want to feel this way anymore. Every day you don't start the modules is a day you could have been learning a skill that makes this feeling go away forever. Start tonight. I'm not going anywhere."</div><button class="copy-btn" onclick="event.stopPropagation();copyText(this)">Copy</button></div>
+            <div class="fu-dont-block"><div class="fu-msg-label">🚫 WHAT NOT TO SAY</div><div class="fu-msg-text">"NEVER say 'You should have thought about that before signing up.' NEVER question their financial decisions. NEVER make them feel irresponsible. They already feel that way. Your job is to show them the path forward, not remind them of the pain."</div></div>
+          </div></div>
+        </div>
+
+        <!-- MASTER RULES BOX -->
+        <div class="glass-gold reveal" style="padding:24px;margin-top:32px">
+          <h4 style="color:var(--gold-light);margin-bottom:14px">🧊 Cold Feet Master Rules</h4>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:.9rem">
+            <div style="padding:10px 14px;background:rgba(231,76,60,.06);border-left:3px solid var(--red);border-radius:0 8px 8px 0;color:var(--text)">🚫 <strong>NEVER</strong> say "no refunds" as the first thing out of your mouth</div>
+            <div style="padding:10px 14px;background:rgba(212,168,67,.06);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;color:var(--text)">✅ <strong>ALWAYS</strong> reassure first, then give an action (Module 1), then normalize, then address policy</div>
+            <div style="padding:10px 14px;background:rgba(52,152,219,.06);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;color:var(--text)">🧠 <strong>REMEMBER:</strong> They already paid. Your job is to keep them, not win an argument</div>
+            <div style="padding:10px 14px;background:rgba(155,89,182,.06);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;color:var(--text)">💜 Be understanding but firm. Don't be a pushover. Don't be defensive. Be a mentor.</div>
+            <div style="padding:10px 14px;background:rgba(46,204,113,.06);border-left:3px solid var(--green);border-radius:0 8px 8px 0;color:var(--text)">📖 Module 1 is the answer to EVERYTHING. Every cold feet response should point them there.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SUB-PANEL: PAYMENT FOLLOW-UP ============ -->
+    <div class="fu-subpanel" id="fuSub-followup">
+
+      <!-- Follow-Up Hero -->
+      <div style="text-align:center;margin-bottom:36px" class="reveal">
+        <div style="font-size:3rem;margin-bottom:8px">💳</div>
+        <h3 style="font-size:1.4rem;color:var(--gold-light);margin-bottom:8px">Payment Link Sent. No Payment Yet.</h3>
+        <p style="color:var(--text2);max-width:600px;margin:0 auto;font-size:.95rem">They said yes. Now let's get them to hit pay. The #1 reason for lost revenue is leads who get the link and go silent. This fixes that.</p>
+      </div>
+
+      <!-- INPUT FORM -->
+      <div class="glass-gold reveal" style="padding:32px;max-width:700px;margin:0 auto 48px" id="fuForm">
+        <h3 style="text-align:center;font-size:1.3rem;margin-bottom:24px">📝 Add a Lead</h3>
+
+        <!-- Lead Name -->
+        <div style="margin-bottom:20px">
+          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:6px">Lead Name</label>
+          <input type="text" id="fuName" placeholder="Who are we following up with?" style="width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--glass-border);border-radius:var(--radius-sm);color:var(--gold);font-size:1.1rem;font-weight:700;outline:none">
+        </div>
+
+        <!-- Time Since Link Sent -->
+        <div style="margin-bottom:20px">
+          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:10px">Time Since Link Sent</label>
+          <div class="fu-radio-grid" id="fuTime">
+            <label class="fu-radio"><input type="radio" name="fuTime" value="under1h"><span>⏰ Under 1 hour</span></label>
+            <label class="fu-radio"><input type="radio" name="fuTime" value="1to3h"><span>⏰ 1-3 hours</span></label>
+            <label class="fu-radio"><input type="radio" name="fuTime" value="3to6h"><span>⏰ 3-6 hours</span></label>
+            <label class="fu-radio"><input type="radio" name="fuTime" value="6to12h"><span>⏰ 6-12 hours</span></label>
+            <label class="fu-radio"><input type="radio" name="fuTime" value="12to24h"><span>⏰ 12-24 hours</span></label>
+            <label class="fu-radio"><input type="radio" name="fuTime" value="1to2d"><span>⏰ 1-2 days</span></label>
+            <label class="fu-radio"><input type="radio" name="fuTime" value="2to3d"><span>⏰ 2-3 days</span></label>
+            <label class="fu-radio" style="border-color:rgba(231,76,60,.4)"><input type="radio" name="fuTime" value="3plus"><span>⏰ 3+ days <span style="color:var(--red);font-size:.75rem">(danger zone)</span></span></label>
+          </div>
+        </div>
+
+        <!-- Excitement Level -->
+        <div style="margin-bottom:20px">
+          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:10px">How excited were they?</label>
+          <div class="fu-radio-grid" id="fuExcitement">
+            <label class="fu-radio"><input type="radio" name="fuExcitement" value="super"><span>🔥🔥🔥 Super hyped... "let's go!", "I'm ready!", "sign me up!"</span></label>
+            <label class="fu-radio"><input type="radio" name="fuExcitement" value="solid"><span>🔥🔥 Solid... said yes but wasn't jumping out of their seat</span></label>
+            <label class="fu-radio"><input type="radio" name="fuExcitement" value="lukewarm"><span>🔥 Lukewarm yes... agreed but felt like they were being polite</span></label>
+            <label class="fu-radio"><input type="radio" name="fuExcitement" value="hesitant"><span>😬 Hesitant... said yes but had lingering doubts</span></label>
+          </div>
+        </div>
+
+        <!-- What Stood Out -->
+        <div style="margin-bottom:20px">
+          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:10px">What stood out to them? <span style="color:var(--text3)">(select all that apply)</span></label>
+          <div class="fu-check-grid" id="fuStandout">
+            <label class="fu-check"><input type="checkbox" value="Daily live trading sessions"><span>📺 Daily live trading sessions</span></label>
+            <label class="fu-check"><input type="checkbox" value="The community / Discord"><span>💬 The community / Discord</span></label>
+            <label class="fu-check"><input type="checkbox" value="Kay's transparency (red days too)"><span>🔍 Kay's transparency (red days too)</span></label>
+            <label class="fu-check"><input type="checkbox" value="The modules / education structure"><span>📚 The modules / education structure</span></label>
+            <label class="fu-check"><input type="checkbox" value="Risk management focus"><span>🛡️ Risk management focus</span></label>
+            <label class="fu-check"><input type="checkbox" value="The mentorship / personal guidance"><span>🤝 The mentorship / personal guidance</span></label>
+            <label class="fu-check"><input type="checkbox" value="Student results / gains"><span>📈 Student results / gains</span></label>
+            <label class="fu-check"><input type="checkbox" value="The payment plan option"><span>💳 The payment plan option</span></label>
+            <label class="fu-check"><input type="checkbox" value="Psychology / mindset training"><span>🧠 Psychology / mindset training</span></label>
+            <label class="fu-check"><input type="checkbox" value="Replacing their income / quitting their job"><span>🚀 Replacing their income / quitting their job</span></label>
+            <label class="fu-check"><input type="checkbox" value="other"><span>✏️ Other</span></label>
+          </div>
+          <input type="text" id="fuStandoutOther" placeholder="What else stood out?" style="display:none;width:100%;padding:12px 16px;background:var(--bg);border:1px solid var(--glass-border);border-radius:var(--radius-sm);color:var(--text);font-size:.9rem;outline:none;margin-top:8px">
+        </div>
+
+        <!-- Main Objection -->
+        <div style="margin-bottom:20px">
+          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:10px">What was their main objection before saying yes?</label>
+          <div class="fu-radio-grid" id="fuObjection">
+            <label class="fu-radio"><input type="radio" name="fuObjection" value="price"><span>💰 Price was the concern</span></label>
+            <label class="fu-radio"><input type="radio" name="fuObjection" value="scam"><span>🛡️ Was worried about scam/legitimacy</span></label>
+            <label class="fu-radio"><input type="radio" name="fuObjection" value="timing"><span>⏰ Timing wasn't perfect</span></label>
+            <label class="fu-radio"><input type="radio" name="fuObjection" value="ability"><span>💪 Doubted their own ability</span></label>
+            <label class="fu-radio"><input type="radio" name="fuObjection" value="spouse"><span>👫 Had to convince spouse/partner</span></label>
+            <label class="fu-radio"><input type="radio" name="fuObjection" value="trial"><span>🆓 Wanted a trial first</span></label>
+            <label class="fu-radio"><input type="radio" name="fuObjection" value="capital"><span>🏦 Worried about having no trading capital left</span></label>
+            <label class="fu-radio"><input type="radio" name="fuObjection" value="none"><span>❌ None... they were smooth from the start</span></label>
+          </div>
+        </div>
+
+        <!-- Monthly Income -->
+        <div style="margin-bottom:28px">
+          <label style="font-size:.85rem;color:var(--text2);display:block;margin-bottom:6px">Monthly income <span style="color:var(--text3)">(optional)</span></label>
+          <input type="text" id="fuIncome" placeholder="What do they make? (helps match gains)" style="width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--glass-border);border-radius:var(--radius-sm);color:var(--text);font-size:1rem;outline:none">
+        </div>
+
+        <!-- Generate Button -->
+        <button class="copilot-analyze-btn" style="width:100%;padding:18px;font-size:1.1rem;font-weight:800" onclick="generateFollowUp()">⚡ GENERATE FOLLOW-UP SEQUENCE</button>
+      </div>
+
+      <!-- OUTPUT SECTION -->
+      <div id="fuOutput" style="display:none;max-width:800px;margin:0 auto">
+
+        <!-- A. Follow-Up Timeline -->
+        <div class="glass reveal" style="padding:28px;margin-bottom:24px" id="fuTimeline">
+          <h3 style="color:var(--gold-light);margin-bottom:20px;font-size:1.15rem">📅 A. Follow-Up Timeline</h3>
+          <div id="fuTimelineContent"></div>
+        </div>
+
+        <!-- B. Matched Proof -->
+        <div class="glass reveal" style="padding:28px;margin-bottom:24px" id="fuProof">
+          <h3 style="color:var(--gold-light);margin-bottom:20px;font-size:1.15rem">📸 B. Matched Proof to Send</h3>
+          <div id="fuProofContent"></div>
+        </div>
+
+        <!-- C. The Hook -->
+        <div class="glass reveal" style="padding:28px;margin-bottom:24px" id="fuHook">
+          <h3 style="color:var(--gold-light);margin-bottom:20px;font-size:1.15rem">🪝 C. The Hook... Personalized Re-Engagement</h3>
+          <div id="fuHookContent"></div>
+        </div>
+
+        <!-- D. Alternative Approaches -->
+        <div class="glass reveal" style="padding:28px;margin-bottom:24px" id="fuAlternatives">
+          <h3 style="color:var(--gold-light);margin-bottom:20px;font-size:1.15rem">🔄 D. Alternative Approaches</h3>
+          <div id="fuAltContent"></div>
+        </div>
+
+        <!-- E. Follow-Up Rules -->
+        <div class="glass-gold reveal" style="padding:28px;margin-bottom:24px" id="fuRules">
+          <h3 style="color:var(--gold-light);margin-bottom:16px;font-size:1.15rem">⚠️ E. Follow-Up Rules</h3>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="padding:12px 16px;background:rgba(212,168,67,.06);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;font-size:.92rem;color:var(--text)">🚫 NEVER send more than 1 follow-up per 6 hours</div>
+            <div style="padding:12px 16px;background:rgba(52,152,219,.06);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;font-size:.92rem;color:var(--text)">🤖 If they respond with ANY objection, switch to the <a href="#" onclick="event.preventDefault();switchTab('copilot')" style="color:var(--gold);font-weight:700">AI Co-Pilot tab</a></div>
+            <div style="padding:12px 16px;background:rgba(212,168,67,.06);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;font-size:.92rem;color:var(--text)">⏳ After 3 unanswered follow-ups, space it out to 1 per day</div>
+            <div style="padding:12px 16px;background:rgba(231,76,60,.06);border-left:3px solid var(--red);border-radius:0 8px 8px 0;font-size:.92rem;color:var(--text)">✋ After 5+ days with no response, move on. They're not ready.</div>
+            <div style="padding:12px 16px;background:rgba(155,89,182,.06);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;font-size:.92rem;color:var(--text)">💜 If they say "I changed my mind", DON'T argue. Say "I respect that. The door is always open." Then send ONE testimonial in 3 days.</div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -5226,6 +5571,292 @@ gsScenarios.forEach(sc=>{
       text:('playbook step '+(i+1)+' '+name).toLowerCase(),
       action:()=>{switchTab('playbook');setTimeout(()=>{const el=document.querySelector('.pb-step[data-pb-step="'+(i+1)+'"]');if(el){el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'center'})}},150)}});
   });
+})();
+
+// ===== TAB 12: PAYMENT FOLLOW-UP & COLD FEET =====
+(function(){
+
+// Sub-tab switching
+window.fuSwitchSub = function(sub) {
+  document.querySelectorAll('.fu-subtab').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().includes(sub === 'coldfeet' ? 'cold' : 'follow')));
+  document.querySelectorAll('.fu-subpanel').forEach(p => p.classList.toggle('active', p.id === 'fuSub-' + sub));
+};
+
+// "Other" checkbox toggle
+const otherCb = document.querySelector('#fuStandout input[value="other"]');
+if (otherCb) otherCb.addEventListener('change', function(){ document.getElementById('fuStandoutOther').style.display = this.checked ? 'block' : 'none'; });
+
+// ===== COLD FEET ANALYZER =====
+const cfDetectPatterns = {
+  spouse: {
+    patterns: [/wife/i, /husband/i, /spouse/i, /partner/i, /she.{0,10}(mad|angry|furious|kill|going to kill|upset|pissed)/i, /he.{0,10}(found out|angry|mad|furious)/i, /significant other/i, /married/i, /girlfriend.{0,10}(mad|angry)/i, /boyfriend.{0,10}(mad|angry)/i],
+    label: '👫 Spouse Anger', cls: 'spouse', catId: 'cfCat-spouse'
+  },
+  reddit: {
+    patterns: [/reddit/i, /scam/i, /reviews/i, /looked it up/i, /people saying/i, /trustpilot/i, /fake/i, /legit/i, /too good to be true/i, /googled/i, /searched/i],
+    label: '🔴 Reddit / Scam Fear', cls: 'reddit', catId: 'cfCat-reddit'
+  },
+  remorse: {
+    patterns: [/second thought/i, /regret/i, /mistake/i, /not sure/i, /changed my mind/i, /nervous/i, /anxious/i, /having doubts/i, /cold feet/i, /buyer.?s? remorse/i, /what (did|have) i done/i, /shouldn.t have/i, /impulsive/i, /rushed/i],
+    label: '😰 Buyer\'s Remorse', cls: 'remorse', catId: 'cfCat-remorse'
+  },
+  refund: {
+    patterns: [/refund/i, /money back/i, /cancel/i, /chargeback/i, /reverse/i, /undo/i, /get back/i, /return/i, /dispute/i],
+    label: '💸 Refund Request', cls: 'refund', catId: 'cfCat-refund'
+  },
+  afford: {
+    patterns: [/can.?t afford/i, /broke/i, /rent/i, /bills/i, /no money left/i, /paycheck/i, /overdraft/i, /credit card/i, /tight/i, /struggle/i, /paycheck to paycheck/i, /behind on/i],
+    label: '🏦 Can\'t Afford', cls: 'afford', catId: 'cfCat-afford'
+  }
+};
+
+// Live detection as they type
+const cfMsgEl = document.getElementById('cfMessage');
+const cfDetectedEl = document.getElementById('cfDetected');
+let cfDebounce;
+if (cfMsgEl) cfMsgEl.addEventListener('input', function(){
+  clearTimeout(cfDebounce);
+  cfDebounce = setTimeout(()=>{
+    const msg = cfMsgEl.value;
+    const detected = [];
+    Object.keys(cfDetectPatterns).forEach(k => {
+      const cat = cfDetectPatterns[k];
+      if (cat.patterns.some(p => p.test(msg))) detected.push(cat);
+    });
+    cfDetectedEl.innerHTML = detected.length
+      ? '<div style="font-size:.75rem;color:var(--text3);margin-bottom:6px">Detected:</div>' + detected.map(d => `<span class="cf-detected ${d.cls}">${d.label}</span>`).join('')
+      : '';
+  }, 300);
+});
+
+// Cold Feet analyze
+window.cfAnalyze = function(){
+  const name = document.getElementById('cfName').value.trim() || '[name]';
+  const msg = (cfMsgEl.value || '').toLowerCase();
+  if (!msg) { showToast('Paste their message first'); return; }
+
+  const detected = [];
+  Object.keys(cfDetectPatterns).forEach(k => {
+    const cat = cfDetectPatterns[k];
+    if (cat.patterns.some(p => p.test(msg))) detected.push({key: k, ...cat});
+  });
+  if (!detected.length) detected.push({key:'remorse', ...cfDetectPatterns.remorse}); // default to general remorse
+
+  const outputEl = document.getElementById('cfOutput');
+  const cardsEl = document.getElementById('cfResponseCards');
+  const testEl = document.getElementById('cfTestimonial');
+  const dontEl = document.getElementById('cfDontSay');
+  const altEl = document.getElementById('cfAlternatives');
+
+  // Build response cards
+  let html = '';
+  detected.forEach(d => {
+    const catEl = document.getElementById(d.catId);
+    if (!catEl) return;
+    const scripts = catEl.querySelectorAll('.fu-msg-block');
+    const donts = catEl.querySelectorAll('.fu-dont-block');
+    html += `<div class="glass" style="padding:24px;margin-bottom:20px">`;
+    html += `<h4 style="color:var(--gold-light);margin-bottom:16px">${d.label} Detected</h4>`;
+    scripts.forEach(s => {
+      const lbl = s.querySelector('.fu-msg-label').textContent;
+      let txt = s.querySelector('.fu-msg-text').textContent;
+      txt = txt.replace(/\[name\]/g, name).replace(/\[spouse\]/g, 'partner');
+      html += `<div class="fu-msg-block"><div class="fu-msg-label">${lbl}</div><div class="fu-msg-text">${txt}</div><button class="copy-btn" onclick="event.stopPropagation();cfCopy(this)">Copy</button></div>`;
+    });
+    donts.forEach(dn => {
+      const txt = dn.querySelector('.fu-msg-text').textContent;
+      html += `<div class="fu-dont-block"><div class="fu-msg-label">🚫 WHAT NOT TO SAY</div><div class="fu-msg-text">${txt}</div></div>`;
+    });
+    html += `</div>`;
+  });
+  cardsEl.innerHTML = html;
+
+  // Matched testimonial
+  if (typeof twData !== 'undefined' && twData.length) {
+    let matchedTw = null;
+    const dKeys = detected.map(d => d.key);
+    if (dKeys.includes('spouse')) {
+      matchedTw = twData.find(t => t.tags && (t.tags.includes('counters-spouse-doubt') || t.tags.includes('married') || t.tags.includes('family-motivation')));
+    }
+    if (!matchedTw && dKeys.includes('reddit')) {
+      matchedTw = twData.find(t => t.tags && (t.tags.includes('skeptic-turned-believer') || t.tags.includes('counters-scam-fear') || t.tags.includes('counters-bad-reviews')));
+    }
+    if (!matchedTw && dKeys.includes('afford')) {
+      matchedTw = twData.find(t => t.tags && (t.tags.includes('counters-price-objection') || t.tags.includes('specific-dollar-amounts')));
+    }
+    if (!matchedTw && dKeys.includes('refund')) {
+      matchedTw = twData.find(t => t.tags && t.tags.includes('life-changed') && t.emotional_impact_score >= 9);
+    }
+    if (!matchedTw) {
+      matchedTw = twData.find(t => t.emotional_impact_score >= 9);
+    }
+    if (matchedTw) {
+      testEl.innerHTML = `<h4 style="color:var(--gold-light);margin-bottom:12px">🎯 Matched Testimonial to Send</h4>
+        <div style="font-weight:700;margin-bottom:4px">${matchedTw.first_name}'s Story</div>
+        <div style="font-size:.88rem;color:var(--text2);margin-bottom:10px;font-style:italic">"${matchedTw.best_quote}"</div>
+        <div style="margin-bottom:12px"><span style="font-size:.78rem;background:rgba(212,168,67,.1);color:var(--gold);padding:3px 10px;border-radius:50px">${matchedTw.situation_before ? matchedTw.situation_before.substring(0,80) : ''}</span></div>
+        <div class="fu-msg-block" style="margin:0"><div class="fu-msg-label">INTRO MESSAGE</div><div class="fu-msg-text">${(matchedTw.intro_message || '').replace(/\[name\]/g, name)}</div><button class="copy-btn" onclick="event.stopPropagation();cfCopy(this)">Copy</button></div>
+        ${matchedTw.dropbox_url ? `<div style="margin-top:10px"><a href="${matchedTw.dropbox_url}" target="_blank" style="color:var(--gold);font-size:.85rem;text-decoration:underline">📥 Download video</a></div>` : ''}`;
+      testEl.style.display = 'block';
+    } else {
+      testEl.style.display = 'none';
+    }
+  } else { testEl.style.display = 'none'; }
+
+  // Alternative scripts
+  const altScripts = [
+    {title:'🧊 The Calm Down', text:`${name}, take a breath. You made this decision for a reason. That reason hasn't changed in the last few hours. What's changed is the fear kicked in. That's normal. That's human. Now open Module 1 and let me show you why you were right.`},
+    {title:'📞 The Voice Note', text:`Send them a 30 second voice note instead of text. Say: "Hey ${name}, I just wanted to check in on you personally. I know that feeling after a big decision. It's totally normal. I just want you to know I'm here, the team is here, and I genuinely believe in you. Start Module 1 tonight. You'll feel completely different by tomorrow."`},
+    {title:'🎥 The Redirect to Community', text:`${name}, jump into the Discord and just read for 10 minutes. Don't even post anything. Just read what current students are saying. See their wins. See the energy. You'll realize you're now part of something real.`},
+    {title:'⏰ The Check-In', text:`I'm going to check in on you in 24 hours. Between now and then, all I want you to do is complete Module 1. That's it. One module. Can you do that for me?`}
+  ];
+  altEl.innerHTML = `<div class="glass" style="padding:24px;margin-bottom:24px"><h4 style="color:var(--gold-light);margin-bottom:16px">🔄 Alternative Approaches</h4>` +
+    altScripts.map(s => `<div class="fu-msg-block"><div class="fu-msg-label">${s.title}</div><div class="fu-msg-text">${s.text}</div><button class="copy-btn" onclick="event.stopPropagation();cfCopy(this)">Copy</button></div>`).join('') +
+    `</div>`;
+
+  // Don't say (global)
+  dontEl.innerHTML = '';
+
+  outputEl.style.display = 'block';
+  outputEl.scrollIntoView({behavior:'smooth', block:'start'});
+  setTimeout(()=>{ document.querySelectorAll('#cfOutput .reveal:not(.visible)').forEach(el => observer.observe(el)); }, 50);
+};
+
+window.cfCopy = function(btn) {
+  const text = btn.closest('.fu-msg-block').querySelector('.fu-msg-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    showToast('Copied to clipboard ✓');
+    setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+  });
+};
+
+// ===== PAYMENT FOLLOW-UP GENERATOR =====
+window.generateFollowUp = function(){
+  const name = document.getElementById('fuName').value.trim() || '[name]';
+  const timeVal = document.querySelector('input[name="fuTime"]:checked');
+  const exciteVal = document.querySelector('input[name="fuExcitement"]:checked');
+  if (!timeVal) { showToast('Select how long since the link was sent'); return; }
+  if (!exciteVal) { showToast('Select their excitement level'); return; }
+
+  const time = timeVal.value;
+  const excitement = exciteVal.value;
+  const objectionVal = document.querySelector('input[name="fuObjection"]:checked');
+  const objection = objectionVal ? objectionVal.value : 'none';
+  const standouts = [];
+  document.querySelectorAll('#fuStandout input:checked').forEach(cb => {
+    if (cb.value === 'other') { const ov = document.getElementById('fuStandoutOther').value.trim(); if (ov) standouts.push(ov); }
+    else standouts.push(cb.value);
+  });
+  const standoutStr = standouts.length ? standouts.join(', ') : 'the program';
+  const incomeRaw = document.getElementById('fuIncome').value.trim();
+  const income = incomeRaw ? parseInt(incomeRaw.replace(/[^0-9]/g, '')) : 0;
+
+  // Time-based messages
+  const timeMessages = {
+    under1h: {label:'Under 1 hour', msg:`Hey ${name}! Just making sure you got the link okay. Let me know if you have any questions about the payment. I'm here 🙌`, note:'Light touch. Don\'t pressure. They might just be at work.'},
+    '1to3h': {label:'1-3 hours', msg:`Hey ${name}, just checking in. Any issues with the link? Sometimes it goes to spam. I can resend if you need 👊`, note:'Blame tech, not them.'},
+    '3to6h': {label:'3-6 hours', msg:`Hey ${name}! I know life gets busy. Just wanted to make sure you're all good. Your spot is still locked in, just need to complete the payment to get started 💪`, note:'Acknowledge life happens.'},
+    '6to12h': {label:'6-12 hours', msg:`${name}, I wanted to remind you... ${standoutStr}. That's all waiting for you. Just need to complete the payment and you're in.`, note:'Remind them of what excited them + gentle urgency.'},
+    '12to24h': {label:'12-24 hours', msg:`${name}, real talk. I can see you're serious about this because of what you told me about ${standoutStr}. I don't want you to lose momentum. The link is still active. Let me know if something came up.`, note:'Show you remember their story.'},
+    '1to2d': {label:'1-2 days', msg:`${name}, I was thinking about our conversation and what you said about ${standoutStr}. I have a student who was in the EXACT same position as you. They didn't wait. And now they're living proof this works. Let me send you their story.`, note:'Send a matched testimonial after this.'},
+    '2to3d': {label:'2-3 days', msg:`${name}, I'll be straight with you. I've been holding your spot but I can only do that for so long. Are you still in?`, note:'Direct but not aggressive.'},
+    '3plus': {label:'3+ days (DANGER ZONE)', msg:`${name}, last message from me on this. I believe you have what it takes, and nothing has changed about that. The link is there when you're ready. But I can't chase you forever. This has to be YOUR decision.`, note:'Final attempt. Respect and walk away.'}
+  };
+
+  const tm = timeMessages[time];
+
+  // Build timeline
+  let timelineHtml = `<div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px">
+    <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;color:var(--bg);font-weight:800">1</div>
+    <div style="flex:1">
+      <div style="font-size:.78rem;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:4px">Message 1: ${tm.label}</div>
+      <div class="fu-msg-block" style="margin:0"><div class="fu-msg-text">${tm.msg}</div><button class="copy-btn" onclick="event.stopPropagation();cfCopy(this)">Copy</button></div>
+      <div style="font-size:.8rem;color:var(--text3);margin-top:6px;font-style:italic">💡 ${tm.note}</div>
+    </div>
+  </div>`;
+
+  // Follow-up message 2 (next tier)
+  const timeOrder = ['under1h','1to3h','3to6h','6to12h','12to24h','1to2d','2to3d','3plus'];
+  const nextIdx = Math.min(timeOrder.indexOf(time) + 2, timeOrder.length - 1);
+  const tm2 = timeMessages[timeOrder[nextIdx]];
+  timelineHtml += `<div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px">
+    <div style="width:44px;height:44px;border-radius:50%;background:var(--bg3);border:2px solid var(--glass-border);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;color:var(--text2);font-weight:800">2</div>
+    <div style="flex:1">
+      <div style="font-size:.78rem;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:4px">Message 2: ${tm2.label}</div>
+      <div class="fu-msg-block" style="margin:0"><div class="fu-msg-text">${tm2.msg}</div><button class="copy-btn" onclick="event.stopPropagation();cfCopy(this)">Copy</button></div>
+      <div style="font-size:.8rem;color:var(--text3);margin-top:6px;font-style:italic">💡 ${tm2.note}</div>
+    </div>
+  </div>`;
+  document.getElementById('fuTimelineContent').innerHTML = timelineHtml;
+
+  // Matched proof
+  let proofHtml = '';
+  if (typeof twData !== 'undefined' && twData.length) {
+    let matchedTw = null;
+    if (objection === 'scam') matchedTw = twData.find(t => t.tags && t.tags.includes('skeptic-turned-believer'));
+    else if (objection === 'ability') matchedTw = twData.find(t => t.tags && t.tags.includes('counters-skill-doubt'));
+    else if (objection === 'spouse') matchedTw = twData.find(t => t.tags && (t.tags.includes('counters-spouse-doubt') || t.tags.includes('married')));
+    else if (objection === 'price' || objection === 'capital') matchedTw = twData.find(t => t.tags && t.tags.includes('counters-price-objection'));
+    if (!matchedTw) matchedTw = twData.find(t => t.emotional_impact_score >= 9 && t.tags && t.tags.includes('life-changed'));
+    if (matchedTw) {
+      proofHtml += `<div style="margin-bottom:16px"><span style="font-size:.78rem;background:rgba(212,168,67,.1);color:var(--gold);padding:3px 10px;border-radius:50px">Best match for: ${objection === 'none' ? 'closing push' : objection}</span></div>`;
+      proofHtml += `<div style="font-weight:700;margin-bottom:4px">Send: ${matchedTw.first_name}'s Testimonial</div>`;
+      proofHtml += `<div style="font-size:.88rem;color:var(--text2);margin-bottom:10px;font-style:italic">"${matchedTw.best_quote}"</div>`;
+      proofHtml += `<div class="fu-msg-block" style="margin:0"><div class="fu-msg-label">INTRO</div><div class="fu-msg-text">${(matchedTw.intro_message || '').replace(/\[name\]/g, name)}</div><button class="copy-btn" onclick="event.stopPropagation();cfCopy(this)">Copy</button></div>`;
+      if (matchedTw.dropbox_url) proofHtml += `<div style="margin-top:10px"><a href="${matchedTw.dropbox_url}" target="_blank" style="color:var(--gold);font-size:.85rem;text-decoration:underline">📥 Download video</a></div>`;
+    }
+  }
+  // Gain screenshot match
+  if (typeof gainScreenshots !== 'undefined' && gainScreenshots.length) {
+    let matched = gainScreenshots.filter(g => g.quality === 'high').slice(0, 2);
+    if (income > 0) {
+      const dailyEquiv = Math.round(income / 20);
+      matched = gainScreenshots.filter(g => {
+        const amt = parseInt((g.estimated_amount || '').replace(/[^0-9]/g, ''));
+        return amt >= dailyEquiv * 0.5 && amt <= dailyEquiv * 3;
+      }).sort((a,b) => (b.quality==='high'?1:0) - (a.quality==='high'?1:0)).slice(0,2);
+      if (!matched.length) matched = gainScreenshots.filter(g => g.quality === 'high').slice(0, 2);
+    }
+    if (matched.length) {
+      proofHtml += `<div style="margin-top:20px;font-weight:700;margin-bottom:8px">📸 Gain Screenshot to Send</div>`;
+      proofHtml += `<div style="display:flex;gap:10px;flex-wrap:wrap">`;
+      matched.forEach(g => {
+        proofHtml += `<img src="${g.url}" alt="${g.estimated_amount}" style="width:140px;border-radius:8px;cursor:pointer;border:1px solid var(--glass-border)" onclick="document.getElementById('gsLightboxImg').src=this.src;document.getElementById('gsLightbox').classList.add('open')" loading="lazy">`;
+      });
+      proofHtml += `</div>`;
+    }
+  }
+  document.getElementById('fuProofContent').innerHTML = proofHtml || '<p style="color:var(--text3)">No matched proof available</p>';
+
+  // The Hook
+  const hookMsg = `${name}, remember when you told me ${standoutStr}? That's literally waiting for you right now. I have students who started in the exact same position and within weeks they were seeing real results. All you need to do is complete the payment and I'll have you set up tonight.`;
+  document.getElementById('fuHookContent').innerHTML = `<div class="fu-msg-block" style="margin:0"><div class="fu-msg-text">${hookMsg}</div><button class="copy-btn" onclick="event.stopPropagation();cfCopy(this)">Copy</button></div>`;
+
+  // Alternative approaches
+  const alts = [
+    {title:'☕ The Casual Check-In', text:`Hey ${name}! No pressure at all. Just wanted to see how you're doing. Let me know if you have any questions about the program. I'm here whenever you're ready 🙌`},
+    {title:'💎 The Value Reminder', text:`${name}, just a quick reminder of what's waiting for you: 40+ hours of modules, daily live trading sessions, the Discord community with 1,100+ members, direct access to me, and a proven system. All of that unlocks the second you complete payment.`},
+    {title:'⏳ The Scarcity Play', text:`${name}, heads up... I can only hold your spot for so long. We have people on the waitlist and I want to make sure you get in. If you're still in, complete the payment today and I'll personally make sure you're set up before the next live session.`},
+    {title:'📸 The Social Proof Drop', text:`(Send a gain screenshot with NO text. Let it sit. If they respond, say: "That was from today. One of my students. Just following the system.")`},
+    {title:'❓ The Direct Ask', text:`Hey ${name}, real talk... are you still in or should I give your spot to someone on the waitlist? No judgment either way. I just need to know.`},
+    {title:'🎤 Voice Note Suggestion', text:`Send them a voice message instead of text. It feels more personal and they're 3x more likely to respond. Keep it under 30 seconds. Just say you were thinking about them and wanted to check in.`}
+  ];
+  document.getElementById('fuAltContent').innerHTML = alts.map(a => `<div class="fu-msg-block"><div class="fu-msg-label">${a.title}</div><div class="fu-msg-text">${a.text}</div><button class="copy-btn" onclick="event.stopPropagation();cfCopy(this)">Copy</button></div>`).join('');
+
+  document.getElementById('fuOutput').style.display = 'block';
+  document.getElementById('fuTimeline').scrollIntoView({behavior:'smooth', block:'start'});
+};
+
+// Add to search index
+searchIndex.push({type:'Tab',name:'📍 Payment Follow-Up & Cold Feet',sub:'Navigate to tab',text:'payment follow-up cold feet buyer remorse refund cancel spouse reddit scam chargeback',action:()=>switchTab('followup')});
+searchIndex.push({type:'Tab',name:'🧊 Cold Feet / Buyer\'s Remorse',sub:'Handle post-purchase panic',text:'cold feet buyer remorse refund cancel spouse wife husband reddit scam chargeback regret second thoughts',action:()=>{switchTab('followup');fuSwitchSub('coldfeet')}});
+searchIndex.push({type:'Tab',name:'💳 Payment Link Follow-Up',sub:'Follow up on unpaid links',text:'payment follow up link sent no payment ghost silent unpaid',action:()=>{switchTab('followup');fuSwitchSub('followup')}});
+['Spouse Anger','Reddit / Scam Fear','General Buyer\'s Remorse','Refund Request','Can\'t Afford After Paying'].forEach((name,i)=>{
+  const ids = ['spouse','reddit','remorse','refund','afford'];
+  searchIndex.push({type:'Cold Feet',name:'🧊 '+name,sub:'Cold feet response scripts',text:('cold feet '+name+' '+ids[i]).toLowerCase(),action:()=>{switchTab('followup');fuSwitchSub('coldfeet');setTimeout(()=>{const el=document.getElementById('cfCat-'+ids[i]);if(el){el.classList.add('open');el.scrollIntoView({behavior:'smooth',block:'center'})}},150)}});
+});
+
 })();
 
 // ===== RE-OBSERVE ON LOAD =====
