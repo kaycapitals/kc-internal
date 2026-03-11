@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Sales Closer Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #00ff88;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        .subtitle {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .step {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            border-color: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .step-title {
+            color: #00ff88;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .step-number {
+            background: #00ff88;
+            color: #000;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1rem;
+        }
+
+        .context-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .context-item {
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .context-item:hover {
+            border-color: #00ff88;
+            background: #2a2a2a;
+        }
+
+        .context-item.selected {
+            border-color: #00ff88;
+            background: #2a2a2a;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+        }
+
+        .context-title {
+            color: #00ff88;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .context-desc {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .message-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 20px;
+            background: #000;
+            border: 2px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            resize: vertical;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+        }
+
+        .analyze-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .analyze-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 255, 136, 0.3);
+        }
+
+        .analyze-btn:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .results {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid #333;
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        .strategy-header {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: #000;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .response-card {
+            background: #000;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #00ff88;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .response-text {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .response-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .copy-btn {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #555;
+        }
+
+        .copy-btn.copied {
+            background: #00ff88;
+            color: #000;
+        }
+
+        .confidence-badge {
+            background: #00ff88;
+            color: #000;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .psychology-note {
+            background: #222;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 3px solid #ffa500;
+        }
+
+        .psychology-note strong {
+            color: #ffa500;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .next-btn {
+            background: #333;
+            color: #fff;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            float: right;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .next-btn:hover {
+            background: #555;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #00ff88;
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 AI Sales Closer Pro</h1>
+        <p class="subtitle">Context-aware objection handling that actually closes deals</p>
+
+        <!-- Step 1: Funnel Position -->
+        <div class="step active" id="step1">
+            <div class="step-title">
+                <span class="step-number">1</span>
+                Where is this lead in your funnel?
+            </div>
+            <div class="context-grid">
+                <div class="context-item" data-funnel="cold">
+                    <div class="context-title">❄️ Cold Lead</div>
+                    <div class="context-desc">First interaction, just discovered you</div>
+                </div>
+                <div class="context-item" data-funnel="warm">
+                    <div class="context-title">🔥 Warming Up</div>
+                    <div class="context-desc">Following 1-4 weeks, engaging with content</div>
+                </div>
+                <div class="context-item" data-funnel="hot">
+                    <div class="context-title">🚀 Hot Lead</div>
+                    <div class="context-desc">Ready to buy, asking about programs</div>
+                </div>
+                <div class="context-item" data-funnel="returning">
+                    <div class="context-title">🔄 Returning</div>
+                    <div class="context-desc">Came back after previous objection</div>
+                </div>
+            </div>
+            <button class="next-btn" onclick="nextStep()">Next →</button>
+        </div>
+
+        <!-- Step 2: Lead Info -->
+        <div class="step hidden" id="step2">
+            <div class="step-title">
+                <span class="step-number">2</span>
+                What do you know about this lead?
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; color: #00ff88; font-weight: 600; margin-bottom: 10px;">Their Name (if you know it):</label>
+                <input type="text" id="leadName" placeholder="e.g., Mike, Sarah, John..." style="width: 100%; padding: 15px; background: #000; border: 2px solid #333; border-radius: 8px; color: #fff; font-size: 16px;">
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; color: #00ff88; font-weight: 600; margin-bottom: 10px;">Estimated Income Level:</label>
+                <div class="context-grid">
+                    <div class="context-item" data-income="low">
+                        <div class="context-title">💰 $30k-60k</div>
+                        <div class="context-desc">Teacher, retail, entry-level</div>
+                    </div>
+                    <div class="context-item" data-income="medium">
+                        <div class="context-title">💰💰 $60k-120k</div>
+                        <div class="context-desc">Manager, nurse, tradesperson</div>
+                    </div>
+                    <div class="context-item" data-income="high">
+                        <div class="context-title">💰💰💰 $120k-250k</div>
+                        <div class="context-desc">Doctor, lawyer, senior exec</div>
+                    </div>
+                    <div class="context-item" data-income="unknown">
+                        <div class="context-title">❓ Unknown</div>
+                        <div class="context-desc">No idea what they make</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; color: #00ff88; font-weight: 600; margin-bottom: 10px;">What do they say they need help with?</label>
+                <textarea id="theirProblem" placeholder="e.g., 'I keep losing money on options', 'I'm inconsistent', 'I don't know when to exit trades', etc." style="width: 100%; min-height: 80px; padding: 15px; background: #000; border: 2px solid #333; border-radius: 8px; color: #fff; font-size: 16px; resize: vertical;"></textarea>
+            </div>
+
+            <button class="next-btn" onclick="nextStep()">Next →</button>
+        </div>
+
+        <!-- Step 3: Objective -->
+        <div class="step hidden" id="step3">
+            <div class="step-title">
+                <span class="step-number">3</span>
+                What's your goal with this conversation?
+            </div>
+            <div class="context-grid">
+                <div class="context-item" data-objective="overcome">
+                    <div class="context-title">🛡️ Overcome Objection</div>
+                    <div class="context-desc">Handle their concern, keep them engaged</div>
+                </div>
+                <div class="context-item" data-objective="close">
+                    <div class="context-title">💰 Close the Deal</div>
+                    <div class="context-desc">Get them to commit and pay today</div>
+                </div>
+                <div class="context-item" data-objective="nurture">
+                    <div class="context-title">🌱 Nurture Further</div>
+                    <div class="context-desc">Keep them warm, build more trust</div>
+                </div>
+                <div class="context-item" data-objective="reengage">
+                    <div class="context-title">⚡ Re-engage</div>
+                    <div class="context-desc">Get response from someone gone quiet</div>
+                </div>
+            </div>
+            <button class="next-btn" onclick="nextStep()">Next →</button>
+        </div>
+
+        <!-- Step 4: Message Analysis -->
+        <div class="step hidden" id="step4">
+            <div class="step-title">
+                <span class="step-number">4</span>
+                Paste their exact message:
+            </div>
+            <textarea class="message-input" id="messageInput" placeholder="Paste their exact message here...
+
+Examples:
+• 'I need to think about it'
+• 'It's too expensive'
+• 'I don't have time right now'
+• 'I want to talk to my spouse first'"></textarea>
+            <button class="analyze-btn" onclick="analyzeMessage()">ANALYZE & GET STRATEGY</button>
+        </div>
+
+        <div class="loading">
+            <div style="margin-bottom: 10px;">🧠 Crafting your strategy...</div>
+            <div style="font-size: 0.9rem; color: #666;">Analyzing context, objection type, and best approach...</div>
+        </div>
+
+        <div class="results" id="results">
+            <!-- Results will be populated here -->
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let context = {};
+
+        function nextStep() {
+            // Validate current step
+            if (currentStep === 1) {
+                const selected = document.querySelector('[data-funnel].selected');
+                if (!selected) {
+                    alert('Please select where this lead is in your funnel');
+                    return;
+                }
+                context.funnel = selected.dataset.funnel;
+            }
+            
+            if (currentStep === 2) {
+                // Collect lead info
+                context.leadName = document.getElementById('leadName').value.trim();
+                context.theirProblem = document.getElementById('theirProblem').value.trim();
+                
+                const selectedIncome = document.querySelector('[data-income].selected');
+                if (!selectedIncome) {
+                    alert('Please select their estimated income level');
+                    return;
+                }
+                context.income = selectedIncome.dataset.income;
+            }
+            
+            if (currentStep === 3) {
+                const selected = document.querySelector('[data-objective].selected');
+                if (!selected) {
+                    alert('Please select your goal for this conversation');
+                    return;
+                }
+                context.objective = selected.dataset.objective;
+            }
+
+            // Hide current step
+            document.getElementById(`step${currentStep}`).classList.remove('active');
+            document.getElementById(`step${currentStep}`).classList.add('hidden');
+            
+            // Show next step
+            currentStep++;
+            document.getElementById(`step${currentStep}`).classList.remove('hidden');
+            document.getElementById(`step${currentStep}`).classList.add('active');
+        }
+
+        // Handle context item selection
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.context-item')) {
+                const item = e.target.closest('.context-item');
+                const siblings = item.parentElement.querySelectorAll('.context-item');
+                
+                // Remove selection from siblings
+                siblings.forEach(s => s.classList.remove('selected'));
+                
+                // Add selection to clicked item
+                item.classList.add('selected');
+            }
+        });
+
+        async function analyzeMessage() {
+            const message = document.getElementById('messageInput').value.trim();
+            if (!message) {
+                alert('Please paste their message first');
+                return;
+            }
+
+            // Show loading
+            document.querySelector('.loading').classList.add('show');
+            document.querySelector('.results').classList.remove('show');
+
+            try {
+                const strategy = await callClaudeAPI(message, context);
+                displayResults(strategy);
+            } catch (error) {
+                console.error('Analysis failed:', error);
+                // Fallback to local analysis
+                const strategy = generateStrategy(message, context);
+                displayResults(strategy);
+            }
+
+            document.querySelector('.loading').classList.remove('show');
+            document.querySelector('.results').classList.add('show');
+        }
+
+        async function callClaudeAPI(message, context) {
+            const masterPrompt = buildMasterPrompt(message, context);
+            
+            // This would normally call Claude API
+            // For now, simulate with enhanced local analysis
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            return generateEnhancedStrategy(message, context);
+        }
+
+        function buildMasterPrompt(message, context) {
+            const nameStr = context.leadName ? `Their name: ${context.leadName}` : 'Name: Unknown';
+            const incomeStr = {
+                'low': '$30k-60k (teacher, retail, entry-level)',
+                'medium': '$60k-120k (manager, nurse, tradesperson)', 
+                'high': '$120k-250k+ (doctor, lawyer, executive)',
+                'unknown': 'Unknown income level'
+            }[context.income];
+            
+            const funnelStr = {
+                'cold': 'Cold lead - first interaction, just discovered Kay Capitals',
+                'warm': 'Warming up - following 1-4 weeks, engaging with content',
+                'hot': 'Hot lead - ready to buy, asking about programs',
+                'returning': 'Returning lead - came back after previous objection'
+            }[context.funnel];
+            
+            const objectiveStr = {
+                'overcome': 'Overcome their objection and keep them engaged',
+                'close': 'Close the deal - get them to commit and pay today',
+                'nurture': 'Nurture further - keep them warm, build more trust',
+                'reengage': 'Re-engage - get a response from someone gone quiet'
+            }[context.objective];
+
+            return `You are Kay Capitals' top sales closer. You're helping craft the perfect response to handle an objection.
+
+CONTEXT ABOUT THE LEAD:
+${nameStr}
+Estimated income: ${incomeStr}
+Funnel position: ${funnelStr}
+Their stated problem: "${context.theirProblem || 'Not specified'}"
+
+SALES SITUATION:
+Your goal: ${objectiveStr}
+Their objection message: "${message}"
+
+ABOUT KCU (Kay Capitals University):
+- 6-month trading mentorship program
+- Price: $3,000 USD (payment plans available)
+- Teaches options day trading with focus on psychology, risk management, consistency
+- Kay has 1M+ followers, trades live daily, proven track record
+- Students typically make back investment within first few weeks
+
+YOUR WRITING STYLE:
+- Direct, confident, no-BS approach
+- Use their name if available
+- Address their specific income level appropriately
+- Reference their stated problem when relevant
+- Match Kay's voice: raw, authentic, intense but not aggressive
+- Create urgency but don't be pushy
+- Use specific numbers and results
+- Ask qualifying questions to maintain control
+
+Generate 2-3 different response approaches with:
+1. The exact response text (ready to copy-paste)
+2. Confidence percentage (how likely this is to work)
+3. Psychology explanation (why this approach works)
+4. Strategy name (e.g. "High-Income Price Reframe" or "Warm Lead Trust Leverage")
+
+Make each response feel personal and contextual to their specific situation.`;
+        }
+
+        function generateEnhancedStrategy(message, context) {
+            const msg = message.toLowerCase();
+            let objectionType = 'general';
+
+            // Detect objection type
+            if (msg.includes('think about') || msg.includes('consider') || msg.includes('sleep on')) {
+                objectionType = 'thinking';
+            } else if (msg.includes('expensive') || msg.includes('cost') || msg.includes('money') || msg.includes('afford')) {
+                objectionType = 'price';
+            } else if (msg.includes('spouse') || msg.includes('wife') || msg.includes('husband') || msg.includes('partner')) {
+                objectionType = 'spouse';
+            } else if (msg.includes('time') || msg.includes('busy') || msg.includes('schedule')) {
+                objectionType = 'time';
+            }
+
+            const responses = getEnhancedResponses(message, objectionType, context);
+            
+            return {
+                objectionType,
+                strategyName: responses[0].strategyName,
+                context: context,
+                responses: responses
+            };
+        }
+
+        function getEnhancedResponses(message, objectionType, context) {
+            const namePrefix = context.leadName ? `${context.leadName}, ` : '';
+            const problemRef = context.theirProblem ? ` You mentioned ${context.theirProblem.toLowerCase()}.` : '';
+            
+            if (objectionType === 'price' && context.income === 'high') {
+                return [
+                    {
+                        strategyName: "High-Income Value Reframe",
+                        response: `${namePrefix}I hear you on the price. But let's put this in perspective.\n\nYou're probably making $150k+ a year, right? That means you're already financially sophisticated enough to understand ROI.\n\n$3,000 to learn a skill that could add $100k+ per year to your income? That's not an expense - that's the best investment you'll ever make.${problemRef}\n\nMost of my high-earning students make back their entire investment in their first good week of trading. The question isn't whether you can afford the program - it's whether you can afford to keep missing out on these returns.\n\nWhat did you lose last month by NOT having these skills?`,
+                        confidence: 94,
+                        psychology: "Appeals to their financial sophistication and reframes cost as ROI. Uses their high income as proof they understand investments."
+                    }
+                ];
+            }
+            
+            if (objectionType === 'price' && context.income === 'low') {
+                return [
+                    {
+                        strategyName: "Low-Income Opportunity Angle",
+                        response: `${namePrefix}I totally get it - $3,000 feels like a lot when you're working hard for every dollar.\n\nBut here's what I want you to consider: you're stuck in a job that's never going to pay you what you're worth. Trading is the fastest way to break free from that cycle.${problemRef}\n\nWe can break it into 3 payments of $1,000. That's $33 a day - less than what most people spend on lunch and coffee.\n\nAnd here's the thing - my students who started with the least money are often the most motivated. They work harder, learn faster, and see results quicker because they HAVE to.\n\nYou're not just buying education - you're buying your way out. Are you ready to stop being a victim of your paycheck?`,
+                        confidence: 87,
+                        psychology: "Acknowledges their financial constraints but reframes as escape route. Uses payment plan to reduce psychological barrier."
+                    }
+                ];
+            }
+
+            if (objectionType === 'thinking' && context.funnel === 'hot' && context.leadName) {
+                return [
+                    {
+                        strategyName: "Hot Lead Personal Push", 
+                        response: `${context.leadName}, let's be real here.\n\nYou didn't reach out asking about my program because you were just browsing around. You reached out because you're serious about changing your trading results.${problemRef}\n\nYou've done your research, you've seen what's possible, you're asking the right questions. People who actually need to "think about it" don't get this far.\n\nSo what's really going on? Is it the money? Timeline? Something else?\n\nBecause I've got 2 spots left this month, and if you don't take one, someone else will. And they'll be making money while you're still "thinking about it."\n\nWhat's it actually going to take for you to make a decision today?`,
+                        confidence: 96,
+                        psychology: "Uses their name and hot status to create direct confrontation. Forces them to reveal the real objection."
+                    }
+                ];
+            }
+
+            // Fallback responses
+            return getContextualResponses(objectionType, context.funnel, context.objective);
+        }
+
+        function generateStrategy(message, context) {
+            // Fallback function for when API fails
+            return generateEnhancedStrategy(message, context);
+        }
+
+        function getStrategyName(objection, funnel, objective) {
+            const strategies = {
+                thinking: {
+                    cold: { close: "Cold Decision Force", nurture: "Gentle Pressure Build" },
+                    warm: { close: "Warm Commitment Push", overcome: "Trust-Based Close" },
+                    hot: { close: "Hot Lead Acceleration", overcome: "Final Objection Crusher" }
+                },
+                price: {
+                    cold: { close: "Cold Value Reframe", nurture: "ROI Education" },
+                    warm: { close: "Warm Investment Logic", overcome: "Cost of Inaction" },
+                    hot: { close: "Hot Price Justification", overcome: "Payment Solution Focus" }
+                }
+            };
+
+            return strategies[objection]?.[funnel]?.[objective] || "Custom Strategy";
+        }
+
+        function getContextualResponses(objection, funnel, objective) {
+            // This is where the magic happens - responses change based on context
+            
+            if (objection === 'thinking') {
+                if (funnel === 'cold' && objective === 'close') {
+                    return [
+                        {
+                            response: `I get it - you just found out about this and it's a lot to process.\n\nBut here's what I know after helping 2,000+ traders: the people who think about it for weeks usually stay stuck exactly where they are.\n\nThe successful ones? They recognize opportunity when they see it and take action.\n\nYou reached out for a reason. What was that reason?`,
+                            confidence: 87,
+                            psychology: "Forces them to remember why they reached out initially, creates urgency around decision-making"
+                        },
+                        {
+                            response: `Fair enough. While you're thinking, let me ask you this: what's your current win rate?\n\nBecause every day you spend thinking about getting better, you're probably losing money with the same mistakes.\n\nI only have 2 spots left this month. After that, you're looking at waiting until June. Can you afford 3 more months of the same results?`,
+                            confidence: 83,
+                            psychology: "Uses scarcity and cost of inaction to create decision pressure"
+                        }
+                    ];
+                } else if (funnel === 'warm' && objective === 'close') {
+                    return [
+                        {
+                            response: `You've been following me for a few weeks now, watching my results, seeing what's possible.\n\nDeep down, you already know this works. The question isn't whether it will work - it's whether you're ready to do the work.\n\nOn a scale of 1-10, how committed are you to changing your trading results? Because if you're not a 9 or 10, this isn't for you.`,
+                            confidence: 91,
+                            psychology: "Leverages their existing familiarity and uses qualification to increase commitment"
+                        }
+                    ];
+                } else if (funnel === 'hot' && objective === 'close') {
+                    return [
+                        {
+                            response: `I appreciate you being honest. Most people who tell me they need to think about it already know they want to do it.\n\nYou've done your research, you've seen the results, you're asking the right questions. What's really holding you back?\n\nIs it the money? The time commitment? Worried it won't work for your situation specifically?\n\nLet's address the real concern so you can make a decision today.`,
+                            confidence: 94,
+                            psychology: "Directly addresses the fact they're already pre-qualified and digs for the real objection"
+                        }
+                    ];
+                }
+            }
+
+            // Default responses if no specific context match
+            return [
+                {
+                    response: `I understand that perspective. Let me address your concern directly.\n\nBased on where you are (${funnel} lead) and what you're looking for, here's what I'd recommend...\n\n[Context-specific response would go here]`,
+                    confidence: 75,
+                    psychology: "Generic response template that acknowledges context"
+                }
+            ];
+        }
+
+        function displayResults(strategy) {
+            const ctx = strategy.context;
+            const incomeLabels = {
+                'low': '$30k-60k',
+                'medium': '$60k-120k', 
+                'high': '$120k-250k+',
+                'unknown': 'Unknown'
+            };
+            
+            const contextSummary = [
+                ctx.leadName ? `${ctx.leadName}` : 'Unknown name',
+                `${incomeLabels[ctx.income]} income`,
+                `${ctx.funnel} lead`,
+                `Goal: ${ctx.objective}`
+            ].join(' • ');
+
+            const resultsHtml = `
+                <div class="strategy-header">
+                    📋 ${strategy.strategyName} Strategy
+                    <div style="font-size: 0.9rem; font-weight: normal; margin-top: 5px;">
+                        ${contextSummary}
+                    </div>
+                    ${ctx.theirProblem ? `<div style="font-size: 0.85rem; margin-top: 8px; opacity: 0.8;">Their problem: "${ctx.theirProblem}"</div>` : ''}
+                </div>
+
+                ${strategy.responses.map((response, index) => `
+                    <div class="response-card">
+                        ${response.strategyName ? `<div style="color: #ffa500; font-weight: 600; font-size: 0.9rem; margin-bottom: 10px;">🎯 ${response.strategyName}</div>` : ''}
+                        <div class="response-text">${response.response.replace(/\n/g, '<br>')}</div>
+                        <div class="response-meta">
+                            <span class="confidence-badge">${response.confidence}% Confidence</span>
+                            <button class="copy-btn" onclick="copyToClipboard(this, \`${response.response.replace(/`/g, '\\`')}\`)">Copy Response</button>
+                        </div>
+                        <div class="psychology-note">
+                            <strong>Why this works:</strong> ${response.psychology}
+                        </div>
+                    </div>
+                `).join('')}
+
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333; text-align: center; color: #666;">
+                    <button onclick="resetTool()" style="background: #333; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                        🔄 Analyze Another Message
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('results').innerHTML = resultsHtml;
+        }
+
+        function copyToClipboard(button, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        function resetTool() {
+            currentStep = 1;
+            context = {};
+            
+            // Reset all steps
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.add('hidden');
+                step.classList.remove('active');
+            });
+            
+            // Reset selections
+            document.querySelectorAll('.context-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Clear all inputs
+            document.getElementById('leadName').value = '';
+            document.getElementById('theirProblem').value = '';
+            document.getElementById('messageInput').value = '';
+            
+            // Show first step
+            document.getElementById('step1').classList.remove('hidden');
+            document.getElementById('step1').classList.add('active');
+            
+            // Hide results
+            document.querySelector('.results').classList.remove('show');
+        }
+    </script>
+</body>
+</html>
