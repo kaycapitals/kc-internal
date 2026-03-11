@@ -1643,6 +1643,8 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
             <label class="cp-qs-option" data-val="technical"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🔧</span><span class="cp-qs-text">Not tech-savvy / platform confused</span></label>
             <label class="cp-qs-option" data-val="trial"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🆓</span><span class="cp-qs-text">Asked for a trial / free access</span></label>
             <label class="cp-qs-option" data-val="pay_from_profits"><span class="cp-qs-check"></span><span class="cp-qs-emoji">💸</span><span class="cp-qs-text">"Let me make money first then pay"</span></label>
+            <label class="cp-qs-option" data-val="learn_alone"><span class="cp-qs-check"></span><span class="cp-qs-emoji">📚</span><span class="cp-qs-text">"Let me learn on my own first"</span></label>
+            <label class="cp-qs-option" data-val="no_trading_capital"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🏦</span><span class="cp-qs-text">"If I pay, I won't have money to trade"</span></label>
           </div>
         </div>
 
@@ -3245,7 +3247,25 @@ const cpObjDB = {
       {label:'Flip The Logic',text:"If you KNEW this was going to work — like 100% guaranteed — would you invest? Of course you would. So the real question isn't about paying from profits. It's whether you believe in yourself enough to commit. And I'm telling you, based on what our students do, the ROI is there."}
     ],
     killShot:"Everyone wants to win without risking anything. But that's not how it works — in trading OR in life. The students making $1K days invested first. They bet on themselves. That's the difference between someone who talks about trading and someone who actually does it.",
-    note:"2.5% conversion — very low. These leads want zero risk which means zero commitment. Reframe it: the investment IS the accountability. If they won't budge, offer payment plan as a middle ground. ⚠️ DON'T say 'that's not how it works' dismissively — validate first, then flip."}
+    note:"2.5% conversion — very low. These leads want zero risk which means zero commitment. Reframe it: the investment IS the accountability. If they won't budge, offer payment plan as a middle ground. ⚠️ DON'T say 'that's not how it works' dismissively — validate first, then flip."},
+  learn_alone: {emoji:'📚',name:'"Let Me Learn On My Own First"',rate:2.0,convos:'380',priority:12,
+    scripts:[
+      {label:'Six Pack Analogy',text:"That's like saying 'let me get a six pack first, THEN I'll stop eating junk food.' You've got it backwards. The program IS how you learn to trade properly. Without it, you're just repeating the same mistakes and hoping for different results."},
+      {label:'Time Cost',text:"How long have you been trying on your own? Months? Years? And where are you? Still looking for answers on YouTube and Reddit. The students making $1K days aren't smarter than you — they just stopped trying to figure it out alone and got a system that works."},
+      {label:'What You Don\'t Know',text:"Here's the thing — you don't know what you don't know. Our students say that all the time. They THOUGHT they knew how to trade until they started the modules and realized they were gambling, not trading. The knowledge gap is what's costing you money right now."},
+      {label:'The Math',text:"Every day you spend trying to learn alone is a day you're either losing money or leaving money on the table. If the program gets you profitable even ONE month sooner, that's thousands of dollars. The cost of waiting is way higher than the cost of joining."}
+    ],
+    killShot:"You're telling me you want to learn to trade on your own... so you can eventually join a program to learn to trade? Think about what you just said. Skip the struggling part and go straight to the system that works.",
+    note:"2.0% conversion — these people are stuck in the DIY trap. They've been watching YouTube for months/years and still aren't profitable. Hit them with the time cost. ⚠️ DON'T insult their intelligence — respect their effort, then show them the shortcut."},
+  no_trading_capital: {emoji:'🏦',name:'"I Won\'t Have Money Left to Trade"',rate:8.2,convos:'510',priority:9,
+    scripts:[
+      {label:'Small Account Reality',text:"You don't need a big account to start. Some of our students started with $500 — even $300. The skill is what matters, not the account size. Once you know the system, you can grow a small account into something real. We literally teach you how to do that."},
+      {label:'Payment Plan + Small Start',text:"That's exactly why we offer payment plans. First $1,100 gets you full access. Start with whatever you have in your trading account — even $500. Learn the system, grow the account, and the second payment practically pays for itself."},
+      {label:'Invest In Skill First',text:"Would you rather have $3K in a trading account with no idea what you're doing — and lose it? Or invest that $3K in learning the skill, start small, and actually KEEP what you make? The skill is worth more than the capital. Capital without skill = donations to the market."},
+      {label:'Student Examples',text:"I've had students start with tiny accounts — $500, even less. One student grew $1,500 to $8,700 in a month. Another took $500 to $3,000. The account size doesn't matter when you have the skill. The system works on any size."}
+    ],
+    killShot:"Right now you have $3K and no skill. In 6 months you'll have the skill AND the money. Without the program, in 6 months you'll have $0 and still no skill. Which sounds better?",
+    note:"8.2% conversion — actually decent! These people WANT in, they're just scared about capital. Reassure them: small accounts work, payment plan helps, skill > capital. ⚠️ DON'T dismiss their concern — $3K is real money to them. Show empathy, then show the path."}
 };
 
 // --- Objection Keyword Map (for text analysis modes) ---
@@ -3266,7 +3286,9 @@ const cpKeywordMap = {
   fear: ['scared','afraid','worried','risk','lose money','what if','nervous','anxiety','terrified','fear','risky','dangerous'],
   technical: ['tech','computer','platform','software','app','download','setup','technical','how does it work','what do i need'],
   trial: ['trial','free trial','try it','test it','sample','free access','try before','money back','refund','guarantee','try for free','demo','test drive'],
-  pay_from_profits: ['pay from profits','make money first','pay after','pay you back','earn first','profit first','pay later from','pay once i make','pay when i make','pay you from my','pay from what i make','prove it works','show me it works then','results first']
+  pay_from_profits: ['pay from profits','make money first','pay after','pay you back','earn first','profit first','pay later from','pay once i make','pay when i make','pay you from my','pay from what i make','prove it works','show me it works then','results first'],
+  learn_alone: ['learn on my own','figure it out','teach myself','learn myself','do it myself','youtube','on my own first','self taught','learn first then join','study on my own','practice first','try on my own','learn by myself'],
+  no_trading_capital: ['nothing left to trade','no money to trade','won\'t have capital','no capital','can\'t trade with nothing','nothing to invest','empty account','won\'t have anything left','no trading money','all my money','nothing left after','account will be empty','won\'t have funds']
 };
 
 var cpCurrentProofSent = [];
