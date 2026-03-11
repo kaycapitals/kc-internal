@@ -1645,6 +1645,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
             <label class="cp-qs-option" data-val="pay_from_profits"><span class="cp-qs-check"></span><span class="cp-qs-emoji">💸</span><span class="cp-qs-text">"Let me make money first then pay"</span></label>
             <label class="cp-qs-option" data-val="learn_alone"><span class="cp-qs-check"></span><span class="cp-qs-emoji">📚</span><span class="cp-qs-text">"Let me learn on my own first"</span></label>
             <label class="cp-qs-option" data-val="no_trading_capital"><span class="cp-qs-check"></span><span class="cp-qs-emoji">🏦</span><span class="cp-qs-text">"If I pay, I won't have money to trade"</span></label>
+            <label class="cp-qs-option" data-val="after_six_months"><span class="cp-qs-check"></span><span class="cp-qs-emoji">📅</span><span class="cp-qs-text">"What happens after 6 months?"</span></label>
           </div>
         </div>
 
@@ -3265,7 +3266,16 @@ const cpObjDB = {
       {label:'Student Examples',text:"I've had students start with tiny accounts — $500, even less. One student grew $1,500 to $8,700 in a month. Another took $500 to $3,000. The account size doesn't matter when you have the skill. The system works on any size."}
     ],
     killShot:"Right now you have $3K and no skill. In 6 months you'll have the skill AND the money. Without the program, in 6 months you'll have $0 and still no skill. Which sounds better?",
-    note:"8.2% conversion — actually decent! These people WANT in, they're just scared about capital. Reassure them: small accounts work, payment plan helps, skill > capital. ⚠️ DON'T dismiss their concern — $3K is real money to them. Show empathy, then show the path."}
+    note:"8.2% conversion — actually decent! These people WANT in, they're just scared about capital. Reassure them: small accounts work, payment plan helps, skill > capital. ⚠️ DON'T dismiss their concern — $3K is real money to them. Show empathy, then show the path."},
+  after_six_months: {emoji:'📅',name:'"What Happens After 6 Months?"',rate:18.5,convos:'1,240',priority:5,
+    scripts:[
+      {label:'The Re-Evaluation',text:"Great question. After 6 months we re-evaluate every single person in the chat. If you've been putting in the work, doing the modules, showing up... we want you to stay. If someone hasn't been active or hasn't done what they need to do, we let them go. We keep the community full of serious people only."},
+      {label:'Why We Do It',text:"Here's why that matters for YOU. Imagine you just joined and you see someone in the chat who's been there 6 months crying about not getting results. That would freak you out right? But the truth is that person never finished the modules. Never did the work. We don't let that energy stay in the chat because it affects everyone else. So we keep it clean."},
+      {label:'The Modules Are Yours',text:"The modules you get are yours to keep forever. That never goes away. The 6 months is for the live community, the daily trading sessions, the Discord, the Zoom coaching. After 6 months if you've been active and putting in work, you stay. Simple as that."},
+      {label:'It\'s Actually a Good Thing',text:"Most programs just take your money and don't care if you show up or not. We actually hold people accountable. The fact that we re-evaluate at 6 months means we care about results, not just collecting payments. That should tell you everything about what kind of program this is."}
+    ],
+    killShot:"We're the only program that will actually let you go if you don't do the work. Think about that. Everyone else just keeps charging you. We'd rather have 500 serious students than 5,000 people who never open the modules. That's the standard here.",
+    note:"18.5% conversion. This is actually a BUYING SIGNAL. They're asking about the future because they're picturing themselves in it. Don't treat this as an objection, treat it as interest. Explain it confidently. The re-evaluation policy is a SELLING POINT, not a weakness. ⚠️ DON'T make it sound like they'll get kicked out. Frame it as 'we keep the community elite'."}
 };
 
 // --- Objection Keyword Map (for text analysis modes) ---
@@ -3288,7 +3298,8 @@ const cpKeywordMap = {
   trial: ['trial','free trial','try it','test it','sample','free access','try before','money back','refund','guarantee','try for free','demo','test drive'],
   pay_from_profits: ['pay from profits','make money first','pay after','pay you back','earn first','profit first','pay later from','pay once i make','pay when i make','pay you from my','pay from what i make','prove it works','show me it works then','results first'],
   learn_alone: ['learn on my own','figure it out','teach myself','learn myself','do it myself','youtube','on my own first','self taught','learn first then join','study on my own','practice first','try on my own','learn by myself'],
-  no_trading_capital: ['nothing left to trade','no money to trade','won\'t have capital','no capital','can\'t trade with nothing','nothing to invest','empty account','won\'t have anything left','no trading money','all my money','nothing left after','account will be empty','won\'t have funds']
+  no_trading_capital: ['nothing left to trade','no money to trade','won\'t have capital','no capital','can\'t trade with nothing','nothing to invest','empty account','won\'t have anything left','no trading money','all my money','nothing left after','account will be empty','won\'t have funds'],
+  after_six_months: ['after 6 months','after six months','what happens after','renewal','renew','pay again','keep paying','subscription','recurring','ongoing','how long','lifetime','forever','expire','expiration','membership end','access expire','do i lose','cancel after']
 };
 
 var cpCurrentProofSent = [];
