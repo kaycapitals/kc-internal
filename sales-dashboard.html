@@ -2349,6 +2349,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
         </div>
         <div id="cfDetected" style="margin-bottom:16px;min-height:28px"></div>
         <button class="copilot-analyze-btn" style="width:100%;padding:16px;font-size:1.05rem;font-weight:800" onclick="cfAnalyze()">🧊 ANALYZE &amp; GENERATE RESPONSE</button>
+        <button class="cp-start-over" onclick="cfStartOver()" style="margin-top:12px">↩ Reset Form</button>
       </div>
 
       <!-- Cold Feet Output -->
@@ -2572,6 +2573,7 @@ footer{text-align:center;padding:32px 24px;color:var(--text3);font-size:.82rem;b
 
         <!-- Generate Button -->
         <button class="copilot-analyze-btn" style="width:100%;padding:18px;font-size:1.1rem;font-weight:800" onclick="generateFollowUp()">⚡ GENERATE FOLLOW-UP SEQUENCE</button>
+        <button class="cp-start-over" onclick="fuStartOver()" style="margin-top:12px">↩ Reset Form</button>
       </div>
 
       <!-- OUTPUT SECTION -->
@@ -5651,6 +5653,33 @@ if (cfMsgEl) cfMsgEl.addEventListener('input', function(){
 });
 
 // Cold Feet analyze
+window.cfStartOver = function(){
+  document.getElementById('cfBuyerName').value = '';
+  document.getElementById('cfMessage').value = '';
+  document.getElementById('cfDetected').innerHTML = '';
+  document.getElementById('cfOutput').style.display = 'none';
+  document.getElementById('cfOutput').innerHTML = '';
+  // Clear localStorage
+  Object.keys(localStorage).forEach(k => { if(k.startsWith('kc_dash_cf')) localStorage.removeItem(k); });
+};
+
+window.fuStartOver = function(){
+  var form = document.getElementById('fuSub-followup');
+  if(form){
+    form.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
+    form.querySelectorAll('input[type="radio"]').forEach(i => i.checked = false);
+    form.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);
+  }
+  ['fuTimeline','fuProofContent','fuHookContent','fuAltContent'].forEach(id => {
+    var el = document.getElementById(id);
+    if(el) el.innerHTML = '';
+  });
+  var results = document.getElementById('fuResults');
+  if(results) results.style.display = 'none';
+  // Clear localStorage
+  Object.keys(localStorage).forEach(k => { if(k.startsWith('kc_dash_fu')) localStorage.removeItem(k); });
+};
+
 window.cfAnalyze = function(){
   const name = document.getElementById('cfName').value.trim() || '[name]';
   const msg = (cfMsgEl.value || '').toLowerCase();
