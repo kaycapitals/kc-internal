@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Content Engine</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding:16px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto}
+.hdr{text-align:center;padding:24px 0 20px}
+.hdr h1{font-size:24px;font-weight:700;color:#d4a843;margin-bottom:6px}
+.hdr p{color:#555;font-size:13px}
+.input-wrap{margin-bottom:20px}
+textarea{width:100%;padding:16px;border-radius:12px;border:1px solid #222;background:#111;color:#fff;font-size:16px;resize:none;outline:none;font-family:inherit;min-height:80px;transition:border-color .2s}
+textarea:focus{border-color:#d4a843}
+textarea::placeholder{color:#444}
+.btn-row{display:flex;gap:8px;margin-top:10px}
+.gen-btn{flex:1;padding:14px;border-radius:12px;border:none;background:#d4a843;color:#000;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .2s}
+.gen-btn:disabled{opacity:.4;cursor:not-allowed}
+.gen-btn:hover:not(:disabled){opacity:.85}
+.hint{color:#333;font-size:11px;text-align:center;margin-top:6px}
+.loading{text-align:center;padding:40px 20px}
+.loading .bar{width:100%;height:3px;background:#1a1a1a;border-radius:2px;overflow:hidden;margin-bottom:16px}
+.loading .fill{width:0%;height:100%;background:#d4a843;border-radius:2px;animation:load 8s ease-in-out forwards}
+@keyframes load{0%{width:0%}50%{width:60%}90%{width:85%}100%{width:92%}}
+.loading p{color:#555;font-size:13px}
+.error{padding:14px;border-radius:10px;background:#1a0a0a;color:#cc4444;font-size:14px;margin-bottom:16px}
+.results-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.results-hdr h2{color:#fff;font-size:18px}
+.copy-all{padding:6px 14px;border-radius:8px;border:1px solid #d4a843;background:transparent;color:#d4a843;font-size:12px;cursor:pointer}
+.card{background:#111;border:1px solid #1a1a1a;border-radius:14px;padding:18px;margin-bottom:16px}
+.card-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #1a1a1a}
+.badge{font-size:14px;font-weight:700;color:#d4a843;letter-spacing:.5px}
+.card-meta{display:flex;align-items:center;gap:8px}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.dur{color:#555;font-size:12px}
+.copy-btn{background:none;border:none;font-size:16px;cursor:pointer;padding:2px 6px}
+.section{margin-bottom:14px}
+.lbl{font-size:10px;font-weight:700;color:#d4a843;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px}
+.hook-box{padding:12px;border-radius:10px;background:#161616;border-left:3px solid #d4a843}
+.hook-box p{color:#fff;font-size:16px;font-weight:600;line-height:1.4}
+.body-text{color:#bbb;font-size:14px;line-height:1.7;white-space:pre-wrap}
+.cta-box{padding:10px 12px;border-radius:10px;background:#0f1a0f}
+.cta-box p{color:#6b6;font-size:14px;font-weight:500;line-height:1.5}
+.vis-box{padding:8px 12px;border-radius:8px;background:#0f0f1a}
+.vis-box p{color:#88c;font-size:12px;line-height:1.5;font-style:italic}
+.cost{text-align:center;color:#333;font-size:11px;padding:8px}
+.raw{color:#bbb;font-size:13px;white-space:pre-wrap;line-height:1.6}
+@media(max-width:600px){
+  body{padding:10px}
+  .hdr h1{font-size:20px}
+  textarea{font-size:15px;padding:12px}
+  .gen-btn{padding:12px;font-size:14px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <h1>🎬 Content Engine</h1>
+    <p>1,025 reels analyzed · your voice · your scripts</p>
+  </div>
+
+  <div class="input-wrap">
+    <textarea id="idea" rows="3" placeholder="Drop your idea here... e.g. 'why people blow up accounts on Fridays'"></textarea>
+    <div class="btn-row">
+      <button class="gen-btn" id="genBtn" onclick="generate()">⚡ Generate Scripts</button>
+    </div>
+    <div class="hint">⌘+Enter to generate</div>
+  </div>
+
+  <div id="output"></div>
+</div>
+
+<script>
+const VOICE_DNA = {"hooks": ["today was one of the best trading days in the history of the stock market", "breaking news", "this strategy is called", "me sitting on the f***ing chair like this, you know i'm f***ing printed", "90% of traders ignore this one thing", "i think i found out the biggest trading psychology cheat code", "before every single trade that i take, i have a checklist", "you cannot keep trading new stocks every single day", "one of the biggest mistakes that day traders make", "somebody asked me a question today", "i love trading same day expiration contracts, but i didn't take any trade", "you know what it is justin, i'll keep it real with you bro", "any level that's holding in the pre-market becomes a level", "revenge trading used to destroy me", "jose, what's good my brother", "now here's the thing, not every trade", "now most people see a gap down in the market and they freeze", "you should understand this, most traders stay broke", "today was one of the best trading days", "so many people are scared of trading spx", "most of you all are losing money because you can't take action", "i literally laugh at people when they tell me", "a lot of you all want to become a full time day trader", "let's say you take 1 trade with a $2000 position size", "today i actually didn't follow my trading rules"], "phrases": ["check this out", "absolutely beautiful", "let's make it happen", "it is what it is", "here's the thing", "keeping it real", "absolutely insane", "at the end of the day", "you understand what i'm saying?", "let me break it down", "if you want to learn", "i promise you", "i'll send you all the details right away", "let's go", "just comment the word system down below", "you got nothing to lose", "let me show you", "let me put you on some sauce", "bro", "that's exactly what happened", "let me break down", "absolutely printed", "like this video first and comment", "let's freaking go", "matter of fact"], "slang": ["man", "bro", "like", "literally", "absolutely", "freaking", "f***ing", "alright", "i mean", "you know what", "beautiful", "yo", "hey", "honestly", "straight away"], "ctas": ["let's make it happen", "you got nothing to lose", "just comment the word system down below and i'll send you all the details right away", "comment the word [x] and i'll dm you the link straight away", "let me put you on some sauce", "just comment the word system down below and i'll reach out", "just comment the word mentor down below and i'll reach out", "like this video first and comment [word]", "comment the word [x] and i'll dm you", "like this video first and comment the word [x]", "i'll dm you the link straight away", "let's freaking go", "like this video first and comment the word yes and i'll dm you the link straight away", "i'll send you all the details right away", "comment the word mentor and i'll send you all the details"], "power_words": ["beautiful", "absolutely", "insane", "literally", "massive", "freaking", "printed", "exactly", "sauce", "critical", "perfect", "life-changing", "sexy", "life changing", "fire", "straight away", "clean", "huge", "brutal", "conviction"], "quotes": ["you're comparing your chapter 1 with other people's chapter 533", "Bro, whether you like it or not, this is a profession. You want to do this for life, then stop trading it like it's a side hustle", "you're gonna risk it for the biscuit man at the end of the day", "my grandmother's 90 plus and she can walk faster than this", "If you try to eat everything you're going to be extremely overweight. That means you can only catch your piece and that's it. Leave the rest of the food for the rest of the people.", "Crashes are exactly where day traders like you and me print", "More volatility means more confusion around FOMC. And more confusion means you're risking your house for a f***ing dent", "People who rely on wages are getting crushed. People who know how to extract money from the markets are making an absolute fuck ton.", "anything in the middle is where the emotions live", "You know why? Because it's not sexy. So for people who are serious about this in 2026, and you're done with having fantasy timelines, I got something for you", "I mean it's for free so you got nothing to lose.", "You can't be a student and the rock star at the same time.", "top 1% of people will actually watch this and change their lives, so I'm making this video for you", "Patience pays the patient hand that waits patiently to be paid.", "When power clashes at the top, we as traders are who get paid", "You do not break your rules. You break your character.", "Trading is meant to be super simple, especially when you have a small trading account.", "there's so much food on the table you can only eat your bit and yeah there'll be a few days where you try to eat the whole thing but if you keep on doing the whole thing eating the whole thing you're gonna turn into a really really really big freaking guy", "Because the long term investors will simply wait for months or years for this stuff to play out. Day traders do not wait, we trade the reaction of this stuff.", "I make the money, money don't make me", "You do not understand when the market is easy you need to go hard. When the market is hard you need to go easy.", "I'd rather walk away at zero than walking away with minus $4,000 just because I know how to trade and also how not to trade in a way.", "There's only so much food on the table and I can only eat this much and I ate my piece and I'm leaving the rest of the food for the rest of the people", "All the money that I'm making from trading has to be making me more money. And that more money should be making me even more money and that more money should be making me more money and on and on and on.", "nobody goes broke taking profits? Nobody actually gets rich taking small profits", "This right here, this is earned freaking confidence. If you built it yourself, if you paid the price, if you bled for it, bro, flex that shit.", "nothing is broken, you're just in the stage three", "They just wanna look cool, not actually be cool. They wanna pretend they're cool.", "All I'm saying is this might be a little bit too much sauce for you. So make sure you save this video for later because you will need to circle back to this video later as well", "All the pain and the sleepless nights are mine and the joy is yours. But you know what? You're mine.", "In God we trust, but the rest of you, Papa Trump included, better bring the numbers", "That's why you keep going back to the same old mistakes that you were making before.", "I make the money money don't make me I'm gonna make content regardless", "Me personally, I don't think I'm that smart to understand all those tough concepts. I make enough money using my easy concepts man so, I mean it works out for me.", "all those guys that laughed at me, they do not live in such a beautiful f***ing house now, while I live the freaking life", "When you cap risk pricing, banks don't lose money, they just stop lending.", "But because now you stayed at your P&L, now you're holding on to the trade based off greed and now you're sitting in there, please, maybe I'll get paid more", "Market doesn't move on the truth, market moves on the perception and speed", "For me, trading is not about hope, Hopium doesn't pay in trading and hope is never going to be a position.", "And then the classic dad response. He sends me a thumbs up for the $50,000 transfer."], "energy": ["Teaching mode uses slower pace with repeated explanations", "Reflective and personal when sharing losses or personal stories", "Passionate and fired up when discussing politics/economics and their market impact", "Intense urgency during live trading calls with short commands like 'yo', 'take some off'", "Boastful and celebratory when showing lifestyle/success", "Calm and methodical when explaining technical setups step-by-step", "High energy and excited when describing big wins and profitable trades", "High intensity when discussing winning trades or big moves", "Fired up and aggressive when defending trading against critics", "Aggressive/confrontational when addressing critics or market conditions"], "teaching": ["Shows before/after examples with specific trade results", "Breaks down step-by-step technical setup process", "Uses 'Now what does that mean?' to transition to explanations", "Picasso comparison for trading mastery", "Subway Surfers game metaphor for levels breaking", "References specific levels and percentages", "Contrasts right way vs wrong way approaches", "Uses food metaphors: 'there's so much food on the table you can only eat your bit'", "Step-by-step breakdowns: 'First... Second... Third...'", "Relates to food metaphors: 'there's so much food on the table'"], "story": ["Admits mistakes and vulnerabilities for relatability", "Ends with transformation or success", "Shows the emotional journey within trades", "Creates urgency around missed opportunities", "Builds to revelation or lesson learned", "Uses cliffhangers: 'but most of you would have...'", "Timeline-based narratives (what happened first, then, finally)", "Admits mistakes openly then explains the lesson learned", "Uses callback phrases like 'and that's exactly what happened'", "Builds anticipation then reveals results"], "contrast": ["Fear-based decisions vs educated positioning", "SPY moving up while QQQ moving down (red flag) vs both moving same direction (green flag)", "Most people vs real traders", "Some people risk freedom for money, while some risk money for freedom", "Hard market vs easy market", "While you were stuck in your own head, I took a 40% trade", "Losses you can learn from vs losses you can't learn anything from", "day trading vs scalping: 'Day trading can go for hours sometimes. Scalping goes for max minutes'", "While others panic vs opportunity for us: 'While others are freezing or waiting, you can use tight setups'", "Red days vs. winning days with position sizing"], "direct_address": ["If you're going on your trading journey man", "Stop lying to yourself", "you're comparing your chapter 1 with other people's chapter 533", "I promise you...", "You want something moving with a little bit of conviction", "Some of you all", "You don't need a lot of money to make money bro", "You need to", "Listen if you want to...", "don't tell me that you have tried everything"], "tone_shifts": ["Transitions from technical analysis to emotional/psychological insights", "Goes from calm explanation to frustrated when talking about excuses", "Begins frustrated about losses, transitions to philosophical acceptance", "Moves from personal story to direct teaching to strong CTA", "Becomes excited when describing successful trades", "Starts humble/vulnerable, builds to confident teaching", "Goes from analytical to protective when warning about risks", "Goes from sympathetic about losses to tough love about taking responsibility", "Begins with specific example, generalizes to broader lesson", "Builds intensity during chart analysis, calms for educational segments"], "emotional": ["Gets fired up about unrealistic trading timelines - 'that's disrespect to people who actually made it'", "Other traders' bad habits make him want to teach and correct", "Wrong conventional wisdom about trading - fires him up to correct", "Greed and fear controlling decisions", "People making excuses or saying trading is impossible", "Criticism of his methods makes him argumentative", "Defending his wife and relationship", "People getting distracted by news instead of focusing on skills", "Complex strategies frustrate him - he prefers simple", "Memories of being hungry/poor - deep emotion and vulnerability"], "topics": ["trading psychology and mindset", "risk management and position sizing", "student success stories", "live trade breakdowns", "risk management lessons", "technical analysis tutorials", "trading psychology and discipline", "student success stories and testimonials", "course/mentorship promotion", "trading mistakes and lessons", "trading rules and discipline", "trading strategy breakdowns", "risk management", "live trading commentary", "trading psychology and emotions", "specific trade breakdowns", "trade breakdowns with specific profit percentages", "technical analysis education", "risk management principles", "market conditions analysis"]};
+
+const SYSTEM_PROMPT = `You are a content script writer for Somesh (Kay Capitals) — a day trading educator with 1M+ Instagram followers. Your job is to write Instagram reel scripts that sound EXACTLY like him.
+
+## VOICE DNA (extracted from 1,000+ of his actual videos)
+${JSON.stringify(VOICE_DNA)}
+
+## RULES
+1. Write EXACTLY how Somesh talks — use his slang, his phrases, his energy. Reference the hooks, phrases, and quotes above.
+2. Every script must have: HOOK (first 3 seconds — the most important part), BODY, CTA
+3. Hooks must stop the scroll. Use patterns from his actual hooks above.
+4. Keep it conversational — he talks TO one person, not an audience
+5. Swearing is fine and encouraged for emphasis — he's raw and authentic
+6. Use his recurring phrases naturally — don't force them
+7. Match his sentence structure: short punchy sentences mixed with longer emotional ones
+8. Include [VISUAL CUE] notes in brackets for camera/editing guidance
+9. Scripts should be 30-90 seconds when spoken (roughly 80-250 words)
+10. Never sound corporate, polished, or generic. Sound like a real person talking to a friend.
+11. Each script variant should feel genuinely different — not the same script reworded
+
+## OUTPUT FORMAT
+Return ONLY valid JSON (no markdown, no backticks) with this structure:
+{"scripts":[{"variant":"aggressive","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"high"},{"variant":"teaching","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"medium"},{"variant":"story","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"calm"}]}`;
+
+const ICONS = {aggressive:'🔥',teaching:'📚',story:'📖'};
+const ECOLORS = {high:'#ff4444',medium:'#d4a843',calm:'#44aa88'};
+
+document.getElementById('idea').addEventListener('keydown', e => {
+  if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)) generate();
+});
+
+async function generate() {
+  const idea = document.getElementById('idea').value.trim();
+  if(!idea) return;
+  const btn = document.getElementById('genBtn');
+  const out = document.getElementById('output');
+  btn.disabled = true;
+  btn.textContent = '⏳ Generating...';
+  out.innerHTML = '<div class="loading"><div class="bar"><div class="fill"></div></div><p>Analyzing your voice DNA and crafting scripts...</p></div>';
+
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key': getKey(),
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:3000,
+        system: SYSTEM_PROMPT,
+        messages:[{role:'user',content:`Create 3 Instagram reel script variants for this idea:\n\n"${idea}"\n\nGenerate these variants:\n1. 🔥 AGGRESSIVE — high energy, call-out style, confrontational\n2. 📚 TEACHING — educational breakdown, clear explanation\n3. 📖 STORY — personal story or relatable scenario leading to lesson\n\nEach must sound authentically like Somesh. Use his actual phrases and energy. Return ONLY valid JSON.`}]
+      })
+    });
+
+    const data = await r.json();
+    if(data.error) throw new Error(data.error.message);
+
+    const txt = data.content[0].text;
+    let scripts;
+    try {
+      const m = txt.match(/\{[\s\S]*"scripts"[\s\S]*\}/);
+      scripts = m ? JSON.parse(m[0]) : null;
+    } catch(e) { scripts = null; }
+
+    const iT = data.usage?.input_tokens||0;
+    const oT = data.usage?.output_tokens||0;
+    const cost = ((iT*3)+(oT*15))/1000000;
+
+    if(scripts?.scripts) {
+      let h = '<div class="results-hdr"><h2>Your Scripts</h2><button class="copy-all" onclick="copyAll()">📋 Copy All</button></div>';
+      scripts.scripts.forEach((s,i) => {
+        h += `<div class="card" id="card${i}">
+          <div class="card-hdr">
+            <span class="badge">${ICONS[s.variant]||'🎬'} ${(s.variant||'').toUpperCase()}</span>
+            <div class="card-meta">
+              <span class="dot" style="background:${ECOLORS[s.energy]||'#888'}"></span>
+              <span class="dur">~${s.estimated_seconds||45}s</span>
+              <button class="copy-btn" onclick="copyOne(${i})">📋</button>
+            </div>
+          </div>
+          <div class="section"><div class="lbl">🎯 Hook</div><div class="hook-box"><p>${esc(s.hook)}</p></div></div>
+          <div class="section"><div class="lbl">📝 Body</div><p class="body-text">${esc(s.body)}</p></div>
+          <div class="section"><div class="lbl">🎬 CTA</div><div class="cta-box"><p>${esc(s.cta)}</p></div></div>
+          ${s.visual_notes?`<div class="section"><div class="lbl">🎥 Visual</div><div class="vis-box"><p>${esc(s.visual_notes)}</p></div></div>`:''}
+        </div>`;
+      });
+      h += `<div class="cost">Cost: $${cost.toFixed(4)} · ${iT+oT} tokens</div>`;
+      out.innerHTML = h;
+      window._scripts = scripts.scripts;
+    } else {
+      out.innerHTML = `<div class="card"><pre class="raw">${esc(txt)}</pre></div>`;
+    }
+  } catch(e) {
+    out.innerHTML = `<div class="error">❌ ${esc(e.message)}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '⚡ Generate Scripts';
+  }
+}
+
+function esc(s) { if(!s)return''; const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+function copyOne(i) {
+  const s = window._scripts?.[i];
+  if(!s) return;
+  const t = `[HOOK]\n${s.hook}\n\n[BODY]\n${s.body}\n\n[CTA]\n${s.cta}\n\n[VISUAL NOTES]\n${s.visual_notes||''}`;
+  navigator.clipboard.writeText(t);
+  document.querySelectorAll('.copy-btn')[i].textContent = '✅';
+  setTimeout(()=>document.querySelectorAll('.copy-btn')[i].textContent='📋',2000);
+}
+
+function copyAll() {
+  if(!window._scripts) return;
+  const t = window._scripts.map(s => `=== ${(ICONS[s.variant]||'🎬')} ${(s.variant||'').toUpperCase()} ===\n\n[HOOK]\n${s.hook}\n\n[BODY]\n${s.body}\n\n[CTA]\n${s.cta}\n\n[VISUAL NOTES]\n${s.visual_notes||''}`).join('\n\n'+('─'.repeat(50))+'\n\n');
+  navigator.clipboard.writeText(t);
+  document.querySelector('.copy-all').textContent='✅ Copied!';
+  setTimeout(()=>document.querySelector('.copy-all').textContent='📋 Copy All',2000);
+}
+
+function getKey() {
+  let k = localStorage.getItem('_ck');
+  if(!k) {
+    k = prompt('Enter access key:');
+    if(k) localStorage.setItem('_ck', k);
+  }
+  return k || '';
+}
+
+// Auto-prompt on first load
+if(!localStorage.getItem('_ck')) {
+  document.addEventListener('DOMContentLoaded', () => {
+    const k = prompt('Enter your access key to get started:');
+    if(k) localStorage.setItem('_ck', k);
+  });
+}
+</script>
+</body>
+</html>
