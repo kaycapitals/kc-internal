@@ -56,10 +56,28 @@ textarea::placeholder{color:#444}
 </style>
 </head>
 <body>
+<!-- Login Screen -->
+<div id="loginScreen" style="display:flex;align-items:center;justify-content:center;min-height:100vh">
+  <div style="max-width:360px;width:100%;padding:24px">
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="font-size:40px;margin-bottom:12px">🎬</div>
+      <h1 style="font-size:22px;font-weight:700;color:#d4a843;margin-bottom:6px">Content Engine</h1>
+      <p style="color:#444;font-size:13px">Private access only</p>
+    </div>
+    <input type="password" id="loginPwd" placeholder="Password" style="width:100%;padding:14px 16px;border-radius:12px;border:1px solid #222;background:#111;color:#fff;font-size:16px;outline:none;margin-bottom:12px;font-family:inherit" autocomplete="off">
+    <button onclick="checkLogin()" style="width:100%;padding:14px;border-radius:12px;border:none;background:#d4a843;color:#000;font-size:15px;font-weight:700;cursor:pointer">Enter</button>
+    <div id="loginErr" style="display:none;text-align:center;color:#cc4444;font-size:13px;margin-top:12px"></div>
+    <button onclick="localStorage.removeItem('_cs');document.getElementById('loginErr').textContent='Session cleared';document.getElementById('loginErr').style.display='block'" style="display:block;margin:20px auto 0;background:none;border:none;color:#333;font-size:11px;cursor:pointer">Clear saved session</button>
+  </div>
+</div>
+
+<!-- Main App (hidden until login) -->
+<div id="mainApp" style="display:none">
 <div class="wrap">
   <div class="hdr">
     <h1>🎬 Content Engine</h1>
     <p>1,025 reels analyzed · your voice · your scripts</p>
+    <button onclick="localStorage.removeItem('_cs');location.reload()" style="background:none;border:none;color:#333;font-size:11px;cursor:pointer;margin-top:8px">Log out</button>
   </div>
 
   <div class="input-wrap">
@@ -71,6 +89,7 @@ textarea::placeholder{color:#444}
   </div>
 
   <div id="output"></div>
+</div>
 </div>
 
 <script>
@@ -196,22 +215,39 @@ function copyAll() {
   setTimeout(()=>document.querySelector('.copy-all').textContent='📋 Copy All',2000);
 }
 
+const _e = [56, 40, 0, 34, 1, 26, 89, 4, 30, 29, 29, 1, 29, 65, 89, 72, 58, 58, 126, 4, 22, 1, 25, 58, 34, 30, 123, 118, 111, 90, 98, 107, 7, 122, 90, 15, 35, 0, 32, 20, 4, 76, 104, 0, 86, 117, 117, 70, 34, 44, 120, 28, 24, 56, 89, 3, 7, 39, 95, 123, 115, 125, 124, 69, 7, 1, 117, 54, 9, 32, 54, 81, 30, 2, 84, 81, 81, 123, 94, 116, 38, 33, 78, 112, 34, 57, 2, 38, 36, 31, 122, 11, 69, 125, 80, 107, 50, 59, 90, 110, 59, 61, 61, 54, 61, 19, 108, 115];
+const _p = "KC-Content-2026!";
+
 function getKey() {
-  let k = localStorage.getItem('_ck');
-  if(!k) {
-    k = prompt('Enter access key:');
-    if(k) localStorage.setItem('_ck', k);
+  const s = localStorage.getItem('_cs');
+  if(s === 'true') {
+    return _e.map((c,i) => String.fromCharCode(c ^ _p.charCodeAt(i % _p.length))).join('');
   }
-  return k || '';
+  return '';
 }
 
-// Auto-prompt on first load
-if(!localStorage.getItem('_ck')) {
-  document.addEventListener('DOMContentLoaded', () => {
-    const k = prompt('Enter your access key to get started:');
-    if(k) localStorage.setItem('_ck', k);
-  });
+function checkLogin() {
+  const pwd = document.getElementById('loginPwd').value;
+  if(pwd === _p) {
+    localStorage.setItem('_cs', 'true');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+  } else {
+    document.getElementById('loginErr').textContent = 'Wrong password';
+    document.getElementById('loginErr').style.display = 'block';
+  }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  if(localStorage.getItem('_cs') === 'true') {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') checkLogin();
+});
 </script>
 </body>
 </html>
