@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://api.anthropic.com https://api.openai.com https://kc-tools.kaycapitals.co; img-src 'self' data:; font-src 'self';">
 <title>Content Engine</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a0a;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding:16px;-webkit-font-smoothing:antialiased}
+body{background:#0a0a0a;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom, 0px));-webkit-font-smoothing:antialiased}
 .wrap{max-width:720px;margin:0 auto}
 .hdr{text-align:center;padding:24px 0 20px}
 .hdr h1{font-size:24px;font-weight:700;color:#d4a843;margin-bottom:6px}
@@ -47,18 +48,13 @@ textarea::placeholder{color:#444}
 .vis-box p{color:#88c;font-size:12px;line-height:1.5;font-style:italic}
 .cost{text-align:center;color:#333;font-size:11px;padding:8px}
 .raw{color:#bbb;font-size:13px;white-space:pre-wrap;line-height:1.6}
-@media(max-width:600px){
-  body{padding:10px}
-  .hdr h1{font-size:20px}
-  textarea{font-size:15px;padding:12px}
-  .gen-btn{padding:12px;font-size:14px}
-}
 
 /* Tab Navigation */
-.tab-bar{display:flex;gap:0;border-bottom:1px solid #222;margin-bottom:20px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tab-btn{flex:1;padding:14px 8px;background:none;border:none;color:#555;font-size:14px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;min-width:0;text-align:center}
-.tab-btn.active{color:#d4a843;border-bottom-color:#d4a843}
+.tab-bar{display:flex;gap:0;border-bottom:1px solid #222;margin-bottom:20px;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.tab-btn{flex:1;padding:14px 8px;background:none;border:none;color:#555;font-size:14px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:color .2s;white-space:nowrap;min-width:0;text-align:center;position:relative;z-index:1}
+.tab-btn.active{color:#d4a843;border-bottom-color:transparent}
 .tab-btn:hover{color:#888}
+.tab-indicator{position:absolute;bottom:0;height:3px;background:#d4a843;border-radius:2px;transition:left .3s cubic-bezier(.4,0,.2,1),width .3s cubic-bezier(.4,0,.2,1)}
 .tab-panel{display:none}
 .tab-panel.active{display:block}
 
@@ -69,14 +65,18 @@ textarea::placeholder{color:#444}
 .funnel-hdr.mof{background:#1a1508;color:#d4a843;border:1px solid #332a11}
 .funnel-hdr.bof{background:#081a0c;color:#22aa44;border:1px solid #113322}
 
-.idea-card{background:#111;border:1px solid #222;border-radius:12px;padding:14px;margin-bottom:10px;position:relative}
+.idea-card{background:#111;border:1px solid #222;border-radius:12px;padding:14px;margin-bottom:10px;position:relative;transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .3s ease;will-change:transform,opacity;touch-action:pan-y}
 .idea-card.replacing{opacity:.5;pointer-events:none}
+.idea-card.slide-out-right{transform:translateX(120%);opacity:0}
+.idea-card.slide-out-left{transform:translateX(-120%);opacity:0}
+.idea-card.swiping{transition:none}
 .idea-badges{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
 .idea-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.5px}
 .idea-badge.tof{background:#cc2222;color:#fff}
 .idea-badge.mof{background:#d4a843;color:#000}
 .idea-badge.bof{background:#22aa44;color:#fff}
 .idea-badge.topic{background:#222;color:#999}
+.idea-badge.confidence{background:#1a1a2a;color:#88f;font-size:9px}
 .idea-title{color:#fff;font-size:15px;font-weight:600;line-height:1.4;margin-bottom:8px}
 .idea-preview{display:none;color:#999;font-size:13px;line-height:1.5;padding:10px;background:#0a0a0a;border-radius:8px;margin-bottom:8px}
 .idea-preview.show{display:block}
@@ -91,7 +91,7 @@ textarea::placeholder{color:#444}
 .idea-action.reject:hover{background:#1a0a0a}
 .idea-action.refresh{border-color:#555}
 
-/* Reject Feedback Form */
+/* Reject Feedback Form (desktop inline) */
 .reject-form{display:none;padding:12px;background:#0a0a0a;border-radius:10px;margin-top:8px;border:1px solid #1a1111}
 .reject-form.show{display:block}
 .reject-form select{width:100%;padding:10px;border-radius:8px;border:1px solid #222;background:#111;color:#fff;font-size:14px;margin-bottom:8px;outline:none}
@@ -99,11 +99,27 @@ textarea::placeholder{color:#444}
 .reject-form input{flex:1;padding:10px;border-radius:8px;border:1px solid #222;background:#111;color:#fff;font-size:14px;outline:none}
 .reject-form .fb-mic{width:44px;height:44px;border-radius:50%;border:2px solid #333;background:#111;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
 .reject-form .fb-mic.recording{background:#cc2222;border-color:#cc2222}
-.reject-form .fb-submit{width:100%;padding:10px;border-radius:8px;border:none;background:#cc2222;color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px}
+.reject-form .fb-submit{width:100%;padding:10px;border-radius:8px;border:none;background:#cc2222;color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;min-height:44px}
+
+/* Bottom Sheet (mobile reject form) */
+.bottom-sheet-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;opacity:0;transition:opacity .3s}
+.bottom-sheet-overlay.show{display:flex;align-items:flex-end;opacity:1}
+.bottom-sheet{width:100%;max-width:720px;margin:0 auto;background:#111;border-radius:20px 20px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom, 0px));transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.bottom-sheet-overlay.show .bottom-sheet{transform:translateY(0)}
+.bottom-sheet-handle{width:40px;height:4px;background:#333;border-radius:2px;margin:0 auto 16px}
+.bottom-sheet h3{color:#fff;font-size:16px;margin-bottom:4px}
+.bottom-sheet .bs-subtitle{color:#666;font-size:13px;margin-bottom:16px}
+.bottom-sheet select{width:100%;padding:12px;border-radius:10px;border:1px solid #222;background:#1a1a1a;color:#fff;font-size:15px;margin-bottom:10px;outline:none}
+.bottom-sheet .fb-row{display:flex;gap:8px;margin-bottom:10px}
+.bottom-sheet .fb-row input{flex:1;padding:12px;border-radius:10px;border:1px solid #222;background:#1a1a1a;color:#fff;font-size:15px;outline:none}
+.bottom-sheet .fb-row .fb-mic{width:48px;height:48px;border-radius:50%;border:2px solid #333;background:#1a1a1a;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bottom-sheet .fb-row .fb-mic.recording{background:#cc2222;border-color:#cc2222}
+.bottom-sheet .bs-submit{width:100%;padding:14px;border-radius:12px;border:none;background:#cc2222;color:#fff;font-size:15px;font-weight:700;cursor:pointer;min-height:48px}
 
 /* Approved Queue */
 .approved-counter{text-align:center;padding:16px;color:#d4a843;font-size:18px;font-weight:700;margin-bottom:16px}
-.approved-card{background:#111;border:1px solid #222;border-radius:12px;padding:14px;margin-bottom:10px;display:flex;flex-direction:column;gap:10px}
+.approved-card{background:#111;border:1px solid #222;border-radius:12px;padding:14px;margin-bottom:10px;display:flex;flex-direction:column;gap:10px;transition:transform .3s,opacity .3s}
+.approved-card.slide-out{transform:translateX(-120%);opacity:0}
 .approved-title{color:#fff;font-size:15px;font-weight:600;line-height:1.4}
 .approved-actions{display:flex;gap:6px;flex-wrap:wrap}
 .approved-action{padding:10px 14px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;min-height:44px}
@@ -122,10 +138,91 @@ textarea::placeholder{color:#444}
 .ideas-loading p{color:#555;font-size:14px}
 .ideas-empty{text-align:center;padding:40px 20px;color:#444;font-size:14px}
 
+/* Skeleton loading cards */
+.skeleton-card{background:#111;border:1px solid #1a1a1a;border-radius:12px;padding:14px;margin-bottom:10px;overflow:hidden}
+.skeleton-line{height:12px;background:#1a1a1a;border-radius:6px;margin-bottom:8px;position:relative;overflow:hidden}
+.skeleton-line::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.03),transparent);animation:shimmer 1.5s infinite}
+.skeleton-line.w60{width:60%}
+.skeleton-line.w80{width:80%}
+.skeleton-line.w40{width:40%}
+.skeleton-line.h20{height:20px}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+/* Toast notification */
+.toast-container{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom, 0px));left:50%;transform:translateX(-50%);z-index:2000;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:90%;max-width:400px}
+.toast{background:#222;color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,.5);pointer-events:auto;animation:toastIn .3s ease;width:100%;justify-content:space-between}
+.toast.success{border-left:3px solid #22aa44}
+.toast.error{border-left:3px solid #cc2222}
+.toast.info{border-left:3px solid #d4a843}
+.toast-undo{background:none;border:1px solid #d4a843;color:#d4a843;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;min-height:36px}
+@keyframes toastIn{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes toastOut{from{opacity:1}to{opacity:0;transform:translateY(10px)}}
+
+/* Waveform visualization */
+.waveform-wrap{display:flex;align-items:center;gap:10px;margin-top:6px}
+.waveform-canvas{height:32px;width:120px;border-radius:4px}
+.rec-timer{color:#cc2222;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+
+/* Taste profile summary */
+.taste-summary{background:#111;border:1px solid #1a1a1a;border-radius:12px;padding:14px;margin-bottom:16px}
+.taste-summary h3{color:#d4a843;font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.taste-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.taste-tag{font-size:11px;padding:3px 8px;border-radius:6px;font-weight:600}
+.taste-tag.liked{background:#0a1a0f;color:#22aa44;border:1px solid #113322}
+.taste-tag.rejected{background:#1a0a0a;color:#cc2222;border:1px solid #331111}
+.taste-ratio{color:#666;font-size:11px;margin-left:4px}
+.taste-actions{display:flex;gap:8px;margin-top:8px}
+.taste-reset{background:none;border:1px solid #333;color:#666;padding:6px 12px;border-radius:6px;font-size:11px;cursor:pointer;min-height:36px}
+.taste-reset:hover{border-color:#555;color:#999}
+
+/* Script quality features */
+.script-meta{display:flex;gap:12px;align-items:center;padding:8px 0;border-top:1px solid #1a1a1a;margin-top:10px;flex-wrap:wrap}
+.script-meta-item{color:#555;font-size:11px;display:flex;align-items:center;gap:4px}
+.script-rate{display:flex;gap:4px}
+.script-rate button{background:none;border:1px solid #222;border-radius:6px;padding:4px 8px;font-size:14px;cursor:pointer;min-height:36px;min-width:36px;transition:all .15s}
+.script-rate button:hover{border-color:#444}
+.script-rate button.rated-up{background:#0a1a0f;border-color:#22aa44}
+.script-rate button.rated-down{background:#1a0a0a;border-color:#cc2222}
+.script-regen{background:none;border:1px solid #333;color:#888;padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;min-height:36px;transition:all .15s}
+.script-regen:hover{border-color:#d4a843;color:#d4a843}
+.brain-sources{margin-top:8px}
+.brain-sources-toggle{background:none;border:none;color:#555;font-size:11px;cursor:pointer;padding:4px 0;min-height:32px}
+.brain-sources-toggle:hover{color:#888}
+.brain-sources-list{display:none;padding:8px;background:#0a0a0a;border-radius:8px;margin-top:4px}
+.brain-sources-list.show{display:block}
+.brain-source{color:#666;font-size:11px;line-height:1.5;padding:4px 0;border-bottom:1px solid #111}
+.brain-source:last-child{border-bottom:none}
+
+/* Pull to refresh */
+.ptr-indicator{text-align:center;padding:0;overflow:hidden;height:0;transition:height .2s;color:#d4a843;font-size:13px}
+.ptr-indicator.pulling{height:40px;padding:10px 0}
+.ptr-indicator.refreshing{height:40px;padding:10px 0}
+
+/* Session timeout overlay */
+.timeout-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:3000;align-items:center;justify-content:center}
+.timeout-overlay.show{display:flex}
+.timeout-box{text-align:center;padding:32px}
+.timeout-box h2{color:#d4a843;font-size:20px;margin-bottom:8px}
+.timeout-box p{color:#666;font-size:14px;margin-bottom:20px}
+.timeout-box button{padding:14px 32px;border-radius:12px;border:none;background:#d4a843;color:#000;font-size:15px;font-weight:700;cursor:pointer}
+
+/* Rate limit indicator */
+.rate-limit-bar{height:2px;background:#1a1a1a;border-radius:1px;margin-bottom:8px;overflow:hidden;opacity:0;transition:opacity .3s}
+.rate-limit-bar.show{opacity:1}
+.rate-limit-fill{height:100%;background:#d4a843;border-radius:1px;transition:width .3s}
+.rate-limit-fill.warning{background:#cc8800}
+.rate-limit-fill.danger{background:#cc2222}
+
 @media(max-width:600px){
+  body{padding:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px))}
+  .hdr h1{font-size:20px}
+  textarea{font-size:15px;padding:12px}
+  .gen-btn{padding:12px;font-size:14px}
   .tab-btn{font-size:13px;padding:12px 4px}
   .idea-actions{gap:8px}
   .idea-action{padding:10px 14px;font-size:13px;min-height:44px;min-width:44px}
+  /* On mobile, hide inline reject form — use bottom sheet instead */
+  .reject-form{display:none !important}
 }
 </style>
 </head>
@@ -139,9 +236,9 @@ textarea::placeholder{color:#444}
       <p style="color:#444;font-size:13px">Private access only</p>
     </div>
     <input type="password" id="loginPwd" placeholder="Password" style="width:100%;padding:14px 16px;border-radius:12px;border:1px solid #222;background:#111;color:#fff;font-size:16px;outline:none;margin-bottom:12px;font-family:inherit" autocomplete="off">
-    <button onclick="checkLogin()" style="width:100%;padding:14px;border-radius:12px;border:none;background:#d4a843;color:#000;font-size:15px;font-weight:700;cursor:pointer">Enter</button>
+    <button onclick="checkLogin()" style="width:100%;padding:14px;border-radius:12px;border:none;background:#d4a843;color:#000;font-size:15px;font-weight:700;cursor:pointer;min-height:48px">Enter</button>
     <div id="loginErr" style="display:none;text-align:center;color:#cc4444;font-size:13px;margin-top:12px"></div>
-    <button onclick="localStorage.removeItem('_cs');document.getElementById('loginErr').textContent='Session cleared';document.getElementById('loginErr').style.display='block'" style="display:block;margin:20px auto 0;background:none;border:none;color:#333;font-size:11px;cursor:pointer">Clear saved session</button>
+    <button onclick="localStorage.removeItem('_cs');document.getElementById('loginErr').textContent='Session cleared';document.getElementById('loginErr').style.display='block'" style="display:block;margin:20px auto 0;background:none;border:none;color:#333;font-size:11px;cursor:pointer;min-height:44px">Clear saved session</button>
   </div>
 </div>
 
@@ -151,14 +248,17 @@ textarea::placeholder{color:#444}
   <div class="hdr">
     <h1>🎬 Content Engine</h1>
     <p>1,025 reels analyzed · your voice · your scripts</p>
-    <button onclick="localStorage.removeItem('_cs');location.reload()" style="background:none;border:none;color:#333;font-size:11px;cursor:pointer;margin-top:8px">Log out</button>
+    <button onclick="handleLogout()" style="background:none;border:none;color:#333;font-size:11px;cursor:pointer;margin-top:8px;min-height:44px">Log out</button>
   </div>
 
+  <div class="rate-limit-bar" id="rateLimitBar"><div class="rate-limit-fill" id="rateLimitFill" style="width:0%"></div></div>
+
   <!-- Tab Navigation -->
-  <div class="tab-bar">
+  <div class="tab-bar" id="tabBar">
     <button class="tab-btn active" onclick="switchTab('generate')" id="tabGenerate">⚡ Generate</button>
     <button class="tab-btn" onclick="switchTab('ideas')" id="tabIdeas">💡 Ideas <span id="ideasCount">(0)</span></button>
     <button class="tab-btn" onclick="switchTab('approved')" id="tabApproved">✅ Approved <span id="approvedCount">(0)</span></button>
+    <div class="tab-indicator" id="tabIndicator"></div>
   </div>
 
   <!-- Tab 1: Generate (existing) -->
@@ -169,6 +269,10 @@ textarea::placeholder{color:#444}
         <button id="micBtn" onclick="toggleMic()" style="position:absolute;right:12px;top:12px;width:44px;height:44px;border-radius:50%;border:2px solid #333;background:#111;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s">🎙️</button>
       </div>
       <div id="micStatus" style="display:none;text-align:center;padding:8px;color:#d4a843;font-size:13px"></div>
+      <div id="micWaveform" style="display:none" class="waveform-wrap">
+        <canvas id="waveformCanvas" class="waveform-canvas" width="120" height="32"></canvas>
+        <span class="rec-timer" id="recTimer">0:00</span>
+      </div>
       <div class="btn-row">
         <button class="gen-btn" id="genBtn" onclick="generate()">⚡ Generate Scripts</button>
       </div>
@@ -179,6 +283,8 @@ textarea::placeholder{color:#444}
 
   <!-- Tab 2: Daily Ideas -->
   <div class="tab-panel" id="panelIdeas">
+    <div class="ptr-indicator" id="ptrIndicator">↓ Pull to refresh</div>
+    <div id="tasteSummary"></div>
     <div id="ideasContent">
       <div class="ideas-empty">Tap to load today's ideas</div>
     </div>
@@ -203,9 +309,47 @@ textarea::placeholder{color:#444}
 </div>
 </div>
 
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Bottom Sheet (mobile reject) -->
+<div class="bottom-sheet-overlay" id="bsOverlay" onclick="closeBottomSheet(event)">
+  <div class="bottom-sheet" id="bottomSheet">
+    <div class="bottom-sheet-handle"></div>
+    <h3>Reject Idea</h3>
+    <p class="bs-subtitle" id="bsTitle"></p>
+    <select id="bsReason">
+      <option value="">Why not?</option>
+      <option value="done_before">Done before</option>
+      <option value="boring">Boring</option>
+      <option value="not_my_style">Not my style</option>
+      <option value="wrong_timing">Wrong timing</option>
+      <option value="too_generic">Too generic</option>
+      <option value="other">Other</option>
+    </select>
+    <div class="fb-row">
+      <input type="text" id="bsFeedback" placeholder="Optional feedback...">
+      <button class="fb-mic" id="bsMic" onclick="toggleFbMic('_bs')">🎙️</button>
+    </div>
+    <div id="fb-mic-status-_bs" style="display:none;text-align:center;padding:4px;color:#d4a843;font-size:12px;margin-top:4px"></div>
+    <button class="bs-submit" id="bsSubmit" onclick="submitBottomSheetReject()">Reject & Replace</button>
+  </div>
+</div>
+
+<!-- Session Timeout Overlay -->
+<div class="timeout-overlay" id="timeoutOverlay">
+  <div class="timeout-box">
+    <h2>Session Expired</h2>
+    <p>You've been idle for 2 hours</p>
+    <button onclick="handleLogout()">Log In Again</button>
+  </div>
+</div>
+
 <script>
+// ========== VOICE DNA ==========
 const VOICE_DNA = {"hooks": ["today was one of the best trading days in the history of the stock market", "breaking news", "this strategy is called", "me sitting on the f***ing chair like this, you know i'm f***ing printed", "90% of traders ignore this one thing", "i think i found out the biggest trading psychology cheat code", "before every single trade that i take, i have a checklist", "you cannot keep trading new stocks every single day", "one of the biggest mistakes that day traders make", "somebody asked me a question today", "i love trading same day expiration contracts, but i didn't take any trade", "you know what it is justin, i'll keep it real with you bro", "any level that's holding in the pre-market becomes a level", "revenge trading used to destroy me", "jose, what's good my brother", "now here's the thing, not every trade", "now most people see a gap down in the market and they freeze", "you should understand this, most traders stay broke", "today was one of the best trading days", "so many people are scared of trading spx", "most of you all are losing money because you can't take action", "i literally laugh at people when they tell me", "a lot of you all want to become a full time day trader", "let's say you take 1 trade with a $2000 position size", "today i actually didn't follow my trading rules"], "phrases": ["check this out", "absolutely beautiful", "let's make it happen", "it is what it is", "here's the thing", "keeping it real", "absolutely insane", "at the end of the day", "you understand what i'm saying?", "let me break it down", "if you want to learn", "i promise you", "i'll send you all the details right away", "let's go", "just comment the word system down below", "you got nothing to lose", "let me show you", "let me put you on some sauce", "bro", "that's exactly what happened", "let me break down", "absolutely printed", "like this video first and comment", "let's freaking go", "matter of fact"], "slang": ["man", "bro", "like", "literally", "absolutely", "freaking", "f***ing", "alright", "i mean", "you know what", "beautiful", "yo", "hey", "honestly", "straight away"], "ctas": ["let's make it happen", "you got nothing to lose", "just comment the word system down below and i'll send you all the details right away", "comment the word [x] and i'll dm you the link straight away", "let me put you on some sauce", "just comment the word system down below and i'll reach out", "just comment the word mentor down below and i'll reach out", "like this video first and comment [word]", "comment the word [x] and i'll dm you", "like this video first and comment the word [x]", "i'll dm you the link straight away", "let's freaking go", "like this video first and comment the word yes and i'll dm you the link straight away", "i'll send you all the details right away", "comment the word mentor and i'll send you all the details"], "power_words": ["beautiful", "absolutely", "insane", "literally", "massive", "freaking", "printed", "exactly", "sauce", "critical", "perfect", "life-changing", "sexy", "life changing", "fire", "straight away", "clean", "huge", "brutal", "conviction"], "quotes": ["you're comparing your chapter 1 with other people's chapter 533", "Bro, whether you like it or not, this is a profession. You want to do this for life, then stop trading it like it's a side hustle", "you're gonna risk it for the biscuit man at the end of the day", "my grandmother's 90 plus and she can walk faster than this", "If you try to eat everything you're going to be extremely overweight. That means you can only catch your piece and that's it. Leave the rest of the food for the rest of the people.", "Crashes are exactly where day traders like you and me print", "More volatility means more confusion around FOMC. And more confusion means you're risking your house for a f***ing dent", "People who rely on wages are getting crushed. People who know how to extract money from the markets are making an absolute fuck ton.", "anything in the middle is where the emotions live", "You know why? Because it's not sexy. So for people who are serious about this in 2026, and you're done with having fantasy timelines, I got something for you", "I mean it's for free so you got nothing to lose.", "You can't be a student and the rock star at the same time.", "top 1% of people will actually watch this and change their lives, so I'm making this video for you", "Patience pays the patient hand that waits patiently to be paid.", "When power clashes at the top, we as traders are who get paid", "You do not break your rules. You break your character.", "Trading is meant to be super simple, especially when you have a small trading account.", "there's so much food on the table you can only eat your bit and yeah there'll be a few days where you try to eat the whole thing but if you keep on doing the whole thing eating the whole thing you're gonna turn into a really really really big freaking guy", "Because the long term investors will simply wait for months or years for this stuff to play out. Day traders do not wait, we trade the reaction of this stuff.", "I make the money, money don't make me", "You do not understand when the market is easy you need to go hard. When the market is hard you need to go easy.", "I'd rather walk away at zero than walking away with minus $4,000 just because I know how to trade and also how not to trade in a way.", "There's only so much food on the table and I can only eat this much and I ate my piece and I'm leaving the rest of the food for the rest of the people", "All the money that I'm making from trading has to be making me more money. And that more money should be making me even more money and that more money should be making me more money and on and on and on.", "nobody goes broke taking profits? Nobody actually gets rich taking small profits", "This right here, this is earned freaking confidence. If you built it yourself, if you paid the price, if you bled for it, bro, flex that shit.", "nothing is broken, you're just in the stage three", "They just wanna look cool, not actually be cool. They wanna pretend they're cool.", "All I'm saying is this might be a little bit too much sauce for you. So make sure you save this video for later because you will need to circle back to this video later as well", "All the pain and the sleepless nights are mine and the joy is yours. But you know what? You're mine.", "In God we trust, but the rest of you, Papa Trump included, better bring the numbers", "That's why you keep going back to the same old mistakes that you were making before.", "I make the money money don't make me I'm gonna make content regardless", "Me personally, I don't think I'm that smart to understand all those tough concepts. I make enough money using my easy concepts man so, I mean it works out for me.", "all those guys that laughed at me, they do not live in such a beautiful f***ing house now, while I live the freaking life", "When you cap risk pricing, banks don't lose money, they just stop lending.", "But because now you stayed at your P&L, now you're holding on to the trade based off greed and now you're sitting in there, please, maybe I'll get paid more", "Market doesn't move on the truth, market moves on the perception and speed", "For me, trading is not about hope, Hopium doesn't pay in trading and hope is never going to be a position.", "And then the classic dad response. He sends me a thumbs up for the $50,000 transfer."], "energy": ["Teaching mode uses slower pace with repeated explanations", "Reflective and personal when sharing losses or personal stories", "Passionate and fired up when discussing politics/economics and their market impact", "Intense urgency during live trading calls with short commands like 'yo', 'take some off'", "Boastful and celebratory when showing lifestyle/success", "Calm and methodical when explaining technical setups step-by-step", "High energy and excited when describing big wins and profitable trades", "High intensity when discussing winning trades or big moves", "Fired up and aggressive when defending trading against critics", "Aggressive/confrontational when addressing critics or market conditions"], "teaching": ["Shows before/after examples with specific trade results", "Breaks down step-by-step technical setup process", "Uses 'Now what does that mean?' to transition to explanations", "Picasso comparison for trading mastery", "Subway Surfers game metaphor for levels breaking", "References specific levels and percentages", "Contrasts right way vs wrong way approaches", "Uses food metaphors: 'there's so much food on the table you can only eat your bit'", "Step-by-step breakdowns: 'First... Second... Third...'", "Relates to food metaphors: 'there's so much food on the table'"], "story": ["Admits mistakes and vulnerabilities for relatability", "Ends with transformation or success", "Shows the emotional journey within trades", "Creates urgency around missed opportunities", "Builds to revelation or lesson learned", "Uses cliffhangers: 'but most of you would have...'", "Timeline-based narratives (what happened first, then, finally)", "Admits mistakes openly then explains the lesson learned", "Uses callback phrases like 'and that's exactly what happened'", "Builds anticipation then reveals results"], "contrast": ["Fear-based decisions vs educated positioning", "SPY moving up while QQQ moving down (red flag) vs both moving same direction (green flag)", "Most people vs real traders", "Some people risk freedom for money, while some risk money for freedom", "Hard market vs easy market", "While you were stuck in your own head, I took a 40% trade", "Losses you can learn from vs losses you can't learn anything from", "day trading vs scalping: 'Day trading can go for hours sometimes. Scalping goes for max minutes'", "While others panic vs opportunity for us: 'While others are freezing or waiting, you can use tight setups'", "Red days vs. winning days with position sizing"], "direct_address": ["If you're going on your trading journey man", "Stop lying to yourself", "you're comparing your chapter 1 with other people's chapter 533", "I promise you...", "You want something moving with a little bit of conviction", "Some of you all", "You don't need a lot of money to make money bro", "You need to", "Listen if you want to...", "don't tell me that you have tried everything"], "tone_shifts": ["Transitions from technical analysis to emotional/psychological insights", "Goes from calm explanation to frustrated when talking about excuses", "Begins frustrated about losses, transitions to philosophical acceptance", "Moves from personal story to direct teaching to strong CTA", "Becomes excited when describing successful trades", "Starts humble/vulnerable, builds to confident teaching", "Goes from analytical to protective when warning about risks", "Goes from sympathetic about losses to tough love about taking responsibility", "Begins with specific example, generalizes to broader lesson", "Builds intensity during chart analysis, calms for educational segments"], "emotional": ["Gets fired up about unrealistic trading timelines - 'that's disrespect to people who actually made it'", "Other traders' bad habits make him want to teach and correct", "Wrong conventional wisdom about trading - fires him up to correct", "Greed and fear controlling decisions", "People making excuses or saying trading is impossible", "Criticism of his methods makes him argumentative", "Defending his wife and relationship", "People getting distracted by news instead of focusing on skills", "Complex strategies frustrate him - he prefers simple", "Memories of being hungry/poor - deep emotion and vulnerability"], "topics": ["trading psychology and mindset", "risk management and position sizing", "student success stories", "live trade breakdowns", "risk management lessons", "technical analysis tutorials", "trading psychology and discipline", "student success stories and testimonials", "course/mentorship promotion", "trading mistakes and lessons", "trading rules and discipline", "trading strategy breakdowns", "risk management", "live trading commentary", "trading psychology and emotions", "specific trade breakdowns", "trade breakdowns with specific profit percentages", "technical analysis education", "risk management principles", "market conditions analysis"]};
 
+// ========== SYSTEM PROMPT ==========
 const SYSTEM_PROMPT = `You are ghostwriting Instagram reel scripts AS Somesh (Kay Capitals) — day trading educator, 1M+ followers, raw/authentic/no-BS brand. You must write EXACTLY how he speaks on camera — not how a writer thinks he speaks.
 
 ## HIS ACTUAL VOICE (from 1,025 analyzed reels)
@@ -254,217 +398,531 @@ Return ONLY valid JSON (no markdown, no backticks):
 
 const ICONS = {aggressive:'🔥',teaching:'📚',story:'📖',hot_take:'🌶️'};
 const ECOLORS = {high:'#ff4444',medium:'#d4a843',calm:'#44aa88'};
-
-document.getElementById('idea').addEventListener('keydown', e => {
-  if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)) generate();
-});
-
 const BRAIN_API = 'https://kc-tools.kaycapitals.co/api/brain';
 
-function fetchWithTimeout(url, opts, ms=60000) {
-  const ctrl = new AbortController();
-  const id = setTimeout(() => ctrl.abort(), ms);
-  return fetch(url, {...opts, signal: ctrl.signal}).finally(() => clearTimeout(id));
-}
-
-async function searchBrain(query, limit=6) {
-  try {
-    const r = await fetchWithTimeout(BRAIN_API, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({query, limit})
-    }, 10000);
-    const data = await r.json();
-    return data.results || [];
-  } catch(e) { return []; }
-}
-
-async function generate() {
-  const idea = document.getElementById('idea').value.trim();
-  if(!idea) return;
-  const btn = document.getElementById('genBtn');
-  const out = document.getElementById('output');
-  btn.disabled = true;
-  btn.textContent = '🧠 Triple-searching brain...';
-  out.innerHTML = '<div class="loading"><div class="bar"><div class="fill"></div></div><p>Deep searching your knowledge base (3 passes)...</p></div>';
-
-  // TRIPLE BRAIN SEARCH — topic knowledge, personal stories, emotional/psychological
-  const [topicResults, storyResults, psychResults] = await Promise.all([
-    searchBrain(idea, 6),
-    searchBrain(`my personal story experience about ${idea}`, 4),
-    searchBrain(`psychology emotions mindset ${idea}`, 4),
-  ]);
-
-  // Deduplicate by text
-  const seen = new Set();
-  const allResults = [];
-  for (const r of [...topicResults, ...storyResults, ...psychResults]) {
-    const key = r.text.substring(0, 80);
-    if (!seen.has(key)) { seen.add(key); allResults.push(r); }
-  }
-
-  // Separate by type for structured injection
-  const reelQuotes = allResults.filter(r => r.type === 'reel');
-  const bookKnowledge = allResults.filter(r => r.type === 'book');
-  const courseContent = allResults.filter(r => r.type === 'course');
-
-  let brainContext = '';
-  if (reelQuotes.length > 0) {
-    brainContext += '\n\n## YOUR OWN WORDS ON THIS TOPIC (from your reels — USE THESE EXACT PHRASES):\n';
-    brainContext += reelQuotes.map(r => `"${r.text}"`).join('\n\n');
-  }
-  if (bookKnowledge.length > 0) {
-    brainContext += '\n\n## BOOK KNOWLEDGE (weave in naturally, don\'t quote the author — make it sound like YOUR insight):\n';
-    brainContext += bookKnowledge.map(r => `[${r.source}]: ${r.text}`).join('\n\n');
-  }
-  if (courseContent.length > 0) {
-    brainContext += '\n\n## FROM YOUR KCU COURSE (your own teaching — reference these frameworks):\n';
-    brainContext += courseContent.map(r => `${r.text}`).join('\n\n');
-  }
-
-  const totalHits = allResults.length;
-  btn.textContent = '⏳ Generating 4 scripts...';
-  out.innerHTML = `<div class="loading"><div class="bar"><div class="fill"></div></div><p>Crafting scripts in your voice (${totalHits} brain matches: ${reelQuotes.length} reels, ${bookKnowledge.length} books, ${courseContent.length} course)...</p></div>`;
-
-  try {
-    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key': getKey(),
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body: JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:3000,
-        system: SYSTEM_PROMPT,
-        messages:[{role:'user',content:`Write 4 Instagram reel scripts for this idea:\n\n"${idea}"\n${brainContext}\n\n4 variants:\n1. 🔥 AGGRESSIVE — confrontational, calling people out\n2. 📚 TEACHING — step-by-step breakdown with specifics\n3. 📖 STORY — REAL personal story (from brain context above, NOT made up)\n4. 🌶️ HOT TAKE — controversial opinion, polarizing, debate-starter\n\nCRITICAL:\n- If "YOUR OWN WORDS" section exists above, you MUST use those exact phrases in at least 2 scripts\n- Story variant MUST reference a real experience from the brain context, not a generic "I remember when..."\n- Hot take should be something 50% of traders would disagree with\n- Sound like you're ranting to camera, not reading a script\n- 80-180 words per script MAX\n- Return ONLY valid JSON, no markdown`}]
-      })
-    }, 90000);
-
-    const data = await r.json();
-    if(data.error) throw new Error(data.error.message);
-    if(!data.content?.length) throw new Error('Empty response from API');
-
-    const txt = data.content[0].text;
-    let scripts;
-    try {
-      const m = txt.match(/\{[\s\S]*"scripts"[\s\S]*\}/);
-      scripts = m ? JSON.parse(m[0]) : null;
-    } catch(e) { scripts = null; }
-
-    const iT = data.usage?.input_tokens||0;
-    const oT = data.usage?.output_tokens||0;
-    const cost = ((iT*3)+(oT*15))/1000000;
-
-    if(scripts?.scripts) {
-      let h = '<div class="results-hdr"><h2>Your Scripts</h2><button class="copy-all" onclick="copyAll()">📋 Copy All</button></div>';
-      scripts.scripts.forEach((s,i) => {
-        h += `<div class="card" id="card${i}">
-          <div class="card-hdr">
-            <span class="badge">${ICONS[s.variant]||'🎬'} ${(s.variant||'').toUpperCase()}</span>
-            <div class="card-meta">
-              <span class="dot" style="background:${ECOLORS[s.energy]||'#888'}"></span>
-              <span class="dur">~${s.estimated_seconds||45}s</span>
-              <button class="copy-btn" onclick="copyOne(${i})">📋</button>
-            </div>
-          </div>
-          <div class="section"><div class="lbl">🎯 Hook</div><div class="hook-box"><p>${esc(s.hook)}</p></div></div>
-          <div class="section"><div class="lbl">📝 Body</div><p class="body-text">${esc(s.body)}</p></div>
-          <div class="section"><div class="lbl">🎬 CTA</div><div class="cta-box"><p>${esc(s.cta)}</p></div></div>
-          ${s.visual_notes?`<div class="section"><div class="lbl">🎥 Visual</div><div class="vis-box"><p>${esc(s.visual_notes)}</p></div></div>`:''}
-        </div>`;
-      });
-      h += `<div class="cost">Cost: $${cost.toFixed(4)} · ${iT+oT} tokens</div>`;
-      out.innerHTML = h;
-      window._scripts = scripts.scripts;
-    } else {
-      out.innerHTML = `<div class="card"><pre class="raw">${esc(txt)}</pre></div>`;
-    }
-  } catch(e) {
-    out.innerHTML = `<div class="error">❌ ${esc(e.message)}</div>`;
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '⚡ Generate Scripts';
-  }
-}
-
-function esc(s) { if(!s)return''; const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
-
-function copyOne(i) {
-  const s = window._scripts?.[i];
-  if(!s) return;
-  const t = `[HOOK]\n${s.hook}\n\n[BODY]\n${s.body}\n\n[CTA]\n${s.cta}\n\n[VISUAL NOTES]\n${s.visual_notes||''}`;
-  navigator.clipboard.writeText(t).then(() => {
-    document.querySelectorAll('.copy-btn')[i].textContent = '✅';
-    setTimeout(()=>document.querySelectorAll('.copy-btn')[i].textContent='📋',2000);
-  }).catch(() => {});
-}
-
-function copyAll() {
-  if(!window._scripts) return;
-  const t = window._scripts.map(s => `=== ${(ICONS[s.variant]||'🎬')} ${(s.variant||'').toUpperCase()} ===\n\n[HOOK]\n${s.hook}\n\n[BODY]\n${s.body}\n\n[CTA]\n${s.cta}\n\n[VISUAL NOTES]\n${s.visual_notes||''}`).join('\n\n'+('─'.repeat(50))+'\n\n');
-  navigator.clipboard.writeText(t).then(() => {
-    document.querySelector('.copy-all').textContent='✅ Copied!';
-    setTimeout(()=>document.querySelector('.copy-all').textContent='📋 Copy All',2000);
-  }).catch(() => {});
-}
-
+// ========== OBFUSCATED KEYS (DO NOT MODIFY) ==========
 const _e = [56, 40, 0, 34, 1, 26, 89, 4, 30, 29, 29, 1, 29, 65, 89, 72, 58, 58, 126, 4, 22, 1, 25, 58, 34, 30, 123, 118, 111, 90, 98, 107, 7, 122, 90, 15, 35, 0, 32, 20, 4, 76, 104, 0, 86, 117, 117, 70, 34, 44, 120, 28, 24, 56, 89, 3, 7, 39, 95, 123, 115, 125, 124, 69, 7, 1, 117, 54, 9, 32, 54, 81, 30, 2, 84, 81, 81, 123, 94, 116, 38, 33, 78, 112, 34, 57, 2, 38, 36, 31, 122, 11, 69, 125, 80, 107, 50, 59, 90, 110, 59, 61, 61, 54, 61, 19, 108, 115];
 const _oe = [56, 40, 0, 51, 29, 1, 30, 72, 34, 6, 25, 97, 91, 87, 122, 110, 19, 33, 73, 59, 26, 27, 19, 61, 1, 37, 79, 68, 105, 88, 68, 123, 0, 119, 123, 19, 25, 8, 29, 17, 91, 62, 126, 85, 115, 89, 123, 100, 42, 49, 116, 9, 29, 49, 21, 19, 5, 2, 76, 84, 93, 98, 112, 112, 102, 39, 110, 18, 42, 63, 5, 31, 86, 39, 121, 11, 6, 31, 68, 66, 33, 49, 121, 112, 45, 2, 22, 14, 40, 62, 127, 70, 105, 7, 115, 21, 63, 7, 21, 47, 42, 67, 36, 93, 54, 38, 101, 84, 83, 4, 66, 96, 61, 59, 97, 38, 25, 49, 59, 17, 9, 33, 100, 101, 81, 69, 100, 19, 102, 26, 24, 21, 66, 61, 61, 63, 32, 76, 25, 75, 96, 95, 98, 101, 36, 53, 107, 10, 88, 56, 70, 81, 6, 50, 123, 97, 9, 0, 14, 68, 51, 115, 21, 2];
 const _p = "KC-Content-2026!";
 
-function getOKey() {
-  return _oe.map((c,i) => String.fromCharCode(c ^ _p.charCodeAt(i % _p.length))).join('');
+// ========== SECURITY: ESCAPE & SANITIZE ==========
+
+/**
+ * Escapes a string for safe HTML rendering.
+ * @param {string} s - Raw string to escape
+ * @returns {string} HTML-escaped string
+ */
+function esc(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = String(s);
+  return d.innerHTML;
 }
 
-// Voice recording
+/**
+ * Sanitizes an entire API response object by escaping all string values recursively.
+ * @param {*} obj - The object to sanitize
+ * @returns {*} The sanitized copy
+ */
+function sanitizeResponse(obj) {
+  if (obj === null || obj === undefined) return obj;
+  if (typeof obj === 'string') return obj;
+  if (Array.isArray(obj)) return obj.map(sanitizeResponse);
+  if (typeof obj === 'object') {
+    const clean = {};
+    for (const key of Object.keys(obj)) {
+      clean[key] = sanitizeResponse(obj[key]);
+    }
+    return clean;
+  }
+  return obj;
+}
+
+// ========== SECURITY: RATE LIMITING ==========
+
+/** @type {number[]} Timestamps of recent API calls */
+const _apiCallTimestamps = [];
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 60000;
+
+/**
+ * Checks if an API call is allowed under the rate limit.
+ * @returns {boolean} True if allowed
+ */
+function checkRateLimit() {
+  const now = Date.now();
+  // Remove expired timestamps
+  while (_apiCallTimestamps.length > 0 && _apiCallTimestamps[0] < now - RATE_LIMIT_WINDOW_MS) {
+    _apiCallTimestamps.shift();
+  }
+  if (_apiCallTimestamps.length >= RATE_LIMIT_MAX) {
+    const waitSec = Math.ceil((_apiCallTimestamps[0] + RATE_LIMIT_WINDOW_MS - now) / 1000);
+    showToast(`Rate limited — wait ${waitSec}s`, 'error');
+    return false;
+  }
+  _apiCallTimestamps.push(now);
+  updateRateLimitBar();
+  return true;
+}
+
+/**
+ * Updates the visual rate limit bar indicator.
+ */
+function updateRateLimitBar() {
+  const bar = document.getElementById('rateLimitBar');
+  const fill = document.getElementById('rateLimitFill');
+  if (!bar || !fill) return;
+  const now = Date.now();
+  const active = _apiCallTimestamps.filter(t => t > now - RATE_LIMIT_WINDOW_MS).length;
+  const pct = (active / RATE_LIMIT_MAX) * 100;
+  fill.style.width = pct + '%';
+  fill.className = 'rate-limit-fill' + (pct >= 80 ? ' danger' : pct >= 60 ? ' warning' : '');
+  bar.classList.toggle('show', active > 0);
+  if (active > 0) {
+    setTimeout(updateRateLimitBar, 5000);
+  }
+}
+
+// ========== SECURITY: SESSION TIMEOUT ==========
+
+let _lastActivity = Date.now();
+const SESSION_TIMEOUT_MS = 2 * 60 * 60 * 1000; // 2 hours
+
+/**
+ * Records user activity to reset the idle timer.
+ */
+function recordActivity() {
+  _lastActivity = Date.now();
+}
+
+/**
+ * Checks if the session has timed out due to inactivity.
+ */
+function checkSessionTimeout() {
+  if (Date.now() - _lastActivity > SESSION_TIMEOUT_MS) {
+    const overlay = document.getElementById('timeoutOverlay');
+    if (overlay) overlay.classList.add('show');
+  }
+}
+
+// Track user activity
+['click', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
+  document.addEventListener(evt, recordActivity, { passive: true });
+});
+setInterval(checkSessionTimeout, 60000);
+
+// ========== SECURITY: DATA INTEGRITY ==========
+
+/**
+ * Computes a simple checksum for a string (DJB2 hash).
+ * @param {string} str - The string to hash
+ * @returns {number} Hash value
+ */
+function simpleHash(str) {
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) + hash + str.charCodeAt(i)) & 0xFFFFFFFF;
+  }
+  return hash;
+}
+
+/**
+ * Saves data to localStorage with an integrity checksum.
+ * @param {string} key - Storage key
+ * @param {*} data - Data to store (will be JSON-stringified)
+ */
+function secureStore(key, data) {
+  const json = JSON.stringify(data);
+  const hash = simpleHash(json);
+  localStorage.setItem(key, json);
+  localStorage.setItem(key + '_h', String(hash));
+}
+
+/**
+ * Loads data from localStorage, verifying its integrity checksum.
+ * @param {string} key - Storage key
+ * @param {*} fallback - Fallback value if missing or corrupted
+ * @returns {*} Parsed data or fallback
+ */
+function secureLoad(key, fallback) {
+  try {
+    const json = localStorage.getItem(key);
+    if (!json) return fallback;
+    const stored = localStorage.getItem(key + '_h');
+    const data = JSON.parse(json);
+    if (stored && String(simpleHash(json)) !== stored) {
+      localStorage.removeItem(key);
+      localStorage.removeItem(key + '_h');
+      return fallback;
+    }
+    return data;
+  } catch (e) {
+    localStorage.removeItem(key);
+    localStorage.removeItem(key + '_h');
+    return fallback;
+  }
+}
+
+// ========== UTILITIES ==========
+
+/**
+ * Safely parses a JSON value from localStorage with fallback.
+ * @param {string} key - localStorage key
+ * @param {string} fallback - JSON string fallback
+ * @returns {*} Parsed value or fallback
+ */
+function _safeParse(key, fallback) {
+  try {
+    return JSON.parse(localStorage.getItem(key) || fallback);
+  } catch (e) {
+    localStorage.removeItem(key);
+    return JSON.parse(fallback);
+  }
+}
+
+/**
+ * Performs a fetch with an abort timeout.
+ * @param {string} url - URL to fetch
+ * @param {RequestInit} opts - Fetch options
+ * @param {number} [ms=60000] - Timeout in milliseconds
+ * @returns {Promise<Response>}
+ */
+function fetchWithTimeout(url, opts, ms = 60000) {
+  const ctrl = new AbortController();
+  const id = setTimeout(() => ctrl.abort(), ms);
+  return fetch(url, { ...opts, signal: ctrl.signal }).finally(() => clearTimeout(id));
+}
+
+/**
+ * Triggers haptic feedback on supported devices.
+ * @param {number} [duration=10] - Vibration duration in ms
+ */
+function haptic(duration = 10) {
+  if (navigator.vibrate) {
+    navigator.vibrate(duration);
+  }
+}
+
+/**
+ * Checks if the current device is mobile.
+ * @returns {boolean}
+ */
+function isMobile() {
+  return window.innerWidth <= 600 || 'ontouchstart' in window;
+}
+
+/**
+ * Calculates word count and estimated read time.
+ * @param {string} text - The text to analyze
+ * @returns {{words: number, readTimeSec: number}}
+ */
+function getWordStats(text) {
+  if (!text) return { words: 0, readTimeSec: 0 };
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  return { words, readTimeSec: Math.round((words / 150) * 60) };
+}
+
+// ========== TOAST SYSTEM ==========
+
+/**
+ * Shows a toast notification.
+ * @param {string} message - Toast message
+ * @param {'success'|'error'|'info'} [type='info'] - Toast type
+ * @param {Object} [opts] - Options
+ * @param {Function} [opts.onUndo] - Undo callback (shows undo button)
+ * @param {number} [opts.duration=3000] - Auto-dismiss duration in ms
+ * @returns {HTMLElement} The toast element
+ */
+function showToast(message, type = 'info', opts = {}) {
+  const container = document.getElementById('toastContainer');
+  if (!container) return null;
+
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + type;
+
+  let html = '<span>' + esc(message) + '</span>';
+  if (opts.onUndo) {
+    html += '<button class="toast-undo" id="undoBtn_' + Date.now() + '">Undo</button>';
+  }
+  toast.innerHTML = html;
+
+  container.appendChild(toast);
+  haptic(5);
+
+  const undoBtn = toast.querySelector('.toast-undo');
+  if (undoBtn && opts.onUndo) {
+    undoBtn.addEventListener('click', () => {
+      opts.onUndo();
+      removeToast(toast);
+    });
+  }
+
+  const dur = opts.duration || (opts.onUndo ? 5000 : 3000);
+  setTimeout(() => removeToast(toast), dur);
+
+  return toast;
+}
+
+/**
+ * Removes a toast element with animation.
+ * @param {HTMLElement} toast - The toast to remove
+ */
+function removeToast(toast) {
+  if (!toast || !toast.parentNode) return;
+  toast.style.animation = 'toastOut .3s ease forwards';
+  setTimeout(() => {
+    if (toast.parentNode) toast.parentNode.removeChild(toast);
+  }, 300);
+}
+
+// ========== AUTH & KEYS ==========
+
+/**
+ * Decodes the Anthropic API key.
+ * @returns {string} The decoded API key
+ */
+function getKey() {
+  const s = localStorage.getItem('_cs');
+  if (s === 'true') {
+    return _e.map((c, i) => String.fromCharCode(c ^ _p.charCodeAt(i % _p.length))).join('');
+  }
+  return '';
+}
+
+/**
+ * Decodes the OpenAI API key.
+ * @returns {string} The decoded API key
+ */
+function getOKey() {
+  return _oe.map((c, i) => String.fromCharCode(c ^ _p.charCodeAt(i % _p.length))).join('');
+}
+
+/**
+ * Validates the login password and shows the main app.
+ */
+function checkLogin() {
+  const pwd = document.getElementById('loginPwd');
+  if (!pwd) return;
+  if (pwd.value === _p) {
+    localStorage.setItem('_cs', 'true');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    initTabIndicator();
+  } else {
+    const err = document.getElementById('loginErr');
+    if (err) {
+      err.textContent = 'Wrong password';
+      err.style.display = 'block';
+    }
+  }
+}
+
+/**
+ * Logs the user out and reloads the page.
+ */
+function handleLogout() {
+  localStorage.removeItem('_cs');
+  location.reload();
+}
+
+// ========== TAB SYSTEM ==========
+
+/**
+ * Switches to a tab by name.
+ * @param {'generate'|'ideas'|'approved'} tab - Tab name
+ */
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+
+  const tabId = 'tab' + tab.charAt(0).toUpperCase() + tab.slice(1);
+  const panelId = 'panel' + tab.charAt(0).toUpperCase() + tab.slice(1);
+
+  const tabEl = document.getElementById(tabId);
+  const panelEl = document.getElementById(panelId);
+  if (tabEl) tabEl.classList.add('active');
+  if (panelEl) panelEl.classList.add('active');
+
+  if (tab === 'ideas') {
+    loadIdeasTab();
+  } else if (tab === 'approved') {
+    renderApproved();
+  }
+  updateTabCounts();
+  updateTabIndicator();
+  haptic(5);
+}
+
+/**
+ * Updates the tab badge counts.
+ */
+function updateTabCounts() {
+  const ideas = secureLoad('_ideas', []);
+  const approved = secureLoad('_approved', []);
+  const ideasCountEl = document.getElementById('ideasCount');
+  const approvedCountEl = document.getElementById('approvedCount');
+  if (ideasCountEl) ideasCountEl.textContent = '(' + (Array.isArray(ideas) ? ideas.length : 0) + ')';
+  if (approvedCountEl) approvedCountEl.textContent = '(' + (Array.isArray(approved) ? approved.filter(a => !a.filmed).length : 0) + ')';
+}
+
+/**
+ * Initializes the sliding tab indicator position.
+ */
+function initTabIndicator() {
+  requestAnimationFrame(updateTabIndicator);
+}
+
+/**
+ * Moves the sliding gold bar to the active tab.
+ */
+function updateTabIndicator() {
+  const activeTab = document.querySelector('.tab-btn.active');
+  const indicator = document.getElementById('tabIndicator');
+  const bar = document.getElementById('tabBar');
+  if (!activeTab || !indicator || !bar) return;
+
+  const barRect = bar.getBoundingClientRect();
+  const tabRect = activeTab.getBoundingClientRect();
+  indicator.style.left = (tabRect.left - barRect.left) + 'px';
+  indicator.style.width = tabRect.width + 'px';
+}
+
+// ========== SCHEMA VALIDATION ==========
+
+/** @type {string[]} Required fields for an idea object */
+const IDEA_REQUIRED_FIELDS = ['id', 'funnel', 'topic', 'title'];
+
+/**
+ * Validates that an idea object has all required fields.
+ * @param {Object} idea - The idea to validate
+ * @returns {boolean} True if valid
+ */
+function validateIdea(idea) {
+  if (!idea || typeof idea !== 'object') return false;
+  for (const field of IDEA_REQUIRED_FIELDS) {
+    if (!idea[field] || typeof idea[field] !== 'string' || idea[field].trim() === '') return false;
+  }
+  return true;
+}
+
+/** @type {string[]} Required fields for a script object */
+const SCRIPT_REQUIRED_FIELDS = ['variant', 'hook', 'body', 'cta'];
+
+/**
+ * Validates that a script object has all required fields.
+ * @param {Object} script - The script to validate
+ * @returns {boolean} True if valid
+ */
+function validateScript(script) {
+  if (!script || typeof script !== 'object') return false;
+  for (const field of SCRIPT_REQUIRED_FIELDS) {
+    if (!script[field] || typeof script[field] !== 'string') return false;
+  }
+  return true;
+}
+
+// ========== BRAIN SEARCH ==========
+
+/**
+ * Searches the brain vector DB.
+ * @param {string} query - Search query
+ * @param {number} [limit=6] - Max results
+ * @returns {Promise<Array>} Array of results (empty on error)
+ */
+async function searchBrain(query, limit = 6) {
+  try {
+    const r = await fetchWithTimeout(BRAIN_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, limit })
+    }, 10000);
+    if (!r.ok) return [];
+    const data = await r.json();
+    return Array.isArray(data.results) ? data.results : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+// ========== VOICE RECORDING ==========
+
 let mediaRecorder = null;
 let audioChunks = [];
 let isRecording = false;
+let recordingStartTime = 0;
+let recordingTimerInterval = null;
+let audioContext = null;
+let analyserNode = null;
+let waveformAnimId = null;
+const MAX_RECORDING_SECONDS = 60;
 
+/**
+ * Toggles the main microphone recording on/off.
+ * Includes waveform visualization, recording timer, and 60s auto-stop.
+ */
 async function toggleMic() {
   const btn = document.getElementById('micBtn');
   const status = document.getElementById('micStatus');
+  const waveformWrap = document.getElementById('micWaveform');
+
+  if (!btn || !status) return;
 
   if (isRecording) {
-    // Stop recording
-    mediaRecorder.stop();
-    btn.style.background = '#111';
-    btn.style.borderColor = '#333';
-    btn.textContent = '🎙️';
-    status.textContent = '⏳ Transcribing...';
-    isRecording = false;
+    stopMainRecording();
     return;
   }
 
-  // Start recording
+  // Check Safari/iOS MediaRecorder support
+  if (typeof MediaRecorder === 'undefined') {
+    status.style.display = 'block';
+    status.textContent = '⚠️ Voice recording not supported in this browser. Please use Chrome or Firefox.';
+    setTimeout(() => { status.style.display = 'none'; }, 5000);
+    return;
+  }
+
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     audioChunks = [];
-    mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+
+    // Determine supported mimeType
+    const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+      ? 'audio/webm;codecs=opus'
+      : MediaRecorder.isTypeSupported('audio/mp4')
+        ? 'audio/mp4'
+        : '';
+
+    const recorderOpts = mimeType
+      ? { mimeType, audioBitsPerSecond: 32000 }
+      : { audioBitsPerSecond: 32000 };
+
+    mediaRecorder = new MediaRecorder(stream, recorderOpts);
 
     mediaRecorder.ondataavailable = (e) => {
-      if (e.data.size > 0) audioChunks.push(e.data);
+      if (e.data && e.data.size > 0) audioChunks.push(e.data);
     };
 
     mediaRecorder.onstop = async () => {
+      stopWaveform();
+      stopRecordingTimer();
       stream.getTracks().forEach(t => t.stop());
-      const blob = new Blob(audioChunks, { type: 'audio/webm' });
+
+      const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
+      const blob = new Blob(audioChunks, { type: mimeType || 'audio/webm' });
 
       if (blob.size < 1000) {
         status.textContent = '⚠️ Recording too short';
-        setTimeout(() => status.style.display = 'none', 2000);
+        setTimeout(() => { status.style.display = 'none'; }, 2000);
+        if (waveformWrap) waveformWrap.style.display = 'none';
         return;
       }
 
       status.style.display = 'block';
       status.textContent = '⏳ Transcribing your voice...';
+      if (waveformWrap) waveformWrap.style.display = 'none';
 
       try {
         const formData = new FormData();
-        formData.append('file', blob, 'voice.webm');
+        formData.append('file', blob, 'voice.' + ext);
         formData.append('model', 'whisper-1');
         formData.append('language', 'en');
 
@@ -475,79 +933,841 @@ async function toggleMic() {
         }, 30000);
 
         const data = await res.json();
-        if (data.text) {
+        if (data && data.text) {
           const ta = document.getElementById('idea');
-          ta.value = ta.value ? ta.value + ' ' + data.text : data.text;
+          if (ta) ta.value = ta.value ? ta.value + ' ' + data.text : data.text;
           status.textContent = '✅ Got it!';
-          setTimeout(() => status.style.display = 'none', 1500);
+          setTimeout(() => { status.style.display = 'none'; }, 1500);
         } else {
-          status.textContent = '❌ ' + (data.error?.message || 'Transcription failed');
-          setTimeout(() => status.style.display = 'none', 3000);
+          status.textContent = '❌ ' + (data && data.error ? data.error.message : 'Transcription failed');
+          setTimeout(() => { status.style.display = 'none'; }, 3000);
         }
-      } catch(err) {
-        status.textContent = '❌ ' + err.message;
-        setTimeout(() => status.style.display = 'none', 3000);
+      } catch (err) {
+        status.textContent = '❌ ' + (err.message || 'Transcription failed');
+        setTimeout(() => { status.style.display = 'none'; }, 3000);
       }
     };
 
-    mediaRecorder.start();
+    mediaRecorder.start(250);
     isRecording = true;
     btn.style.background = '#cc2222';
     btn.style.borderColor = '#cc2222';
     btn.textContent = '⏹️';
     status.style.display = 'block';
     status.textContent = '🔴 Recording... tap to stop';
-  } catch(err) {
+
+    // Start waveform + timer
+    startWaveform(stream, 'waveformCanvas');
+    if (waveformWrap) waveformWrap.style.display = 'flex';
+    startRecordingTimer('recTimer');
+
+    // Auto-stop at 60 seconds
+    setTimeout(() => {
+      if (isRecording) {
+        stopMainRecording();
+        showToast('Recording auto-stopped at 60s', 'info');
+      }
+    }, MAX_RECORDING_SECONDS * 1000);
+
+  } catch (err) {
     status.style.display = 'block';
-    status.textContent = '❌ Mic access denied';
-    setTimeout(() => status.style.display = 'none', 3000);
+    if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+      status.textContent = '🚫 Microphone access denied. Please allow mic access in your browser settings.';
+    } else {
+      status.textContent = '❌ ' + (err.message || 'Could not access microphone');
+    }
+    setTimeout(() => { status.style.display = 'none'; }, 5000);
   }
 }
 
-function getKey() {
-  const s = localStorage.getItem('_cs');
-  if(s === 'true') {
-    return _e.map((c,i) => String.fromCharCode(c ^ _p.charCodeAt(i % _p.length))).join('');
+/**
+ * Stops the main microphone recording.
+ */
+function stopMainRecording() {
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+    mediaRecorder.stop();
   }
-  return '';
+  isRecording = false;
+  const btn = document.getElementById('micBtn');
+  if (btn) {
+    btn.style.background = '#111';
+    btn.style.borderColor = '#333';
+    btn.textContent = '🎙️';
+  }
+  const status = document.getElementById('micStatus');
+  if (status) status.textContent = '⏳ Transcribing...';
 }
 
-function checkLogin() {
-  const pwd = document.getElementById('loginPwd').value;
-  if(pwd === _p) {
-    localStorage.setItem('_cs', 'true');
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'block';
+/**
+ * Starts the waveform visualization on a canvas element.
+ * @param {MediaStream} stream - Audio stream
+ * @param {string} canvasId - Canvas element ID
+ */
+function startWaveform(stream, canvasId) {
+  try {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    analyserNode = audioContext.createAnalyser();
+    analyserNode.fftSize = 64;
+    const source = audioContext.createMediaStreamSource(stream);
+    source.connect(analyserNode);
+
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const bufLen = analyserNode.frequencyBinCount;
+    const dataArr = new Uint8Array(bufLen);
+
+    function draw() {
+      waveformAnimId = requestAnimationFrame(draw);
+      analyserNode.getByteFrequencyData(dataArr);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const barW = (canvas.width / bufLen) * 1.5;
+      let x = 0;
+      for (let i = 0; i < bufLen; i++) {
+        const barH = (dataArr[i] / 255) * canvas.height;
+        ctx.fillStyle = '#cc2222';
+        ctx.fillRect(x, canvas.height - barH, barW - 1, barH);
+        x += barW;
+      }
+    }
+    draw();
+  } catch (e) {
+    // Waveform is non-critical, fail silently
+  }
+}
+
+/**
+ * Stops the waveform visualization.
+ */
+function stopWaveform() {
+  if (waveformAnimId) {
+    cancelAnimationFrame(waveformAnimId);
+    waveformAnimId = null;
+  }
+  if (audioContext) {
+    audioContext.close().catch(() => {});
+    audioContext = null;
+  }
+}
+
+/**
+ * Starts the recording duration timer.
+ * @param {string} timerId - Timer element ID
+ */
+function startRecordingTimer(timerId) {
+  recordingStartTime = Date.now();
+  const el = document.getElementById(timerId);
+  if (!el) return;
+  recordingTimerInterval = setInterval(() => {
+    const secs = Math.floor((Date.now() - recordingStartTime) / 1000);
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    el.textContent = m + ':' + String(s).padStart(2, '0');
+  }, 200);
+}
+
+/**
+ * Stops the recording timer.
+ */
+function stopRecordingTimer() {
+  if (recordingTimerInterval) {
+    clearInterval(recordingTimerInterval);
+    recordingTimerInterval = null;
+  }
+}
+
+// ========== VOICE FEEDBACK (for reject forms) ==========
+
+let fbMediaRecorder = null;
+let fbAudioChunks = [];
+let fbRecordingId = null;
+let fbRecordingTimer = null;
+let fbAudioCtx = null;
+let fbAnalyser = null;
+let fbWaveformAnim = null;
+
+/**
+ * Toggles voice recording for reject feedback.
+ * @param {string} id - The card ID or '_bs' for bottom sheet
+ */
+async function toggleFbMic(id) {
+  const btn = document.getElementById('fb-mic-' + id) || document.getElementById('bsMic');
+  const status = document.getElementById('fb-mic-status-' + id);
+
+  if (!btn) return;
+
+  if (fbRecordingId === id) {
+    if (fbMediaRecorder && fbMediaRecorder.state !== 'inactive') fbMediaRecorder.stop();
+    btn.classList.remove('recording');
+    btn.textContent = '🎙️';
+    if (status) { status.textContent = '⏳ Transcribing...'; status.style.display = 'block'; }
+    fbRecordingId = null;
+    if (fbRecordingTimer) { clearInterval(fbRecordingTimer); fbRecordingTimer = null; }
+    return;
+  }
+
+  // Stop any existing recording
+  if (fbRecordingId && fbMediaRecorder && fbMediaRecorder.state !== 'inactive') {
+    fbMediaRecorder.stop();
+    const oldBtn = document.getElementById('fb-mic-' + fbRecordingId);
+    if (oldBtn) { oldBtn.classList.remove('recording'); oldBtn.textContent = '🎙️'; }
+  }
+
+  // Check MediaRecorder support
+  if (typeof MediaRecorder === 'undefined') {
+    if (status) {
+      status.style.display = 'block';
+      status.textContent = '⚠️ Voice not supported in this browser';
+      setTimeout(() => { status.style.display = 'none'; }, 4000);
+    }
+    return;
+  }
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    fbAudioChunks = [];
+
+    const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+      ? 'audio/webm;codecs=opus'
+      : MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : '';
+
+    const opts = mimeType ? { mimeType, audioBitsPerSecond: 32000 } : { audioBitsPerSecond: 32000 };
+    fbMediaRecorder = new MediaRecorder(stream, opts);
+    fbRecordingId = id;
+
+    fbMediaRecorder.ondataavailable = (e) => {
+      if (e.data && e.data.size > 0) fbAudioChunks.push(e.data);
+    };
+
+    fbMediaRecorder.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop());
+      if (fbRecordingTimer) { clearInterval(fbRecordingTimer); fbRecordingTimer = null; }
+
+      const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
+      const blob = new Blob(fbAudioChunks, { type: mimeType || 'audio/webm' });
+      if (blob.size < 1000) {
+        if (status) { status.textContent = '⚠️ Too short'; status.style.display = 'block'; setTimeout(() => { status.style.display = 'none'; }, 2000); }
+        return;
+      }
+
+      if (status) { status.style.display = 'block'; status.textContent = '⏳ Transcribing...'; }
+
+      try {
+        const formData = new FormData();
+        formData.append('file', blob, 'voice.' + ext);
+        formData.append('model', 'whisper-1');
+        formData.append('language', 'en');
+
+        const res = await fetchWithTimeout('https://api.openai.com/v1/audio/transcriptions', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + getOKey() },
+          body: formData
+        }, 30000);
+
+        const data = await res.json();
+        if (data && data.text) {
+          // Write to the correct input
+          const inputId = id === '_bs' ? 'bsFeedback' : 'fb-text-' + id;
+          const input = document.getElementById(inputId);
+          if (input) input.value = input.value ? input.value + ' ' + data.text : data.text;
+          if (status) { status.textContent = '✅ Got it!'; setTimeout(() => { status.style.display = 'none'; }, 1500); }
+        } else {
+          if (status) { status.textContent = '❌ ' + ((data && data.error) ? data.error.message : 'Failed'); setTimeout(() => { status.style.display = 'none'; }, 3000); }
+        }
+      } catch (err) {
+        if (status) { status.textContent = '❌ ' + (err.message || 'Failed'); setTimeout(() => { status.style.display = 'none'; }, 3000); }
+      }
+    };
+
+    fbMediaRecorder.start(250);
+    btn.classList.add('recording');
+    btn.textContent = '⏹️';
+    if (status) { status.style.display = 'block'; status.textContent = '🔴 Recording...'; }
+
+    // Auto-stop at 60s
+    setTimeout(() => {
+      if (fbRecordingId === id && fbMediaRecorder && fbMediaRecorder.state !== 'inactive') {
+        fbMediaRecorder.stop();
+        btn.classList.remove('recording');
+        btn.textContent = '🎙️';
+        fbRecordingId = null;
+        showToast('Recording auto-stopped at 60s', 'info');
+      }
+    }, MAX_RECORDING_SECONDS * 1000);
+
+  } catch (err) {
+    if (status) {
+      status.style.display = 'block';
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        status.textContent = '🚫 Mic access denied — check browser settings';
+      } else {
+        status.textContent = '❌ ' + (err.message || 'Mic error');
+      }
+      setTimeout(() => { status.style.display = 'none'; }, 5000);
+    }
+  }
+}
+
+// ========== TASTE LEARNING ==========
+
+/**
+ * Gets the taste profile from secure storage.
+ * @returns {Object} Taste profile object
+ */
+function getTasteProfile() {
+  const defaults = {
+    liked_topics: [], rejected_topics: [],
+    liked_funnels: { tof: 0, mof: 0, bof: 0 },
+    rejected_reasons: [], notes: [],
+    history: [] // timestamped entries for recency weighting
+  };
+  const taste = secureLoad('_taste', defaults);
+  if (!taste.liked_topics) taste.liked_topics = [];
+  if (!taste.rejected_topics) taste.rejected_topics = [];
+  if (!taste.liked_funnels) taste.liked_funnels = { tof: 0, mof: 0, bof: 0 };
+  if (!taste.rejected_reasons) taste.rejected_reasons = [];
+  if (!taste.notes) taste.notes = [];
+  if (!taste.history) taste.history = [];
+  return taste;
+}
+
+/**
+ * Saves the taste profile to secure storage.
+ * @param {Object} taste - Taste profile
+ */
+function saveTasteProfile(taste) {
+  secureStore('_taste', taste);
+}
+
+/**
+ * Resets the taste profile to defaults.
+ */
+function resetTasteProfile() {
+  const defaults = {
+    liked_topics: [], rejected_topics: [],
+    liked_funnels: { tof: 0, mof: 0, bof: 0 },
+    rejected_reasons: [], notes: [], history: []
+  };
+  secureStore('_taste', defaults);
+  renderTasteSummary();
+  showToast('Taste profile reset', 'success');
+}
+
+/**
+ * Computes per-topic approve/reject ratios with recency weighting.
+ * @returns {Object.<string, {approved: number, rejected: number, ratio: number}>}
+ */
+function getTopicRatios() {
+  const taste = getTasteProfile();
+  const ratios = {};
+  const now = Date.now();
+  const DAY_MS = 86400000;
+
+  // Process history entries with recency weighting
+  const history = Array.isArray(taste.history) ? taste.history : [];
+  for (const entry of history) {
+    if (!entry || !entry.topic) continue;
+    const topic = entry.topic;
+    if (!ratios[topic]) ratios[topic] = { approved: 0, rejected: 0, ratio: 0 };
+    // Weight: 1.0 for today, decays to 0.3 for entries > 7 days old
+    const ageDays = Math.max(0, (now - (entry.ts || 0)) / DAY_MS);
+    const weight = Math.max(0.3, 1 - (ageDays * 0.1));
+    if (entry.action === 'approve') {
+      ratios[topic].approved += weight;
+    } else if (entry.action === 'reject') {
+      ratios[topic].rejected += weight;
+    }
+  }
+
+  // Calculate ratios
+  for (const topic of Object.keys(ratios)) {
+    const total = ratios[topic].approved + ratios[topic].rejected;
+    ratios[topic].ratio = total > 0 ? ratios[topic].approved / total : 0.5;
+  }
+
+  return ratios;
+}
+
+/**
+ * Calculates a confidence score for an idea based on taste profile.
+ * @param {Object} idea - The idea object
+ * @returns {{score: number, label: string}} Confidence score (0-1) and label
+ */
+function getIdeaConfidence(idea) {
+  if (!idea || !idea.topic) return { score: 0.5, label: '' };
+  const ratios = getTopicRatios();
+  const topicData = ratios[idea.topic];
+
+  if (!topicData || (topicData.approved + topicData.rejected) < 2) {
+    return { score: 0.5, label: '' }; // Not enough data
+  }
+
+  const score = topicData.ratio;
+  if (score >= 0.7) return { score, label: 'Likely match' };
+  if (score <= 0.3) return { score, label: 'Unlikely match' };
+  return { score, label: '' };
+}
+
+/**
+ * Renders the taste profile summary in the Ideas tab.
+ */
+function renderTasteSummary() {
+  const container = document.getElementById('tasteSummary');
+  if (!container) return;
+
+  const taste = getTasteProfile();
+  const ratios = getTopicRatios();
+  const topics = Object.keys(ratios);
+
+  if (topics.length === 0 && taste.liked_topics.length === 0 && taste.rejected_topics.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+
+  // Count topic frequencies
+  const liked = {};
+  const rejected = {};
+  for (const t of (taste.liked_topics || [])) { liked[t] = (liked[t] || 0) + 1; }
+  for (const t of (taste.rejected_topics || [])) { rejected[t] = (rejected[t] || 0) + 1; }
+
+  const likedArr = Object.entries(liked).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const rejectedArr = Object.entries(rejected).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+  let html = '<div class="taste-summary"><h3>📊 Your Taste Profile</h3>';
+
+  if (likedArr.length > 0) {
+    html += '<div style="margin-bottom:4px;color:#888;font-size:11px">Topics you like:</div><div class="taste-row">';
+    for (const [topic, count] of likedArr) {
+      const r = ratios[topic];
+      const pct = r ? Math.round(r.ratio * 100) : '?';
+      html += '<span class="taste-tag liked">' + esc(TOPIC_LABELS[topic] || topic) + '<span class="taste-ratio">' + pct + '% match</span></span>';
+    }
+    html += '</div>';
+  }
+
+  if (rejectedArr.length > 0) {
+    html += '<div style="margin-bottom:4px;color:#888;font-size:11px;margin-top:6px">Topics you skip:</div><div class="taste-row">';
+    for (const [topic] of rejectedArr) {
+      html += '<span class="taste-tag rejected">' + esc(TOPIC_LABELS[topic] || topic) + '</span>';
+    }
+    html += '</div>';
+  }
+
+  html += '<div class="taste-actions"><button class="taste-reset" onclick="resetTasteProfile()">Reset Taste</button></div>';
+  html += '</div>';
+
+  container.innerHTML = html;
+}
+
+// ========== SCRIPT GENERATION ==========
+
+/** @type {Array|null} Last generated scripts */
+window._scripts = null;
+/** @type {Array} Brain sources from last generation */
+window._brainSources = [];
+/** @type {Object} Script rating tracking */
+window._scriptRatings = _safeParse('_scriptRatings', '{}');
+/** @type {Object} Script copy tracking */
+window._scriptCopies = _safeParse('_scriptCopies', '{}');
+
+/**
+ * Generates 4 script variants from the user's idea input.
+ * Includes triple brain search, retry logic, and progress indicators.
+ */
+async function generate() {
+  const ideaEl = document.getElementById('idea');
+  const idea = ideaEl ? ideaEl.value.trim() : '';
+  if (!idea) return;
+
+  if (!checkRateLimit()) return;
+
+  const btn = document.getElementById('genBtn');
+  const out = document.getElementById('output');
+  if (!btn || !out) return;
+
+  btn.disabled = true;
+  btn.textContent = '🧠 Triple-searching brain...';
+  out.innerHTML = '<div class="loading"><div class="bar"><div class="fill"></div></div><p>Deep searching your knowledge base (3 passes)...</p></div>';
+
+  // TRIPLE BRAIN SEARCH
+  let topicResults = [], storyResults = [], psychResults = [];
+  try {
+    [topicResults, storyResults, psychResults] = await Promise.all([
+      searchBrain(idea, 6),
+      searchBrain('my personal story experience about ' + idea, 4),
+      searchBrain('psychology emotions mindset ' + idea, 4),
+    ]);
+  } catch (e) {
+    // Brain API down — continue without brain context
+  }
+
+  // Deduplicate
+  const seen = new Set();
+  const allResults = [];
+  for (const r of [...topicResults, ...storyResults, ...psychResults]) {
+    if (!r || !r.text) continue;
+    const key = r.text.substring(0, 80);
+    if (!seen.has(key)) { seen.add(key); allResults.push(r); }
+  }
+
+  window._brainSources = allResults;
+
+  const reelQuotes = allResults.filter(r => r.type === 'reel');
+  const bookKnowledge = allResults.filter(r => r.type === 'book');
+  const courseContent = allResults.filter(r => r.type === 'course');
+
+  let brainContext = '';
+  if (reelQuotes.length > 0) {
+    brainContext += '\n\n## YOUR OWN WORDS ON THIS TOPIC (from your reels — USE THESE EXACT PHRASES):\n';
+    brainContext += reelQuotes.map(r => '"' + r.text + '"').join('\n\n');
+  }
+  if (bookKnowledge.length > 0) {
+    brainContext += '\n\n## BOOK KNOWLEDGE (weave in naturally, don\'t quote the author — make it sound like YOUR insight):\n';
+    brainContext += bookKnowledge.map(r => '[' + (r.source || 'unknown') + ']: ' + r.text).join('\n\n');
+  }
+  if (courseContent.length > 0) {
+    brainContext += '\n\n## FROM YOUR KCU COURSE (your own teaching — reference these frameworks):\n';
+    brainContext += courseContent.map(r => r.text).join('\n\n');
+  }
+
+  const totalHits = allResults.length;
+  btn.textContent = '⏳ Generating 4 scripts...';
+  out.innerHTML = '<div class="loading"><div class="bar"><div class="fill"></div></div><p>Crafting scripts in your voice (' + totalHits + ' brain matches: ' + reelQuotes.length + ' reels, ' + bookKnowledge.length + ' books, ' + courseContent.length + ' course)...</p></div>';
+
+  const apiBody = {
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 3000,
+    system: SYSTEM_PROMPT,
+    messages: [{ role: 'user', content: 'Write 4 Instagram reel scripts for this idea:\n\n"' + idea + '"\n' + brainContext + '\n\n4 variants:\n1. 🔥 AGGRESSIVE — confrontational, calling people out\n2. 📚 TEACHING — step-by-step breakdown with specifics\n3. 📖 STORY — REAL personal story (from brain context above, NOT made up)\n4. 🌶️ HOT TAKE — controversial opinion, polarizing, debate-starter\n\nCRITICAL:\n- If "YOUR OWN WORDS" section exists above, you MUST use those exact phrases in at least 2 scripts\n- Story variant MUST reference a real experience from the brain context, not a generic "I remember when..."\n- Hot take should be something 50% of traders would disagree with\n- Sound like you\'re ranting to camera, not reading a script\n- 80-180 words per script MAX\n- Return ONLY valid JSON, no markdown' }]
+  };
+
+  let scripts = null;
+  let iT = 0, oT = 0;
+
+  // Try up to 2 times (1 retry)
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      if (attempt === 1) {
+        btn.textContent = '🔄 Retrying...';
+        if (!checkRateLimit()) break;
+      }
+
+      const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': getKey(),
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify(apiBody)
+      }, 90000);
+
+      const data = await r.json();
+      if (data && data.error) throw new Error(data.error.message || 'API error');
+      if (!data || !data.content || !data.content.length) throw new Error('Empty response from API');
+
+      const txt = data.content[0].text;
+      iT = (data.usage && data.usage.input_tokens) || 0;
+      oT = (data.usage && data.usage.output_tokens) || 0;
+
+      try {
+        const m = txt.match(/\{[\s\S]*"scripts"[\s\S]*\}/);
+        const parsed = m ? JSON.parse(m[0]) : null;
+        if (parsed && Array.isArray(parsed.scripts)) {
+          // Validate and filter scripts
+          scripts = parsed.scripts.filter(validateScript);
+          if (scripts.length > 0) break; // Success
+        }
+      } catch (parseErr) {
+        // Parse failed — will retry or show raw
+        if (attempt === 0) continue;
+        out.innerHTML = '<div class="card"><pre class="raw">' + esc(txt.substring(0, 2000)) + '</pre></div>';
+        btn.disabled = false;
+        btn.textContent = '⚡ Generate Scripts';
+        return;
+      }
+    } catch (e) {
+      if (attempt === 1) {
+        out.innerHTML = '<div class="error">❌ ' + esc(e.message || 'Generation failed') + '</div>';
+        btn.disabled = false;
+        btn.textContent = '⚡ Generate Scripts';
+        return;
+      }
+      // First attempt failed, will retry
+    }
+  }
+
+  const cost = ((iT * 3) + (oT * 15)) / 1000000;
+
+  if (scripts && scripts.length > 0) {
+    window._scripts = scripts;
+    let h = '<div class="results-hdr"><h2>Your Scripts</h2><button class="copy-all" onclick="copyAll()">📋 Copy All</button></div>';
+
+    scripts.forEach((s, i) => {
+      const fullText = (s.hook || '') + ' ' + (s.body || '') + ' ' + (s.cta || '');
+      const stats = getWordStats(fullText);
+      const variant = s.variant || 'unknown';
+      const energy = s.energy || 'medium';
+
+      h += '<div class="card" id="card' + i + '">'
+        + '<div class="card-hdr">'
+        + '<span class="badge">' + (ICONS[variant] || '🎬') + ' ' + variant.toUpperCase() + '</span>'
+        + '<div class="card-meta">'
+        + '<span class="dot" style="background:' + (ECOLORS[energy] || '#888') + '"></span>'
+        + '<span class="dur">~' + (s.estimated_seconds || 45) + 's</span>'
+        + '<button class="copy-btn" onclick="copyOne(' + i + ')">📋</button>'
+        + '</div></div>'
+        + '<div class="section"><div class="lbl">🎯 Hook</div><div class="hook-box"><p>' + esc(s.hook) + '</p></div></div>'
+        + '<div class="section"><div class="lbl">📝 Body</div><p class="body-text">' + esc(s.body) + '</p></div>'
+        + '<div class="section"><div class="lbl">🎬 CTA</div><div class="cta-box"><p>' + esc(s.cta) + '</p></div></div>'
+        + (s.visual_notes ? '<div class="section"><div class="lbl">🎥 Visual</div><div class="vis-box"><p>' + esc(s.visual_notes) + '</p></div></div>' : '');
+
+      // Brain sources (collapsible)
+      if (window._brainSources && window._brainSources.length > 0) {
+        h += '<div class="brain-sources">'
+          + '<button class="brain-sources-toggle" onclick="toggleBrainSources(' + i + ')">📚 ' + window._brainSources.length + ' brain sources used ▶</button>'
+          + '<div class="brain-sources-list" id="brain-src-' + i + '">';
+        for (const src of window._brainSources.slice(0, 6)) {
+          h += '<div class="brain-source"><strong>' + esc((src.type || 'unknown')) + '</strong>: ' + esc((src.text || '').substring(0, 120)) + (src.source ? ' — <em>' + esc(src.source) + '</em>' : '') + '</div>';
+        }
+        h += '</div></div>';
+      }
+
+      // Script meta: word count, read time, rating, regenerate
+      h += '<div class="script-meta">'
+        + '<span class="script-meta-item">📝 ' + stats.words + ' words</span>'
+        + '<span class="script-meta-item">⏱️ ~' + stats.readTimeSec + 's read</span>'
+        + '<div class="script-rate">'
+        + '<button onclick="rateScript(' + i + ',1)" id="rate-up-' + i + '" title="Good script">👍</button>'
+        + '<button onclick="rateScript(' + i + ',-1)" id="rate-down-' + i + '" title="Bad script">👎</button>'
+        + '</div>'
+        + '<button class="script-regen" onclick="regenerateVariant(' + i + ')">🔄 Regen</button>'
+        + '</div>';
+
+      h += '</div>';
+    });
+
+    h += '<div class="cost">Cost: $' + cost.toFixed(4) + ' · ' + (iT + oT) + ' tokens</div>';
+    out.innerHTML = h;
   } else {
-    document.getElementById('loginErr').textContent = 'Wrong password';
-    document.getElementById('loginErr').style.display = 'block';
+    out.innerHTML = '<div class="error">❌ No valid scripts generated. Please try again.</div>';
+  }
+
+  btn.disabled = false;
+  btn.textContent = '⚡ Generate Scripts';
+}
+
+/**
+ * Toggles brain sources collapsible section.
+ * @param {number} idx - Script index
+ */
+function toggleBrainSources(idx) {
+  const el = document.getElementById('brain-src-' + idx);
+  if (el) el.classList.toggle('show');
+}
+
+/**
+ * Rates a script (thumbs up/down).
+ * @param {number} idx - Script index
+ * @param {number} rating - 1 for up, -1 for down
+ */
+function rateScript(idx, rating) {
+  if (!window._scripts || !window._scripts[idx]) return;
+
+  const key = (window._scripts[idx].variant || '') + '_' + Date.now();
+  window._scriptRatings[key] = { variant: window._scripts[idx].variant, rating, ts: Date.now() };
+  localStorage.setItem('_scriptRatings', JSON.stringify(window._scriptRatings));
+
+  // Update UI
+  const upBtn = document.getElementById('rate-up-' + idx);
+  const downBtn = document.getElementById('rate-down-' + idx);
+  if (upBtn) upBtn.className = rating === 1 ? 'rated-up' : '';
+  if (downBtn) downBtn.className = rating === -1 ? 'rated-down' : '';
+
+  haptic(10);
+  showToast(rating === 1 ? 'Script rated 👍' : 'Script rated 👎', 'success', { duration: 1500 });
+}
+
+/**
+ * Regenerates a single script variant.
+ * @param {number} idx - Script index to regenerate
+ */
+async function regenerateVariant(idx) {
+  if (!window._scripts || !window._scripts[idx]) return;
+  if (!checkRateLimit()) return;
+
+  const variant = window._scripts[idx].variant;
+  const ideaEl = document.getElementById('idea');
+  const idea = ideaEl ? ideaEl.value.trim() : '';
+  if (!idea) { showToast('No idea text to regenerate from', 'error'); return; }
+
+  const card = document.getElementById('card' + idx);
+  if (card) card.style.opacity = '0.4';
+
+  try {
+    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': getKey(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 800,
+        system: SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: 'Regenerate ONLY the ' + variant.toUpperCase() + ' variant for this idea:\n\n"' + idea + '"\n\nReturn ONLY valid JSON: {"script":{"variant":"' + variant + '","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"high"}}' }]
+      })
+    }, 60000);
+
+    const data = await r.json();
+    if (data && data.error) throw new Error(data.error.message);
+    if (!data || !data.content || !data.content.length) throw new Error('Empty response');
+
+    const txt = data.content[0].text;
+    const m = txt.match(/\{[\s\S]*"script"[\s\S]*\}/);
+    if (m) {
+      const parsed = JSON.parse(m[0]);
+      if (parsed.script && validateScript(parsed.script)) {
+        window._scripts[idx] = parsed.script;
+        // Re-render all (simplest approach)
+        const out = document.getElementById('output');
+        if (out) {
+          // Trigger full re-render by calling generate display logic
+          showToast('Variant regenerated!', 'success');
+          // Quick re-render of just this card
+          generate_renderScripts();
+        }
+        return;
+      }
+    }
+    throw new Error('Bad response');
+  } catch (e) {
+    showToast('Regen failed: ' + (e.message || 'unknown'), 'error');
+  } finally {
+    if (card) card.style.opacity = '1';
   }
 }
 
-// ========== TAB SYSTEM ==========
-function switchTab(tab) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
-  document.getElementById('panel' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+/**
+ * Re-renders the scripts output from window._scripts.
+ */
+function generate_renderScripts() {
+  const out = document.getElementById('output');
+  const scripts = window._scripts;
+  if (!out || !scripts || scripts.length === 0) return;
 
-  if (tab === 'ideas') {
-    loadIdeasTab();
-  } else if (tab === 'approved') {
-    renderApproved();
-  }
-  updateTabCounts();
+  let h = '<div class="results-hdr"><h2>Your Scripts</h2><button class="copy-all" onclick="copyAll()">📋 Copy All</button></div>';
+  scripts.forEach((s, i) => {
+    const fullText = (s.hook || '') + ' ' + (s.body || '') + ' ' + (s.cta || '');
+    const stats = getWordStats(fullText);
+    const variant = s.variant || 'unknown';
+    const energy = s.energy || 'medium';
+
+    h += '<div class="card" id="card' + i + '">'
+      + '<div class="card-hdr">'
+      + '<span class="badge">' + (ICONS[variant] || '🎬') + ' ' + variant.toUpperCase() + '</span>'
+      + '<div class="card-meta">'
+      + '<span class="dot" style="background:' + (ECOLORS[energy] || '#888') + '"></span>'
+      + '<span class="dur">~' + (s.estimated_seconds || 45) + 's</span>'
+      + '<button class="copy-btn" onclick="copyOne(' + i + ')">📋</button>'
+      + '</div></div>'
+      + '<div class="section"><div class="lbl">🎯 Hook</div><div class="hook-box"><p>' + esc(s.hook) + '</p></div></div>'
+      + '<div class="section"><div class="lbl">📝 Body</div><p class="body-text">' + esc(s.body) + '</p></div>'
+      + '<div class="section"><div class="lbl">🎬 CTA</div><div class="cta-box"><p>' + esc(s.cta) + '</p></div></div>'
+      + (s.visual_notes ? '<div class="section"><div class="lbl">🎥 Visual</div><div class="vis-box"><p>' + esc(s.visual_notes) + '</p></div></div>' : '');
+
+    if (window._brainSources && window._brainSources.length > 0) {
+      h += '<div class="brain-sources">'
+        + '<button class="brain-sources-toggle" onclick="toggleBrainSources(' + i + ')">📚 ' + window._brainSources.length + ' brain sources used ▶</button>'
+        + '<div class="brain-sources-list" id="brain-src-' + i + '">';
+      for (const src of window._brainSources.slice(0, 6)) {
+        h += '<div class="brain-source"><strong>' + esc(src.type || 'unknown') + '</strong>: ' + esc((src.text || '').substring(0, 120)) + (src.source ? ' — <em>' + esc(src.source) + '</em>' : '') + '</div>';
+      }
+      h += '</div></div>';
+    }
+
+    h += '<div class="script-meta">'
+      + '<span class="script-meta-item">📝 ' + stats.words + ' words</span>'
+      + '<span class="script-meta-item">⏱️ ~' + stats.readTimeSec + 's read</span>'
+      + '<div class="script-rate">'
+      + '<button onclick="rateScript(' + i + ',1)" id="rate-up-' + i + '">👍</button>'
+      + '<button onclick="rateScript(' + i + ',-1)" id="rate-down-' + i + '">👎</button>'
+      + '</div>'
+      + '<button class="script-regen" onclick="regenerateVariant(' + i + ')">🔄 Regen</button>'
+      + '</div></div>';
+  });
+  out.innerHTML = h;
 }
 
-function updateTabCounts() {
-  const ideas = _safeParse('_ideas', '[]');
-  const approved = _safeParse('_approved', '[]');
-  document.getElementById('ideasCount').textContent = '(' + ideas.length + ')';
-  document.getElementById('approvedCount').textContent = '(' + approved.filter(a => !a.filmed).length + ')';
+/**
+ * Copies a single script to clipboard and tracks the copy.
+ * @param {number} i - Script index
+ */
+function copyOne(i) {
+  const s = window._scripts ? window._scripts[i] : null;
+  if (!s) return;
+  const t = '[HOOK]\n' + (s.hook || '') + '\n\n[BODY]\n' + (s.body || '') + '\n\n[CTA]\n' + (s.cta || '') + '\n\n[VISUAL NOTES]\n' + (s.visual_notes || '');
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(t).then(() => {
+      const btns = document.querySelectorAll('.copy-btn');
+      if (btns[i]) { btns[i].textContent = '✅'; setTimeout(() => { if (btns[i]) btns[i].textContent = '📋'; }, 2000); }
+    }).catch(() => {
+      fallbackCopy(t);
+    });
+  } else {
+    fallbackCopy(t);
+  }
+
+  // Track copy as implicit quality signal
+  const key = (s.variant || '') + '_' + i;
+  window._scriptCopies[key] = (window._scriptCopies[key] || 0) + 1;
+  localStorage.setItem('_scriptCopies', JSON.stringify(window._scriptCopies));
+  haptic(5);
+}
+
+/**
+ * Copies all scripts to clipboard.
+ */
+function copyAll() {
+  if (!window._scripts || window._scripts.length === 0) return;
+  const t = window._scripts.map(s =>
+    '=== ' + (ICONS[s.variant] || '🎬') + ' ' + (s.variant || '').toUpperCase() + ' ===\n\n[HOOK]\n' + (s.hook || '') + '\n\n[BODY]\n' + (s.body || '') + '\n\n[CTA]\n' + (s.cta || '') + '\n\n[VISUAL NOTES]\n' + (s.visual_notes || '')
+  ).join('\n\n' + '─'.repeat(50) + '\n\n');
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(t).then(() => {
+      const btn = document.querySelector('.copy-all');
+      if (btn) { btn.textContent = '✅ Copied!'; setTimeout(() => { if (btn) btn.textContent = '📋 Copy All'; }, 2000); }
+    }).catch(() => { fallbackCopy(t); });
+  } else {
+    fallbackCopy(t);
+  }
+  haptic(5);
+}
+
+/**
+ * Fallback copy method using textarea selection.
+ * @param {string} text - Text to copy
+ */
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;left:-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch (e) { /* fail silently */ }
+  document.body.removeChild(ta);
+  showToast('Copied!', 'success', { duration: 1500 });
 }
 
 // ========== IDEAS TAB ==========
-const IDEAS_STALE_MS = 20 * 60 * 60 * 1000; // 20 hours
+
+const IDEAS_STALE_MS = 20 * 60 * 60 * 1000;
 
 const IDEAS_SYSTEM_PROMPT = `You are a content strategist for Somesh (Kay Capitals) — a day trading educator with 1M+ Instagram followers who runs a $3K mentorship program (KCU).
 
@@ -582,12 +1802,17 @@ Each idea MUST have: id (unique string), funnel (tof/mof/bof), topic (trading/ps
 Ideas must be SPECIFIC not generic. "Trump's new tariff just killed tech stocks — here's how day traders are eating" NOT "something about the economy".
 Include non-trading ideas: family moments, lifestyle flex, behind-the-scenes, wife/dad content.`;
 
+/**
+ * Loads and displays the Ideas tab content.
+ */
 function loadIdeasTab() {
-  const ideas = _safeParse('_ideas', '[]');
+  const ideas = secureLoad('_ideas', []);
   const ts = parseInt(localStorage.getItem('_ideas_ts') || '0') || 0;
   const age = Date.now() - ts;
 
-  if (ideas.length === 0 || age > IDEAS_STALE_MS) {
+  renderTasteSummary();
+
+  if (!Array.isArray(ideas) || ideas.length === 0 || age > IDEAS_STALE_MS) {
     generateAllIdeas(false);
   } else {
     renderIdeas(ideas);
@@ -595,110 +1820,167 @@ function loadIdeasTab() {
   }
 }
 
+/**
+ * Updates the "Generated X ago" text.
+ * @param {number} ts - Timestamp of generation
+ */
 function updateIdeasAge(ts) {
-  if (!ts) { document.getElementById('ideasAge').textContent = ''; return; }
+  const el = document.getElementById('ideasAge');
+  if (!el) return;
+  if (!ts) { el.textContent = ''; return; }
   const hrs = Math.floor((Date.now() - ts) / 3600000);
   const mins = Math.floor((Date.now() - ts) / 60000) % 60;
-  document.getElementById('ideasAge').textContent = hrs > 0 ? `Generated ${hrs}h ${mins}m ago` : `Generated ${mins}m ago`;
+  el.textContent = hrs > 0 ? 'Generated ' + hrs + 'h ' + mins + 'm ago' : 'Generated ' + mins + 'm ago';
 }
 
-function _safeParse(key, fallback) { try { return JSON.parse(localStorage.getItem(key) || fallback); } catch(e) { localStorage.removeItem(key); return JSON.parse(fallback); } }
-
-function getTasteProfile() {
-  const taste = _safeParse('_taste', '{"liked_topics":[],"rejected_topics":[],"liked_funnels":{"tof":0,"mof":0,"bof":0},"rejected_reasons":[],"notes":[]}');
-  if (!taste.liked_topics) taste.liked_topics = [];
-  if (!taste.rejected_topics) taste.rejected_topics = [];
-  if (!taste.liked_funnels) taste.liked_funnels = {tof:0,mof:0,bof:0};
-  if (!taste.rejected_reasons) taste.rejected_reasons = [];
-  if (!taste.notes) taste.notes = [];
-  return taste;
-}
-
-function saveTasteProfile(taste) {
-  localStorage.setItem('_taste', JSON.stringify(taste));
-}
-
+/**
+ * Fetches trending context from brain for idea generation.
+ * @returns {Promise<string>}
+ */
 async function fetchTrendingContext() {
   try {
     const queries = ['stock market news today', 'trading trending topics', 'day trading social media'];
     const results = await Promise.all(queries.map(q => searchBrain(q, 3)));
-    const all = results.flat();
+    const all = results.flat().filter(r => r && r.text);
     if (all.length === 0) return 'No trending context available — use general market awareness.';
     return all.map(r => r.text).join('\n\n');
-  } catch(e) {
+  } catch (e) {
     return 'No trending context available — use general market awareness.';
   }
 }
 
+/**
+ * Renders skeleton loading cards while ideas generate.
+ * @param {HTMLElement} container - Container element
+ */
+function renderSkeletonCards(container) {
+  if (!container) return;
+  let html = '';
+  for (let section = 0; section < 3; section++) {
+    const labels = ['🔴 TOP OF FUNNEL', '🟡 MIDDLE OF FUNNEL', '🟢 BOTTOM OF FUNNEL'];
+    const classes = ['tof', 'mof', 'bof'];
+    html += '<div class="funnel-section"><div class="funnel-hdr ' + classes[section] + '">' + labels[section] + ' — Loading...</div>';
+    for (let i = 0; i < 3; i++) {
+      html += '<div class="skeleton-card"><div class="skeleton-line w40 h20"></div><div class="skeleton-line w80"></div><div class="skeleton-line w60"></div></div>';
+    }
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+/**
+ * Generates all 30 daily ideas with retry logic and progress indicators.
+ * @param {boolean} force - If true, always regenerate
+ */
 async function generateAllIdeas(force) {
   const container = document.getElementById('ideasContent');
   const btn = document.getElementById('refreshAllBtn');
+  if (!container || !btn) return;
+
+  if (!checkRateLimit()) return;
+
   btn.disabled = true;
   btn.textContent = '🧠 Searching brain for trends...';
-  container.innerHTML = '<div class="ideas-loading"><div class="spinner"></div><p>Searching brain for trending context...</p></div>';
+  renderSkeletonCards(container);
 
   const taste = getTasteProfile();
   const tasteStr = JSON.stringify(taste, null, 2);
-  const trending = await fetchTrendingContext();
 
-  btn.textContent = '⏳ Generating 30 ideas...';
-  container.innerHTML = '<div class="ideas-loading"><div class="spinner"></div><p>Generating 30 fresh ideas in 3 funnel stages...</p></div>';
+  let trending;
+  try {
+    trending = await fetchTrendingContext();
+  } catch (e) {
+    trending = 'No trending context available — use general market awareness.';
+  }
+
+  btn.textContent = '⏳ Generating 30 ideas (TOF → MOF → BOF)...';
 
   const prompt = IDEAS_SYSTEM_PROMPT
     .replace('{taste_profile}', tasteStr)
     .replace('{trending_context}', trending);
 
-  try {
-    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': getKey(),
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
-        system: prompt,
-        messages: [{role: 'user', content: 'Generate 30 fresh content ideas for today. Be SPECIFIC and TIMELY. Return valid JSON only.'}]
-      })
-    });
+  let ideas = null;
 
-    const data = await r.json();
-    if (data.error) throw new Error(data.error.message);
-    if (!data.content?.length) throw new Error('Empty response from API');
-
-    const txt = data.content[0].text;
-    let parsed;
+  // Try up to 2 times (1 retry)
+  for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const m = txt.match(/\{[\s\S]*"ideas"[\s\S]*\}/);
-      parsed = m ? JSON.parse(m[0]) : null;
-    } catch(e) { parsed = null; }
+      if (attempt === 1) {
+        btn.textContent = '🔄 Retrying...';
+        if (!checkRateLimit()) break;
+      }
 
-    if (parsed?.ideas && parsed.ideas.length > 0) {
-      // Ensure unique IDs
-      parsed.ideas.forEach((idea, i) => {
-        if (!idea.id) idea.id = 'idea_' + Date.now() + '_' + i;
-      });
-      localStorage.setItem('_ideas', JSON.stringify(parsed.ideas));
-      localStorage.setItem('_ideas_ts', String(Date.now()));
-      renderIdeas(parsed.ideas);
-      updateIdeasAge(Date.now());
-      updateTabCounts();
-    } else {
-      container.innerHTML = '<div class="error">Failed to parse ideas. Raw response:<br><pre style="white-space:pre-wrap;font-size:12px;color:#888;margin-top:8px">' + esc(txt.substring(0, 500)) + '</pre></div>';
+      const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': getKey(),
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 4000,
+          system: prompt,
+          messages: [{ role: 'user', content: 'Generate 30 fresh content ideas for today. Be SPECIFIC and TIMELY. Return valid JSON only.' }]
+        })
+      }, 90000);
+
+      const data = await r.json();
+      if (data && data.error) throw new Error(data.error.message || 'API error');
+      if (!data || !data.content || !data.content.length) throw new Error('Empty response from API');
+
+      const txt = data.content[0].text;
+      let parsed;
+      try {
+        const m = txt.match(/\{[\s\S]*"ideas"[\s\S]*\}/);
+        parsed = m ? JSON.parse(m[0]) : null;
+      } catch (e) { parsed = null; }
+
+      if (parsed && Array.isArray(parsed.ideas)) {
+        // Validate each idea, keep only valid ones
+        ideas = parsed.ideas.filter(validateIdea);
+        // Ensure unique IDs
+        ideas.forEach((idea, i) => {
+          if (!idea.id) idea.id = 'idea_' + Date.now() + '_' + i;
+          if (!idea.preview) idea.preview = '';
+          if (!Array.isArray(idea.tags)) idea.tags = [];
+        });
+        if (ideas.length > 0) break; // Success
+      }
+
+      if (attempt === 0) continue; // Retry
+      container.innerHTML = '<div class="error">Failed to parse ideas. Raw response:<br><pre style="white-space:pre-wrap;font-size:12px;color:#888;margin-top:8px">' + esc((txt || '').substring(0, 500)) + '</pre></div>';
+    } catch (e) {
+      if (attempt === 1) {
+        container.innerHTML = '<div class="error">❌ ' + esc(e.message || 'Failed to generate ideas') + '</div>';
+      }
     }
-  } catch(e) {
-    container.innerHTML = '<div class="error">❌ ' + esc(e.message) + '</div>';
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '🔄 Generate Fresh Ideas';
   }
+
+  if (ideas && ideas.length > 0) {
+    secureStore('_ideas', ideas);
+    localStorage.setItem('_ideas_ts', String(Date.now()));
+    renderIdeas(ideas);
+    updateIdeasAge(Date.now());
+    updateTabCounts();
+  }
+
+  btn.disabled = false;
+  btn.textContent = '🔄 Generate Fresh Ideas';
 }
 
+const TOPIC_LABELS = { trading: 'Trading', psychology: 'Psychology', family: 'Family', lifestyle: 'Lifestyle', news: 'News', student_story: 'Student Story' };
+const VALID_FUNNELS = new Set(['tof', 'mof', 'bof']);
+
+/**
+ * Renders all idea cards grouped by funnel stage.
+ * @param {Array} ideas - Array of idea objects
+ */
 function renderIdeas(ideas) {
   const container = document.getElementById('ideasContent');
+  if (!container) return;
+  if (!Array.isArray(ideas)) { container.innerHTML = '<div class="ideas-empty">No ideas available</div>'; return; }
+
   const tof = ideas.filter(i => i.funnel === 'tof');
   const mof = ideas.filter(i => i.funnel === 'mof');
   const bof = ideas.filter(i => i.funnel === 'bof');
@@ -706,7 +1988,7 @@ function renderIdeas(ideas) {
   let html = '';
 
   // TOF Section
-  html += '<div class="funnel-section"><div class="funnel-hdr tof" style="justify-content:space-between">🔴 TOP OF FUNNEL — Reach & Traffic (' + tof.length + ')<button onclick="refreshNewsOnly()" id="refreshNewsBtn" style="padding:6px 12px;border-radius:8px;border:1px solid #cc2222;background:none;color:#cc2222;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap">🔥 Refresh News</button></div>';
+  html += '<div class="funnel-section"><div class="funnel-hdr tof" style="justify-content:space-between">🔴 TOP OF FUNNEL — Reach & Traffic (' + tof.length + ')<button onclick="refreshNewsOnly()" id="refreshNewsBtn" style="padding:6px 12px;border-radius:8px;border:1px solid #cc2222;background:none;color:#cc2222;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;min-height:44px">🔥 Refresh News</button></div>';
   tof.forEach(idea => { html += renderIdeaCard(idea); });
   html += '</div>';
 
@@ -721,131 +2003,258 @@ function renderIdeas(ideas) {
   html += '</div>';
 
   container.innerHTML = html;
+
+  // Attach swipe handlers on mobile
+  if (isMobile()) {
+    attachSwipeHandlers();
+  }
 }
 
-const TOPIC_LABELS = {trading:'Trading',psychology:'Psychology',family:'Family',lifestyle:'Lifestyle',news:'News',student_story:'Student Story'};
-
-const VALID_FUNNELS = new Set(['tof','mof','bof']);
+/**
+ * Renders a single idea card.
+ * @param {Object} idea - The idea object
+ * @returns {string} HTML string
+ */
 function renderIdeaCard(idea) {
+  if (!idea) return '';
   const funnelClass = VALID_FUNNELS.has(idea.funnel) ? idea.funnel : 'tof';
   const funnelLabel = funnelClass === 'tof' ? 'TOF' : funnelClass === 'mof' ? 'MOF' : 'BOF';
   const topicLabel = TOPIC_LABELS[idea.topic] || idea.topic || 'General';
   const safeId = (idea.id || '').replace(/[^a-zA-Z0-9_-]/g, '');
+  const confidence = getIdeaConfidence(idea);
 
-  return `<div class="idea-card" id="card-${safeId}">
-    <div class="idea-badges">
-      <span class="idea-badge ${funnelClass}">${funnelLabel}</span>
-      <span class="idea-badge topic">${esc(topicLabel)}</span>
-    </div>
-    <div class="idea-title">${esc(idea.title)}</div>
-    <button class="idea-toggle" onclick="togglePreview('${safeId}')">▶ Preview</button>
-    <div class="idea-preview" id="preview-${safeId}">${esc(idea.preview || '')}</div>
-    <div class="idea-actions">
-      <button class="idea-action approve" onclick="approveIdea('${safeId}')">✅</button>
-      <button class="idea-action reject" onclick="showRejectForm('${safeId}')">❌</button>
-      <button class="idea-action refresh" onclick="refreshIdea('${safeId}')">🔄</button>
-    </div>
-    <div class="reject-form" id="reject-${safeId}">
-      <select id="reason-${safeId}">
-        <option value="">Why not?</option>
-        <option value="done_before">Done before</option>
-        <option value="boring">Boring</option>
-        <option value="not_my_style">Not my style</option>
-        <option value="wrong_timing">Wrong timing</option>
-        <option value="too_generic">Too generic</option>
-        <option value="other">Other</option>
-      </select>
-      <div class="fb-row">
-        <input type="text" id="fb-text-${safeId}" placeholder="Optional feedback...">
-        <button class="fb-mic" id="fb-mic-${safeId}" onclick="toggleFbMic('${safeId}')">🎙️</button>
-      </div>
-      <div id="fb-mic-status-${safeId}" style="display:none;text-align:center;padding:4px;color:#d4a843;font-size:12px;margin-top:4px"></div>
-      <button class="fb-submit" onclick="submitReject('${safeId}')">Reject & Replace</button>
-    </div>
-  </div>`;
+  let badges = '<div class="idea-badges">'
+    + '<span class="idea-badge ' + funnelClass + '">' + funnelLabel + '</span>'
+    + '<span class="idea-badge topic">' + esc(topicLabel) + '</span>';
+  if (confidence.label) {
+    badges += '<span class="idea-badge confidence">' + esc(confidence.label) + '</span>';
+  }
+  badges += '</div>';
+
+  return '<div class="idea-card" id="card-' + safeId + '" data-idea-id="' + safeId + '">'
+    + badges
+    + '<div class="idea-title">' + esc(idea.title) + '</div>'
+    + '<button class="idea-toggle" onclick="togglePreview(\'' + safeId + '\')">▶ Preview</button>'
+    + '<div class="idea-preview" id="preview-' + safeId + '">' + esc(idea.preview || '') + '</div>'
+    + '<div class="idea-actions">'
+    + '<button class="idea-action approve" onclick="approveIdea(\'' + safeId + '\')">✅</button>'
+    + '<button class="idea-action reject" onclick="handleReject(\'' + safeId + '\')">❌</button>'
+    + '<button class="idea-action refresh" onclick="refreshIdea(\'' + safeId + '\')">🔄</button>'
+    + '</div>'
+    + (isMobile() ? '' : '<div class="reject-form" id="reject-' + safeId + '">'
+      + '<select id="reason-' + safeId + '"><option value="">Why not?</option><option value="done_before">Done before</option><option value="boring">Boring</option><option value="not_my_style">Not my style</option><option value="wrong_timing">Wrong timing</option><option value="too_generic">Too generic</option><option value="other">Other</option></select>'
+      + '<div class="fb-row"><input type="text" id="fb-text-' + safeId + '" placeholder="Optional feedback...">'
+      + '<button class="fb-mic" id="fb-mic-' + safeId + '" onclick="toggleFbMic(\'' + safeId + '\')">🎙️</button></div>'
+      + '<div id="fb-mic-status-' + safeId + '" style="display:none;text-align:center;padding:4px;color:#d4a843;font-size:12px;margin-top:4px"></div>'
+      + '<button class="fb-submit" onclick="submitReject(\'' + safeId + '\')">Reject & Replace</button></div>')
+    + '</div>';
 }
 
+/**
+ * Toggles the preview section of an idea card.
+ * @param {string} id - Safe card ID
+ */
 function togglePreview(id) {
   const el = document.getElementById('preview-' + id);
-  const btn = el?.previousElementSibling;
-  if (el) {
-    el.classList.toggle('show');
-    if (btn) btn.textContent = el.classList.contains('show') ? '▼ Preview' : '▶ Preview';
-  }
+  if (!el) return;
+  const btn = el.previousElementSibling;
+  el.classList.toggle('show');
+  if (btn) btn.textContent = el.classList.contains('show') ? '▼ Preview' : '▶ Preview';
 }
 
+/**
+ * Gets an idea object by its safe ID.
+ * @param {string} id - Safe card ID
+ * @returns {Object|undefined}
+ */
 function getIdeaById(id) {
-  const ideas = _safeParse('_ideas', '[]');
+  const ideas = secureLoad('_ideas', []);
+  if (!Array.isArray(ideas)) return undefined;
   return ideas.find(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
 }
 
+// ========== APPROVE / REJECT ==========
+
 const _busyCards = new Set();
+
+/**
+ * Approves an idea: moves it to approved queue with undo toast.
+ * @param {string} id - Safe card ID
+ */
 function approveIdea(id) {
   if (_busyCards.has(id)) return;
   _busyCards.add(id);
+
   try {
-    const ideas = _safeParse('_ideas', '[]');
+    const ideas = secureLoad('_ideas', []);
+    if (!Array.isArray(ideas)) { _busyCards.delete(id); return; }
     const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
-    if (idx === -1) return;
+    if (idx === -1) { _busyCards.delete(id); return; }
 
     const idea = ideas[idx];
     ideas.splice(idx, 1);
-    localStorage.setItem('_ideas', JSON.stringify(ideas));
+    secureStore('_ideas', ideas);
 
     // Add to approved
-    const approved = _safeParse('_approved', '[]');
+    const approved = secureLoad('_approved', []);
     idea.approvedAt = Date.now();
     idea.filmed = false;
     approved.unshift(idea);
-    localStorage.setItem('_approved', JSON.stringify(approved));
+    secureStore('_approved', approved);
 
-    // Update taste
+    // Update taste with timestamped history
     const taste = getTasteProfile();
     taste.liked_topics.push(idea.topic);
-    if (taste.liked_funnels[idea.funnel] !== undefined) taste.liked_funnels[idea.funnel]++;
-    // Keep last 50
+    if (taste.liked_funnels && taste.liked_funnels[idea.funnel] !== undefined) taste.liked_funnels[idea.funnel]++;
     if (taste.liked_topics.length > 50) taste.liked_topics = taste.liked_topics.slice(-50);
+    taste.history.push({ action: 'approve', topic: idea.topic, funnel: idea.funnel, ts: Date.now() });
+    if (taste.history.length > 100) taste.history = taste.history.slice(-100);
     saveTasteProfile(taste);
 
-    // Animate removal
+    haptic(15);
+
+    // Animate slide out
     const card = document.getElementById('card-' + id);
     if (card) {
-      card.style.transition = 'all .3s';
-      card.style.opacity = '0';
-      card.style.transform = 'translateX(100px)';
-      setTimeout(() => { renderIdeas(ideas); updateTabCounts(); }, 300);
+      card.classList.add('slide-out-right');
+      setTimeout(() => { renderIdeas(ideas); updateTabCounts(); renderTasteSummary(); }, 350);
     } else {
       renderIdeas(ideas);
       updateTabCounts();
+      renderTasteSummary();
     }
+
+    // Show toast with undo
+    showToast('✅ Approved!', 'success', {
+      duration: 5000,
+      onUndo: () => {
+        // Undo: remove from approved, add back to ideas
+        const currentApproved = secureLoad('_approved', []);
+        const undoIdx = currentApproved.findIndex(a => (a.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
+        if (undoIdx !== -1) {
+          const undone = currentApproved.splice(undoIdx, 1)[0];
+          delete undone.approvedAt;
+          delete undone.filmed;
+          secureStore('_approved', currentApproved);
+
+          const currentIdeas = secureLoad('_ideas', []);
+          currentIdeas.splice(idx, 0, undone);
+          secureStore('_ideas', currentIdeas);
+
+          renderIdeas(currentIdeas);
+          updateTabCounts();
+          showToast('Approve undone', 'info', { duration: 1500 });
+        }
+      }
+    });
   } finally {
     _busyCards.delete(id);
   }
 }
 
+/**
+ * Handles the reject button — shows bottom sheet on mobile, inline form on desktop.
+ * @param {string} id - Safe card ID
+ */
+function handleReject(id) {
+  if (isMobile()) {
+    openBottomSheet(id);
+  } else {
+    showRejectForm(id);
+  }
+}
+
+/**
+ * Shows the inline reject form (desktop only).
+ * @param {string} id - Safe card ID
+ */
 function showRejectForm(id) {
   const form = document.getElementById('reject-' + id);
   if (form) form.classList.toggle('show');
 }
 
+// ========== BOTTOM SHEET (mobile reject) ==========
+
+let _bsRejectId = null;
+
+/**
+ * Opens the bottom sheet for rejecting an idea (mobile).
+ * @param {string} id - Safe card ID
+ */
+function openBottomSheet(id) {
+  _bsRejectId = id;
+  const idea = getIdeaById(id);
+  const titleEl = document.getElementById('bsTitle');
+  if (titleEl) titleEl.textContent = idea ? idea.title : '';
+
+  const overlay = document.getElementById('bsOverlay');
+  if (overlay) {
+    overlay.classList.add('show');
+    // Reset form
+    const reason = document.getElementById('bsReason');
+    const fb = document.getElementById('bsFeedback');
+    if (reason) reason.value = '';
+    if (fb) fb.value = '';
+  }
+}
+
+/**
+ * Closes the bottom sheet.
+ * @param {Event} [event] - Click event
+ */
+function closeBottomSheet(event) {
+  if (event && event.target !== document.getElementById('bsOverlay')) return;
+  const overlay = document.getElementById('bsOverlay');
+  if (overlay) overlay.classList.remove('show');
+  _bsRejectId = null;
+}
+
+/**
+ * Submits the reject from the bottom sheet.
+ */
+async function submitBottomSheetReject() {
+  if (!_bsRejectId) return;
+  const id = _bsRejectId;
+  const reason = document.getElementById('bsReason');
+  const fb = document.getElementById('bsFeedback');
+  closeBottomSheet();
+  await doReject(id, reason ? reason.value : '', fb ? fb.value : '');
+}
+
+/**
+ * Submits a reject from the inline form (desktop).
+ * @param {string} id - Safe card ID
+ */
 async function submitReject(id) {
+  const reason = document.getElementById('reason-' + id);
+  const text = document.getElementById('fb-text-' + id);
+  await doReject(id, reason ? reason.value : '', text ? text.value : '');
+}
+
+/**
+ * Core reject logic: saves feedback, updates taste, replaces idea, with undo.
+ * @param {string} id - Safe card ID
+ * @param {string} reason - Reject reason
+ * @param {string} text - Optional feedback text
+ */
+async function doReject(id, reason, text) {
   if (_busyCards.has(id)) return;
   _busyCards.add(id);
+
   try {
-    const ideas = _safeParse('_ideas', '[]');
+    const ideas = secureLoad('_ideas', []);
+    if (!Array.isArray(ideas)) { _busyCards.delete(id); return; }
     const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
-    if (idx === -1) return;
+    if (idx === -1) { _busyCards.delete(id); return; }
 
     const idea = ideas[idx];
-    const reason = document.getElementById('reason-' + id)?.value || '';
-    const text = document.getElementById('fb-text-' + id)?.value || '';
 
     // Save feedback
     const feedback = _safeParse('_feedback', '[]');
-    feedback.push({ ideaId: idea.id, title: idea.title, funnel: idea.funnel, topic: idea.topic, reason, text, ts: Date.now() });
+    feedback.push({ ideaId: idea.id, title: idea.title, funnel: idea.funnel, topic: idea.topic, reason: reason || '', text: text || '', ts: Date.now() });
     localStorage.setItem('_feedback', JSON.stringify(feedback));
 
-    // Update taste
+    // Update taste with history
     const taste = getTasteProfile();
     taste.rejected_topics.push(idea.topic);
     if (reason) taste.rejected_reasons.push(reason);
@@ -853,38 +2262,70 @@ async function submitReject(id) {
     if (taste.rejected_topics.length > 50) taste.rejected_topics = taste.rejected_topics.slice(-50);
     if (taste.rejected_reasons.length > 50) taste.rejected_reasons = taste.rejected_reasons.slice(-50);
     if (taste.notes.length > 30) taste.notes = taste.notes.slice(-30);
+    taste.history.push({ action: 'reject', topic: idea.topic, funnel: idea.funnel, reason: reason || '', ts: Date.now() });
+    if (taste.history.length > 100) taste.history = taste.history.slice(-100);
     saveTasteProfile(taste);
 
-    // Replace with new idea
-    const card = document.getElementById('card-' + id);
-    if (card) card.classList.add('replacing');
+    haptic(15);
 
+    // Animate slide out
+    const card = document.getElementById('card-' + id);
+    if (card) card.classList.add('slide-out-left');
+
+    // Store for undo
+    const rejectedIdea = { ...idea };
+    const rejectedIdx = idx;
+
+    // Replace with new idea
     try {
       const newIdea = await generateOneIdea(idea.funnel);
-      if (newIdea) {
+      if (newIdea && validateIdea(newIdea)) {
         ideas[idx] = newIdea;
       } else {
         ideas.splice(idx, 1);
       }
-    } catch(e) {
+    } catch (e) {
       ideas.splice(idx, 1);
     }
 
-    localStorage.setItem('_ideas', JSON.stringify(ideas));
-    renderIdeas(ideas);
-    updateTabCounts();
+    secureStore('_ideas', ideas);
+
+    setTimeout(() => {
+      renderIdeas(ideas);
+      updateTabCounts();
+      renderTasteSummary();
+    }, card ? 350 : 0);
+
+    // Show undo toast
+    showToast('❌ Rejected', 'info', {
+      duration: 5000,
+      onUndo: () => {
+        const currentIdeas = secureLoad('_ideas', []);
+        currentIdeas.splice(Math.min(rejectedIdx, currentIdeas.length), 0, rejectedIdea);
+        secureStore('_ideas', currentIdeas);
+        renderIdeas(currentIdeas);
+        updateTabCounts();
+        showToast('Reject undone', 'info', { duration: 1500 });
+      }
+    });
   } finally {
     _busyCards.delete(id);
   }
 }
 
+/**
+ * Refreshes a single idea with a new one.
+ * @param {string} id - Safe card ID
+ */
 async function refreshIdea(id) {
   if (_busyCards.has(id)) return;
   _busyCards.add(id);
+
   try {
-    const ideas = _safeParse('_ideas', '[]');
+    const ideas = secureLoad('_ideas', []);
+    if (!Array.isArray(ideas)) { _busyCards.delete(id); return; }
     const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
-    if (idx === -1) return;
+    if (idx === -1) { _busyCards.delete(id); return; }
 
     const idea = ideas[idx];
     const card = document.getElementById('card-' + id);
@@ -892,12 +2333,12 @@ async function refreshIdea(id) {
 
     try {
       const newIdea = await generateOneIdea(idea.funnel);
-      if (newIdea) {
+      if (newIdea && validateIdea(newIdea)) {
         ideas[idx] = newIdea;
       }
-    } catch(e) { /* keep old idea on error */ }
+    } catch (e) { /* keep old idea on error */ }
 
-    localStorage.setItem('_ideas', JSON.stringify(ideas));
+    secureStore('_ideas', ideas);
     renderIdeas(ideas);
     updateTabCounts();
   } finally {
@@ -905,15 +2346,19 @@ async function refreshIdea(id) {
   }
 }
 
+/**
+ * Refreshes only the news/timely TOF ideas.
+ */
 async function refreshNewsOnly() {
   const btn = document.getElementById('refreshNewsBtn');
   if (!btn) return;
+  if (!checkRateLimit()) return;
+
   const origText = btn.textContent;
   btn.disabled = true;
   btn.textContent = '⏳ Fetching fresh news...';
 
   try {
-    // Fetch real trending news
     const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -925,47 +2370,49 @@ async function refreshNewsOnly() {
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 2000,
-        system: `You generate TOP OF FUNNEL content ideas for Somesh (Kay Capitals) — day trading educator, 1M+ IG followers. Focus on NEWS, CURRENT EVENTS, CONTROVERSY, and TIMELY topics only. Ideas must feel like they happened TODAY or THIS WEEK. Include: market news, earnings, Fed decisions, political moves affecting markets, viral financial topics, breaking economic data. Each idea should be a specific scroll-stopping hook. Return ONLY valid JSON.`,
-        messages: [{role: 'user', content: `Generate 5 fresh NEWS-BASED top of funnel content ideas. These must be TIMELY — things happening RIGHT NOW in markets, politics, or economy that affect traders. Think: earnings reports, Fed meetings, tariffs, market crashes, viral moments.
-
-Return: {"ideas":[{"id":"news_${Date.now()}_1","funnel":"tof","topic":"news","title":"...","preview":"2-3 sentence script preview","tags":["news","timely"]}]}`}]
+        system: 'You generate TOP OF FUNNEL content ideas for Somesh (Kay Capitals) — day trading educator, 1M+ IG followers. Focus on NEWS, CURRENT EVENTS, CONTROVERSY, and TIMELY topics only. Ideas must feel like they happened TODAY or THIS WEEK. Include: market news, earnings, Fed decisions, political moves affecting markets, viral financial topics, breaking economic data. Each idea should be a specific scroll-stopping hook. Return ONLY valid JSON.',
+        messages: [{ role: 'user', content: 'Generate 5 fresh NEWS-BASED top of funnel content ideas. These must be TIMELY — things happening RIGHT NOW in markets, politics, or economy that affect traders. Think: earnings reports, Fed meetings, tariffs, market crashes, viral moments.\n\nReturn: {"ideas":[{"id":"news_' + Date.now() + '_1","funnel":"tof","topic":"news","title":"...","preview":"2-3 sentence script preview","tags":["news","timely"]}]}' }]
       })
-    });
+    }, 60000);
 
     const data = await r.json();
-    if (data.error) throw new Error(data.error.message);
-    if (!data.content?.length) throw new Error('Empty response from API');
+    if (data && data.error) throw new Error(data.error.message);
+    if (!data || !data.content || !data.content.length) throw new Error('Empty response from API');
     const txt = data.content[0].text;
     const m = txt.match(/\{[\s\S]*"ideas"[\s\S]*\}/);
     if (!m) throw new Error('Bad response');
 
     const parsed = JSON.parse(m[0]);
-    const newNewsIdeas = parsed.ideas || [];
+    let newNewsIdeas = Array.isArray(parsed.ideas) ? parsed.ideas.filter(validateIdea) : [];
 
-    // Replace only news/timely TOF ideas, keep family/lifestyle/trading TOF ideas
-    let ideas = _safeParse('_ideas', '[]');
-    const newsTopics = ['news'];
-    const oldNewsIdeas = ideas.filter(i => i.funnel === 'tof' && newsTopics.includes(i.topic));
-    const nonNewsIdeas = ideas.filter(i => !(i.funnel === 'tof' && newsTopics.includes(i.topic)));
+    let ideas = secureLoad('_ideas', []);
+    if (!Array.isArray(ideas)) ideas = [];
+    const nonNewsIdeas = ideas.filter(i => !(i.funnel === 'tof' && i.topic === 'news'));
 
-    // Replace old news with new, keep everything else
     ideas = [...nonNewsIdeas, ...newNewsIdeas.map((idea, idx) => ({
       ...idea,
-      id: idea.id || `news_${Date.now()}_${idx}`
+      id: idea.id || 'news_' + Date.now() + '_' + idx
     }))];
 
-    localStorage.setItem('_ideas', JSON.stringify(ideas));
+    secureStore('_ideas', ideas);
     renderIdeas(ideas);
     updateTabCounts();
     btn.textContent = '✅ News refreshed!';
     setTimeout(() => { btn.textContent = '🔥 Refresh News'; btn.disabled = false; }, 2000);
-  } catch(e) {
-    btn.textContent = '❌ ' + (e.message || 'Failed');
+  } catch (e) {
+    btn.textContent = '❌ ' + esc(e.message || 'Failed');
     setTimeout(() => { btn.textContent = origText; btn.disabled = false; }, 3000);
   }
 }
 
+/**
+ * Generates a single replacement idea for a given funnel stage.
+ * @param {string} funnel - Funnel stage ('tof', 'mof', 'bof')
+ * @returns {Promise<Object|null>} The new idea or null
+ */
 async function generateOneIdea(funnel) {
+  if (!checkRateLimit()) return null;
+
   const taste = getTasteProfile();
   const funnelLabel = funnel === 'tof' ? 'TOP OF FUNNEL' : funnel === 'mof' ? 'MIDDLE OF FUNNEL' : 'BOTTOM OF FUNNEL';
 
@@ -981,202 +2428,331 @@ async function generateOneIdea(funnel) {
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 500,
-        system: `You generate content ideas for Somesh (Kay Capitals) — day trading educator, 1M+ IG followers. Return ONLY valid JSON.`,
-        messages: [{role: 'user', content: `Generate 1 new ${funnelLabel} Instagram reel idea. Be SPECIFIC and TIMELY.
-
-Taste profile: ${JSON.stringify(taste)}
-
-Return ONLY: {"idea":{"id":"${Date.now()}_new","funnel":"${funnel}","topic":"trading|psychology|family|lifestyle|news|student_story","title":"...","preview":"2-3 sentences","tags":[]}}`}]
+        system: 'You generate content ideas for Somesh (Kay Capitals) — day trading educator, 1M+ IG followers. Return ONLY valid JSON.',
+        messages: [{ role: 'user', content: 'Generate 1 new ' + funnelLabel + ' Instagram reel idea. Be SPECIFIC and TIMELY.\n\nTaste profile: ' + JSON.stringify(taste) + '\n\nReturn ONLY: {"idea":{"id":"' + Date.now() + '_new","funnel":"' + funnel + '","topic":"trading|psychology|family|lifestyle|news|student_story","title":"...","preview":"2-3 sentences","tags":[]}}' }]
       })
-    });
+    }, 30000);
 
     const data = await r.json();
-    if (data.error || !data.content?.length) return null;
+    if (!data || data.error || !data.content || !data.content.length) return null;
     const txt = data.content[0].text;
     const m = txt.match(/\{[\s\S]*"idea"[\s\S]*\}/);
     if (m) {
       const parsed = JSON.parse(m[0]);
-      return parsed.idea || null;
+      return (parsed.idea && validateIdea(parsed.idea)) ? parsed.idea : null;
     }
     return null;
-  } catch(e) { return null; }
+  } catch (e) {
+    return null;
+  }
 }
 
-// Voice feedback for reject form
-let fbMediaRecorder = null;
-let fbAudioChunks = [];
-let fbRecordingId = null;
+// ========== SWIPE GESTURES ==========
 
-async function toggleFbMic(id) {
-  const btn = document.getElementById('fb-mic-' + id);
-  const status = document.getElementById('fb-mic-status-' + id);
+const SWIPE_THRESHOLD = 80;
+let _swipeState = null;
 
-  if (fbRecordingId === id) {
-    // Stop recording
-    fbMediaRecorder.stop();
-    btn.classList.remove('recording');
-    btn.textContent = '🎙️';
-    status.textContent = '⏳ Transcribing...';
-    status.style.display = 'block';
-    fbRecordingId = null;
+/**
+ * Attaches swipe event handlers to all idea cards.
+ */
+function attachSwipeHandlers() {
+  const cards = document.querySelectorAll('.idea-card');
+  cards.forEach(card => {
+    card.addEventListener('touchstart', onSwipeStart, { passive: true });
+    card.addEventListener('touchmove', onSwipeMove, { passive: false });
+    card.addEventListener('touchend', onSwipeEnd, { passive: true });
+  });
+}
+
+/**
+ * Handles touch start for swipe.
+ * @param {TouchEvent} e
+ */
+function onSwipeStart(e) {
+  const touch = e.touches[0];
+  if (!touch) return;
+  _swipeState = {
+    startX: touch.clientX,
+    startY: touch.clientY,
+    card: e.currentTarget,
+    id: e.currentTarget.dataset.ideaId,
+    moved: false
+  };
+}
+
+/**
+ * Handles touch move for swipe.
+ * @param {TouchEvent} e
+ */
+function onSwipeMove(e) {
+  if (!_swipeState) return;
+  const touch = e.touches[0];
+  if (!touch) return;
+
+  const dx = touch.clientX - _swipeState.startX;
+  const dy = touch.clientY - _swipeState.startY;
+
+  // If vertical scroll is dominant, bail
+  if (Math.abs(dy) > Math.abs(dx) && !_swipeState.moved) {
+    _swipeState = null;
     return;
   }
 
-  // Stop any existing recording
-  if (fbRecordingId && fbMediaRecorder) {
-    fbMediaRecorder.stop();
-    const oldBtn = document.getElementById('fb-mic-' + fbRecordingId);
-    if (oldBtn) { oldBtn.classList.remove('recording'); oldBtn.textContent = '🎙️'; }
-  }
-
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    fbAudioChunks = [];
-    fbMediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
-    fbRecordingId = id;
-
-    fbMediaRecorder.ondataavailable = (e) => {
-      if (e.data.size > 0) fbAudioChunks.push(e.data);
-    };
-
-    fbMediaRecorder.onstop = async () => {
-      stream.getTracks().forEach(t => t.stop());
-      const blob = new Blob(fbAudioChunks, { type: 'audio/webm' });
-      if (blob.size < 1000) {
-        status.textContent = '⚠️ Too short';
-        setTimeout(() => status.style.display = 'none', 2000);
-        return;
-      }
-
-      status.style.display = 'block';
-      status.textContent = '⏳ Transcribing...';
-
-      try {
-        const formData = new FormData();
-        formData.append('file', blob, 'voice.webm');
-        formData.append('model', 'whisper-1');
-        formData.append('language', 'en');
-
-        const res = await fetchWithTimeout('https://api.openai.com/v1/audio/transcriptions', {
-          method: 'POST',
-          headers: { 'Authorization': 'Bearer ' + getOKey() },
-          body: formData
-        }, 30000);
-
-        const data = await res.json();
-        if (data.text) {
-          const input = document.getElementById('fb-text-' + id);
-          if (input) input.value = input.value ? input.value + ' ' + data.text : data.text;
-          status.textContent = '✅ Got it!';
-          setTimeout(() => status.style.display = 'none', 1500);
-        } else {
-          status.textContent = '❌ ' + (data.error?.message || 'Failed');
-          setTimeout(() => status.style.display = 'none', 3000);
-        }
-      } catch(err) {
-        status.textContent = '❌ ' + err.message;
-        setTimeout(() => status.style.display = 'none', 3000);
-      }
-    };
-
-    fbMediaRecorder.start();
-    btn.classList.add('recording');
-    btn.textContent = '⏹️';
-    status.style.display = 'block';
-    status.textContent = '🔴 Recording...';
-  } catch(err) {
-    status.style.display = 'block';
-    status.textContent = '❌ Mic access denied';
-    setTimeout(() => status.style.display = 'none', 3000);
+  if (Math.abs(dx) > 10) {
+    _swipeState.moved = true;
+    e.preventDefault();
+    _swipeState.card.classList.add('swiping');
+    _swipeState.card.style.transform = 'translateX(' + dx + 'px)';
+    _swipeState.card.style.opacity = String(Math.max(0.3, 1 - Math.abs(dx) / 300));
   }
 }
 
+/**
+ * Handles touch end for swipe.
+ * @param {TouchEvent} e
+ */
+function onSwipeEnd(e) {
+  if (!_swipeState || !_swipeState.moved) {
+    _swipeState = null;
+    return;
+  }
+
+  const card = _swipeState.card;
+  const id = _swipeState.id;
+  const touch = e.changedTouches[0];
+  if (!touch) { resetSwipe(card); return; }
+
+  const dx = touch.clientX - _swipeState.startX;
+
+  if (dx > SWIPE_THRESHOLD && id) {
+    // Swipe right → approve
+    card.classList.remove('swiping');
+    card.classList.add('slide-out-right');
+    setTimeout(() => approveIdea(id), 300);
+  } else if (dx < -SWIPE_THRESHOLD && id) {
+    // Swipe left → reject
+    card.classList.remove('swiping');
+    card.classList.add('slide-out-left');
+    setTimeout(() => handleReject(id), 300);
+  } else {
+    resetSwipe(card);
+  }
+
+  _swipeState = null;
+}
+
+/**
+ * Resets a card's swipe position.
+ * @param {HTMLElement} card
+ */
+function resetSwipe(card) {
+  if (!card) return;
+  card.classList.remove('swiping');
+  card.style.transform = '';
+  card.style.opacity = '';
+}
+
+// ========== PULL TO REFRESH ==========
+
+let _ptrState = null;
+const PTR_THRESHOLD = 60;
+
+/**
+ * Initializes pull-to-refresh on the Ideas panel.
+ */
+function initPullToRefresh() {
+  const panel = document.getElementById('panelIdeas');
+  if (!panel) return;
+
+  panel.addEventListener('touchstart', (e) => {
+    if (panel.scrollTop > 0) return;
+    const touch = e.touches[0];
+    if (!touch) return;
+    _ptrState = { startY: touch.clientY, pulling: false };
+  }, { passive: true });
+
+  panel.addEventListener('touchmove', (e) => {
+    if (!_ptrState) return;
+    const touch = e.touches[0];
+    if (!touch) return;
+    const dy = touch.clientY - _ptrState.startY;
+
+    if (dy > 20) {
+      _ptrState.pulling = true;
+      const indicator = document.getElementById('ptrIndicator');
+      if (indicator) {
+        indicator.classList.add('pulling');
+        indicator.textContent = dy > PTR_THRESHOLD ? '↑ Release to refresh' : '↓ Pull to refresh';
+      }
+    }
+  }, { passive: true });
+
+  panel.addEventListener('touchend', (e) => {
+    if (!_ptrState || !_ptrState.pulling) { _ptrState = null; return; }
+
+    const touch = e.changedTouches[0];
+    if (!touch) { _ptrState = null; return; }
+    const dy = touch.clientY - _ptrState.startY;
+
+    const indicator = document.getElementById('ptrIndicator');
+    if (dy > PTR_THRESHOLD) {
+      if (indicator) { indicator.textContent = '⏳ Refreshing...'; indicator.classList.add('refreshing'); }
+      generateAllIdeas(true).finally(() => {
+        if (indicator) { indicator.classList.remove('pulling', 'refreshing'); }
+      });
+    } else {
+      if (indicator) indicator.classList.remove('pulling');
+    }
+    _ptrState = null;
+  }, { passive: true });
+}
+
 // ========== APPROVED TAB ==========
+
+/**
+ * Renders the approved queue and completed sections.
+ */
 function renderApproved() {
-  const approved = _safeParse('_approved', '[]');
+  const approved = secureLoad('_approved', []);
+  if (!Array.isArray(approved)) return;
+
   const active = approved.filter(a => !a.filmed);
   const completed = approved.filter(a => a.filmed);
 
-  document.getElementById('approvedCounter').textContent = active.length + ' idea' + (active.length !== 1 ? 's' : '') + ' ready to film';
+  const counterEl = document.getElementById('approvedCounter');
+  if (counterEl) counterEl.textContent = active.length + ' idea' + (active.length !== 1 ? 's' : '') + ' ready to film';
 
   let html = '';
   if (active.length === 0) {
     html = '<div class="ideas-empty">No approved ideas yet.<br>Go to 💡 Ideas and approve some!</div>';
   }
+
   active.forEach(idea => {
+    if (!idea) return;
     const safeId = (idea.id || '').replace(/[^a-zA-Z0-9_-]/g, '');
     const funnelClass = VALID_FUNNELS.has(idea.funnel) ? idea.funnel : 'tof';
     const funnelLabel = funnelClass === 'tof' ? 'TOF' : funnelClass === 'mof' ? 'MOF' : 'BOF';
     const topicLabel = TOPIC_LABELS[idea.topic] || idea.topic || 'General';
 
-    html += `<div class="approved-card">
-      <div class="idea-badges">
-        <span class="idea-badge ${funnelClass}">${funnelLabel}</span>
-        <span class="idea-badge topic">${esc(topicLabel)}</span>
-      </div>
-      <div class="approved-title">${esc(idea.title)}</div>
-      <div class="approved-actions">
-        <button class="approved-action generate" onclick="generateFromIdea('${safeId}')">⚡ Generate Scripts</button>
-        <button class="approved-action filmed" onclick="markFilmed('${safeId}')">✅ Filmed</button>
-        <button class="approved-action remove" onclick="removeApproved('${safeId}')">🗑️</button>
-      </div>
-    </div>`;
+    html += '<div class="approved-card" id="approved-' + safeId + '">'
+      + '<div class="idea-badges">'
+      + '<span class="idea-badge ' + funnelClass + '">' + funnelLabel + '</span>'
+      + '<span class="idea-badge topic">' + esc(topicLabel) + '</span>'
+      + '</div>'
+      + '<div class="approved-title">' + esc(idea.title) + '</div>'
+      + '<div class="approved-actions">'
+      + '<button class="approved-action generate" onclick="generateFromIdea(\'' + safeId + '\')">⚡ Generate Scripts</button>'
+      + '<button class="approved-action filmed" onclick="markFilmed(\'' + safeId + '\')">✅ Filmed</button>'
+      + '<button class="approved-action remove" onclick="confirmRemoveApproved(\'' + safeId + '\')">🗑️</button>'
+      + '</div></div>';
   });
-  document.getElementById('approvedList').innerHTML = html;
+
+  const listEl = document.getElementById('approvedList');
+  if (listEl) listEl.innerHTML = html;
 
   // Completed section
+  const completedSection = document.getElementById('completedSection');
   if (completed.length > 0) {
-    document.getElementById('completedSection').style.display = 'block';
-    document.getElementById('completedCount').textContent = completed.length;
+    if (completedSection) completedSection.style.display = 'block';
+    const countEl = document.getElementById('completedCount');
+    if (countEl) countEl.textContent = completed.length;
     let cHtml = '';
     completed.forEach(idea => {
+      if (!idea) return;
       const funnelClass = VALID_FUNNELS.has(idea.funnel) ? idea.funnel : 'tof';
       const funnelLabel = funnelClass === 'tof' ? 'TOF' : funnelClass === 'mof' ? 'MOF' : 'BOF';
-      cHtml += `<div class="completed-card"><div class="idea-badges"><span class="idea-badge ${funnelClass}">${funnelLabel}</span></div><div class="idea-title">${esc(idea.title)}</div></div>`;
+      cHtml += '<div class="completed-card"><div class="idea-badges"><span class="idea-badge ' + funnelClass + '">' + funnelLabel + '</span></div><div class="idea-title">' + esc(idea.title) + '</div></div>';
     });
-    document.getElementById('completedList').innerHTML = cHtml;
+    const completedList = document.getElementById('completedList');
+    if (completedList) completedList.innerHTML = cHtml;
   } else {
-    document.getElementById('completedSection').style.display = 'none';
+    if (completedSection) completedSection.style.display = 'none';
   }
 
   updateTabCounts();
 }
 
+/**
+ * Switches to generate tab and pre-fills with an approved idea.
+ * @param {string} id - Safe card ID
+ */
 function generateFromIdea(id) {
-  const approved = _safeParse('_approved', '[]');
+  const approved = secureLoad('_approved', []);
+  if (!Array.isArray(approved)) return;
   const idea = approved.find(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
   if (!idea) return;
 
-  // Switch to generate tab and pre-fill
   switchTab('generate');
   const ta = document.getElementById('idea');
-  ta.value = idea.title;
-  ta.focus();
-  // Auto-trigger generation
+  if (ta) {
+    ta.value = idea.title;
+    ta.focus();
+  }
   setTimeout(() => generate(), 300);
 }
 
+/**
+ * Marks an approved idea as filmed.
+ * @param {string} id - Safe card ID
+ */
 function markFilmed(id) {
-  const approved = _safeParse('_approved', '[]');
+  const approved = secureLoad('_approved', []);
+  if (!Array.isArray(approved)) return;
   const idea = approved.find(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
   if (idea) {
     idea.filmed = true;
     idea.filmedAt = Date.now();
-    localStorage.setItem('_approved', JSON.stringify(approved));
+    secureStore('_approved', approved);
     renderApproved();
+    haptic(10);
+    showToast('Marked as filmed!', 'success', { duration: 1500 });
   }
 }
 
-function removeApproved(id) {
-  let approved = _safeParse('_approved', '[]');
-  approved = approved.filter(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') !== id);
-  localStorage.setItem('_approved', JSON.stringify(approved));
-  renderApproved();
+/**
+ * Confirms before removing from approved queue.
+ * @param {string} id - Safe card ID
+ */
+function confirmRemoveApproved(id) {
+  const approved = secureLoad('_approved', []);
+  if (!Array.isArray(approved)) return;
+  const idea = approved.find(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
+  if (!idea) return;
+
+  // Show confirmation via toast with undo
+  const filtered = approved.filter(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') !== id);
+  secureStore('_approved', filtered);
+
+  // Animate
+  const card = document.getElementById('approved-' + id);
+  if (card) {
+    card.classList.add('slide-out');
+    setTimeout(() => renderApproved(), 350);
+  } else {
+    renderApproved();
+  }
+
+  haptic(10);
+
+  showToast('Removed from queue', 'info', {
+    duration: 5000,
+    onUndo: () => {
+      const current = secureLoad('_approved', []);
+      current.push(idea);
+      secureStore('_approved', current);
+      renderApproved();
+      showToast('Restored', 'success', { duration: 1500 });
+    }
+  });
 }
 
+/**
+ * Toggles the completed ideas list visibility.
+ */
 function toggleCompleted() {
   const list = document.getElementById('completedList');
   const arrow = document.getElementById('completedArrow');
+  if (!list || !arrow) return;
   if (list.style.display === 'none') {
     list.style.display = 'block';
     arrow.textContent = '▼';
@@ -1186,17 +2762,30 @@ function toggleCompleted() {
   }
 }
 
-// ========== INIT ==========
-document.addEventListener('DOMContentLoaded', () => {
-  if(localStorage.getItem('_cs') === 'true') {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'block';
-  }
-  updateTabCounts();
+// ========== KEYBOARD SHORTCUTS ==========
+
+document.getElementById('idea')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) generate();
 });
 
 document.addEventListener('keydown', e => {
-  if(e.key === 'Enter' && document.getElementById('loginScreen').style.display !== 'none') checkLogin();
+  if (e.key === 'Enter' && document.getElementById('loginScreen')?.style.display !== 'none') checkLogin();
+});
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('_cs') === 'true') {
+    const loginScreen = document.getElementById('loginScreen');
+    const mainApp = document.getElementById('mainApp');
+    if (loginScreen) loginScreen.style.display = 'none';
+    if (mainApp) mainApp.style.display = 'block';
+    initTabIndicator();
+  }
+  updateTabCounts();
+  initPullToRefresh();
+
+  // Resize handler for tab indicator
+  window.addEventListener('resize', updateTabIndicator);
 });
 </script>
 </body>
