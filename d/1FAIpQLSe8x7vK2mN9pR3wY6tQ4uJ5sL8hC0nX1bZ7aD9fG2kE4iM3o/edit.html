@@ -534,8 +534,16 @@ function simpleHash(str) {
 function secureStore(key, data) {
   const json = JSON.stringify(data);
   const hash = simpleHash(json);
-  localStorage.setItem(key, json);
-  localStorage.setItem(key + '_h', String(hash));
+  try {
+    localStorage.setItem(key, json);
+    localStorage.setItem(key + '_h', String(hash));
+  } catch(e) {
+    if (e.name === 'QuotaExceededError' || e.code === 22) {
+      showToast('Storage full — clearing old data...', 'error');
+      try { localStorage.removeItem('_feedback'); localStorage.removeItem('_scriptRatings'); localStorage.removeItem('_scriptCopies'); } catch(_){}
+      try { localStorage.setItem(key, json); localStorage.setItem(key + '_h', String(hash)); } catch(_) { showToast('Storage still full. Clear browser data.', 'error'); }
+    }
+  }
 }
 
 /**
