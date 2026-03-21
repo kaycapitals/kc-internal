@@ -53,6 +53,80 @@ textarea::placeholder{color:#444}
   textarea{font-size:15px;padding:12px}
   .gen-btn{padding:12px;font-size:14px}
 }
+
+/* Tab Navigation */
+.tab-bar{display:flex;gap:0;border-bottom:1px solid #222;margin-bottom:20px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab-btn{flex:1;padding:14px 8px;background:none;border:none;color:#555;font-size:14px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;min-width:0;text-align:center}
+.tab-btn.active{color:#d4a843;border-bottom-color:#d4a843}
+.tab-btn:hover{color:#888}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* Idea Cards */
+.funnel-section{margin-bottom:24px}
+.funnel-hdr{font-size:16px;font-weight:700;margin-bottom:12px;padding:10px 14px;border-radius:10px;display:flex;align-items:center;gap:8px}
+.funnel-hdr.tof{background:#1a0808;color:#cc2222;border:1px solid #331111}
+.funnel-hdr.mof{background:#1a1508;color:#d4a843;border:1px solid #332a11}
+.funnel-hdr.bof{background:#081a0c;color:#22aa44;border:1px solid #113322}
+
+.idea-card{background:#111;border:1px solid #222;border-radius:12px;padding:14px;margin-bottom:10px;position:relative}
+.idea-card.replacing{opacity:.5;pointer-events:none}
+.idea-badges{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.idea-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.5px}
+.idea-badge.tof{background:#cc2222;color:#fff}
+.idea-badge.mof{background:#d4a843;color:#000}
+.idea-badge.bof{background:#22aa44;color:#fff}
+.idea-badge.topic{background:#222;color:#999}
+.idea-title{color:#fff;font-size:15px;font-weight:600;line-height:1.4;margin-bottom:8px}
+.idea-preview{display:none;color:#999;font-size:13px;line-height:1.5;padding:10px;background:#0a0a0a;border-radius:8px;margin-bottom:8px}
+.idea-preview.show{display:block}
+.idea-toggle{background:none;border:none;color:#555;font-size:12px;cursor:pointer;padding:4px 0;margin-bottom:6px}
+.idea-toggle:hover{color:#888}
+.idea-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.idea-action{padding:8px 12px;border-radius:8px;border:1px solid #222;background:#0a0a0a;color:#fff;font-size:13px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:4px}
+.idea-action:hover{border-color:#444}
+.idea-action.approve{border-color:#22aa44}
+.idea-action.approve:hover{background:#0a1a0f}
+.idea-action.reject{border-color:#cc2222}
+.idea-action.reject:hover{background:#1a0a0a}
+.idea-action.refresh{border-color:#555}
+
+/* Reject Feedback Form */
+.reject-form{display:none;padding:12px;background:#0a0a0a;border-radius:10px;margin-top:8px;border:1px solid #1a1111}
+.reject-form.show{display:block}
+.reject-form select{width:100%;padding:10px;border-radius:8px;border:1px solid #222;background:#111;color:#fff;font-size:14px;margin-bottom:8px;outline:none}
+.reject-form .fb-row{display:flex;gap:6px}
+.reject-form input{flex:1;padding:10px;border-radius:8px;border:1px solid #222;background:#111;color:#fff;font-size:14px;outline:none}
+.reject-form .fb-mic{width:40px;height:40px;border-radius:50%;border:2px solid #333;background:#111;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.reject-form .fb-mic.recording{background:#cc2222;border-color:#cc2222}
+.reject-form .fb-submit{width:100%;padding:10px;border-radius:8px;border:none;background:#cc2222;color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px}
+
+/* Approved Queue */
+.approved-counter{text-align:center;padding:16px;color:#d4a843;font-size:18px;font-weight:700;margin-bottom:16px}
+.approved-card{background:#111;border:1px solid #222;border-radius:12px;padding:14px;margin-bottom:10px;display:flex;flex-direction:column;gap:10px}
+.approved-title{color:#fff;font-size:15px;font-weight:600;line-height:1.4}
+.approved-actions{display:flex;gap:6px;flex-wrap:wrap}
+.approved-action{padding:8px 14px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.approved-action.generate{background:#d4a843;color:#000}
+.approved-action.remove{background:none;border:1px solid #cc2222;color:#cc2222}
+.approved-action.filmed{background:none;border:1px solid #22aa44;color:#22aa44}
+.completed-section{margin-top:24px;border-top:1px solid #222;padding-top:16px}
+.completed-toggle{background:none;border:none;color:#555;font-size:13px;cursor:pointer;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.completed-card{background:#0a0a0a;border:1px solid #1a1a1a;border-radius:10px;padding:12px;margin-bottom:8px;opacity:.6}
+.completed-card .idea-title{font-size:13px;color:#666}
+
+/* Loading overlay for ideas */
+.ideas-loading{text-align:center;padding:60px 20px}
+.ideas-loading .spinner{width:40px;height:40px;border:3px solid #222;border-top-color:#d4a843;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ideas-loading p{color:#555;font-size:14px}
+.ideas-empty{text-align:center;padding:40px 20px;color:#444;font-size:14px}
+
+@media(max-width:600px){
+  .tab-btn{font-size:13px;padding:12px 4px}
+  .idea-actions{gap:4px}
+  .idea-action{padding:6px 10px;font-size:12px}
+}
 </style>
 </head>
 <body>
@@ -80,19 +154,52 @@ textarea::placeholder{color:#444}
     <button onclick="localStorage.removeItem('_cs');location.reload()" style="background:none;border:none;color:#333;font-size:11px;cursor:pointer;margin-top:8px">Log out</button>
   </div>
 
-  <div class="input-wrap">
-    <div style="position:relative">
-      <textarea id="idea" rows="3" placeholder="Drop your idea here or tap the mic to speak..." style="padding-right:56px"></textarea>
-      <button id="micBtn" onclick="toggleMic()" style="position:absolute;right:12px;top:12px;width:40px;height:40px;border-radius:50%;border:2px solid #333;background:#111;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s">🎙️</button>
-    </div>
-    <div id="micStatus" style="display:none;text-align:center;padding:8px;color:#d4a843;font-size:13px"></div>
-    <div class="btn-row">
-      <button class="gen-btn" id="genBtn" onclick="generate()">⚡ Generate Scripts</button>
-    </div>
-    <div class="hint">⌘+Enter to generate · tap mic to speak</div>
+  <!-- Tab Navigation -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('generate')" id="tabGenerate">⚡ Generate</button>
+    <button class="tab-btn" onclick="switchTab('ideas')" id="tabIdeas">💡 Ideas <span id="ideasCount">(0)</span></button>
+    <button class="tab-btn" onclick="switchTab('approved')" id="tabApproved">✅ Approved <span id="approvedCount">(0)</span></button>
   </div>
 
-  <div id="output"></div>
+  <!-- Tab 1: Generate (existing) -->
+  <div class="tab-panel active" id="panelGenerate">
+    <div class="input-wrap">
+      <div style="position:relative">
+        <textarea id="idea" rows="3" placeholder="Drop your idea here or tap the mic to speak..." style="padding-right:56px"></textarea>
+        <button id="micBtn" onclick="toggleMic()" style="position:absolute;right:12px;top:12px;width:40px;height:40px;border-radius:50%;border:2px solid #333;background:#111;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s">🎙️</button>
+      </div>
+      <div id="micStatus" style="display:none;text-align:center;padding:8px;color:#d4a843;font-size:13px"></div>
+      <div class="btn-row">
+        <button class="gen-btn" id="genBtn" onclick="generate()">⚡ Generate Scripts</button>
+      </div>
+      <div class="hint">⌘+Enter to generate · tap mic to speak</div>
+    </div>
+    <div id="output"></div>
+  </div>
+
+  <!-- Tab 2: Daily Ideas -->
+  <div class="tab-panel" id="panelIdeas">
+    <div id="ideasContent">
+      <div class="ideas-empty">Tap to load today's ideas</div>
+    </div>
+    <div style="text-align:center;margin-top:16px">
+      <button class="gen-btn" onclick="generateAllIdeas(true)" id="refreshAllBtn" style="max-width:300px">🔄 Generate Fresh Ideas</button>
+      <div class="hint" style="margin-top:8px" id="ideasAge"></div>
+    </div>
+  </div>
+
+  <!-- Tab 3: Approved Queue -->
+  <div class="tab-panel" id="panelApproved">
+    <div class="approved-counter" id="approvedCounter">0 ideas ready to film</div>
+    <div id="approvedList"></div>
+    <div class="completed-section" id="completedSection" style="display:none">
+      <button class="completed-toggle" onclick="toggleCompleted()">
+        <span id="completedArrow">▶</span> Completed (<span id="completedCount">0</span>)
+      </button>
+      <div id="completedList" style="display:none"></div>
+    </div>
+  </div>
+
 </div>
 </div>
 
@@ -408,11 +515,592 @@ function checkLogin() {
   }
 }
 
+// ========== TAB SYSTEM ==========
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+  document.getElementById('panel' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+
+  if (tab === 'ideas') {
+    loadIdeasTab();
+  } else if (tab === 'approved') {
+    renderApproved();
+  }
+  updateTabCounts();
+}
+
+function updateTabCounts() {
+  const ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
+  const approved = JSON.parse(localStorage.getItem('_approved') || '[]');
+  document.getElementById('ideasCount').textContent = '(' + ideas.length + ')';
+  document.getElementById('approvedCount').textContent = '(' + approved.filter(a => !a.filmed).length + ')';
+}
+
+// ========== IDEAS TAB ==========
+const IDEAS_STALE_MS = 20 * 60 * 60 * 1000; // 20 hours
+
+const IDEAS_SYSTEM_PROMPT = `You are a content strategist for Somesh (Kay Capitals) — a day trading educator with 1M+ Instagram followers who runs a $3K mentorship program (KCU).
+
+Generate 30 Instagram reel content ideas: 10 for each funnel stage.
+
+TOP OF FUNNEL (10): Goal is REACH. Cold audience. These people don't know Somesh yet.
+- 3-4 news/controversy (current events, market news, controversial opinions)
+- 2-3 relatable/emotional (things every aspiring trader feels)
+- 2-3 lifestyle/family (flex, personal life, behind-the-scenes)
+Ideas must be SPECIFIC and TIMELY, not generic.
+
+MIDDLE OF FUNNEL (10): Goal is ENGAGEMENT. Warm audience who already follows.
+- 3-4 strategy/education (specific trading concepts, chart patterns, setups)
+- 3-4 psychology/mindset (discipline, emotions, revenge trading, consistency)
+- 2-3 personal stories (his journey, lessons, failures, wins)
+
+BOTTOM OF FUNNEL (10): Goal is CONVERSION. Hot audience ready to buy.
+- 3-4 social proof (student wins, transformations, testimonials)
+- 3-4 direct CTA (why join KCU, what happens inside, the cost of NOT joining)
+- 2-3 community/inside content (insider moments, wins celebrations, "you know you're in KCU when")
+
+TASTE PROFILE (what Somesh likes/rejects):
+{taste_profile}
+
+TRENDING CONTEXT:
+{trending_context}
+
+Return ONLY valid JSON in this format:
+{"ideas":[{"id":"unique_id","funnel":"tof","topic":"trading","title":"The specific idea title","preview":"2-3 sentence script preview","tags":["tag1","tag2"]}]}
+
+Each idea MUST have: id (unique string), funnel (tof/mof/bof), topic (trading/psychology/family/lifestyle/news/student_story), title, preview, tags array.
+Ideas must be SPECIFIC not generic. "Trump's new tariff just killed tech stocks — here's how day traders are eating" NOT "something about the economy".
+Include non-trading ideas: family moments, lifestyle flex, behind-the-scenes, wife/dad content.`;
+
+function loadIdeasTab() {
+  const ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
+  const ts = parseInt(localStorage.getItem('_ideas_ts') || '0');
+  const age = Date.now() - ts;
+
+  if (ideas.length === 0 || age > IDEAS_STALE_MS) {
+    generateAllIdeas(false);
+  } else {
+    renderIdeas(ideas);
+    updateIdeasAge(ts);
+  }
+}
+
+function updateIdeasAge(ts) {
+  if (!ts) { document.getElementById('ideasAge').textContent = ''; return; }
+  const hrs = Math.floor((Date.now() - ts) / 3600000);
+  const mins = Math.floor((Date.now() - ts) / 60000) % 60;
+  document.getElementById('ideasAge').textContent = hrs > 0 ? `Generated ${hrs}h ${mins}m ago` : `Generated ${mins}m ago`;
+}
+
+function getTasteProfile() {
+  const taste = JSON.parse(localStorage.getItem('_taste') || '{"liked_topics":[],"rejected_topics":[],"liked_funnels":{"tof":0,"mof":0,"bof":0},"rejected_reasons":[],"notes":[]}');
+  if (!taste.liked_topics) taste.liked_topics = [];
+  if (!taste.rejected_topics) taste.rejected_topics = [];
+  if (!taste.liked_funnels) taste.liked_funnels = {tof:0,mof:0,bof:0};
+  if (!taste.rejected_reasons) taste.rejected_reasons = [];
+  if (!taste.notes) taste.notes = [];
+  return taste;
+}
+
+function saveTasteProfile(taste) {
+  localStorage.setItem('_taste', JSON.stringify(taste));
+}
+
+async function fetchTrendingContext() {
+  try {
+    const queries = ['stock market news today', 'trading trending topics', 'day trading social media'];
+    const results = await Promise.all(queries.map(q => searchBrain(q, 3)));
+    const all = results.flat();
+    if (all.length === 0) return 'No trending context available — use general market awareness.';
+    return all.map(r => r.text).join('\n\n');
+  } catch(e) {
+    return 'No trending context available — use general market awareness.';
+  }
+}
+
+async function generateAllIdeas(force) {
+  const container = document.getElementById('ideasContent');
+  const btn = document.getElementById('refreshAllBtn');
+  btn.disabled = true;
+  btn.textContent = '🧠 Searching brain for trends...';
+  container.innerHTML = '<div class="ideas-loading"><div class="spinner"></div><p>Searching brain for trending context...</p></div>';
+
+  const taste = getTasteProfile();
+  const tasteStr = JSON.stringify(taste, null, 2);
+  const trending = await fetchTrendingContext();
+
+  btn.textContent = '⏳ Generating 30 ideas...';
+  container.innerHTML = '<div class="ideas-loading"><div class="spinner"></div><p>Generating 30 fresh ideas in 3 funnel stages...</p></div>';
+
+  const prompt = IDEAS_SYSTEM_PROMPT
+    .replace('{taste_profile}', tasteStr)
+    .replace('{trending_context}', trending);
+
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': getKey(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system: prompt,
+        messages: [{role: 'user', content: 'Generate 30 fresh content ideas for today. Be SPECIFIC and TIMELY. Return valid JSON only.'}]
+      })
+    });
+
+    const data = await r.json();
+    if (data.error) throw new Error(data.error.message);
+
+    const txt = data.content[0].text;
+    let parsed;
+    try {
+      const m = txt.match(/\{[\s\S]*"ideas"[\s\S]*\}/);
+      parsed = m ? JSON.parse(m[0]) : null;
+    } catch(e) { parsed = null; }
+
+    if (parsed?.ideas && parsed.ideas.length > 0) {
+      // Ensure unique IDs
+      parsed.ideas.forEach((idea, i) => {
+        if (!idea.id) idea.id = 'idea_' + Date.now() + '_' + i;
+      });
+      localStorage.setItem('_ideas', JSON.stringify(parsed.ideas));
+      localStorage.setItem('_ideas_ts', String(Date.now()));
+      renderIdeas(parsed.ideas);
+      updateIdeasAge(Date.now());
+      updateTabCounts();
+    } else {
+      container.innerHTML = '<div class="error">Failed to parse ideas. Raw response:<br><pre style="white-space:pre-wrap;font-size:12px;color:#888;margin-top:8px">' + esc(txt.substring(0, 500)) + '</pre></div>';
+    }
+  } catch(e) {
+    container.innerHTML = '<div class="error">❌ ' + esc(e.message) + '</div>';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🔄 Generate Fresh Ideas';
+  }
+}
+
+function renderIdeas(ideas) {
+  const container = document.getElementById('ideasContent');
+  const tof = ideas.filter(i => i.funnel === 'tof');
+  const mof = ideas.filter(i => i.funnel === 'mof');
+  const bof = ideas.filter(i => i.funnel === 'bof');
+
+  let html = '';
+
+  // TOF Section
+  html += '<div class="funnel-section"><div class="funnel-hdr tof">🔴 TOP OF FUNNEL — Reach & Traffic (' + tof.length + ')</div>';
+  tof.forEach(idea => { html += renderIdeaCard(idea); });
+  html += '</div>';
+
+  // MOF Section
+  html += '<div class="funnel-section"><div class="funnel-hdr mof">🟡 MIDDLE OF FUNNEL — Engagement (' + mof.length + ')</div>';
+  mof.forEach(idea => { html += renderIdeaCard(idea); });
+  html += '</div>';
+
+  // BOF Section
+  html += '<div class="funnel-section"><div class="funnel-hdr bof">🟢 BOTTOM OF FUNNEL — Convert (' + bof.length + ')</div>';
+  bof.forEach(idea => { html += renderIdeaCard(idea); });
+  html += '</div>';
+
+  container.innerHTML = html;
+}
+
+const TOPIC_LABELS = {trading:'Trading',psychology:'Psychology',family:'Family',lifestyle:'Lifestyle',news:'News',student_story:'Student Story'};
+
+function renderIdeaCard(idea) {
+  const funnelClass = idea.funnel || 'tof';
+  const funnelLabel = funnelClass === 'tof' ? 'TOF' : funnelClass === 'mof' ? 'MOF' : 'BOF';
+  const topicLabel = TOPIC_LABELS[idea.topic] || idea.topic || 'General';
+  const safeId = (idea.id || '').replace(/[^a-zA-Z0-9_-]/g, '');
+
+  return `<div class="idea-card" id="card-${safeId}">
+    <div class="idea-badges">
+      <span class="idea-badge ${funnelClass}">${funnelLabel}</span>
+      <span class="idea-badge topic">${esc(topicLabel)}</span>
+    </div>
+    <div class="idea-title">${esc(idea.title)}</div>
+    <button class="idea-toggle" onclick="togglePreview('${safeId}')">▶ Preview</button>
+    <div class="idea-preview" id="preview-${safeId}">${esc(idea.preview || '')}</div>
+    <div class="idea-actions">
+      <button class="idea-action approve" onclick="approveIdea('${safeId}')">✅</button>
+      <button class="idea-action reject" onclick="showRejectForm('${safeId}')">❌</button>
+      <button class="idea-action refresh" onclick="refreshIdea('${safeId}')">🔄</button>
+    </div>
+    <div class="reject-form" id="reject-${safeId}">
+      <select id="reason-${safeId}">
+        <option value="">Why not?</option>
+        <option value="done_before">Done before</option>
+        <option value="boring">Boring</option>
+        <option value="not_my_style">Not my style</option>
+        <option value="wrong_timing">Wrong timing</option>
+        <option value="too_generic">Too generic</option>
+        <option value="other">Other</option>
+      </select>
+      <div class="fb-row">
+        <input type="text" id="fb-text-${safeId}" placeholder="Optional feedback...">
+        <button class="fb-mic" id="fb-mic-${safeId}" onclick="toggleFbMic('${safeId}')">🎙️</button>
+      </div>
+      <div id="fb-mic-status-${safeId}" style="display:none;text-align:center;padding:4px;color:#d4a843;font-size:12px;margin-top:4px"></div>
+      <button class="fb-submit" onclick="submitReject('${safeId}')">Reject & Replace</button>
+    </div>
+  </div>`;
+}
+
+function togglePreview(id) {
+  const el = document.getElementById('preview-' + id);
+  const btn = el?.previousElementSibling;
+  if (el) {
+    el.classList.toggle('show');
+    if (btn) btn.textContent = el.classList.contains('show') ? '▼ Preview' : '▶ Preview';
+  }
+}
+
+function getIdeaById(id) {
+  const ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
+  return ideas.find(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
+}
+
+function approveIdea(id) {
+  const ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
+  const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
+  if (idx === -1) return;
+
+  const idea = ideas[idx];
+  ideas.splice(idx, 1);
+  localStorage.setItem('_ideas', JSON.stringify(ideas));
+
+  // Add to approved
+  const approved = JSON.parse(localStorage.getItem('_approved') || '[]');
+  idea.approvedAt = Date.now();
+  idea.filmed = false;
+  approved.unshift(idea);
+  localStorage.setItem('_approved', JSON.stringify(approved));
+
+  // Update taste
+  const taste = getTasteProfile();
+  taste.liked_topics.push(idea.topic);
+  if (taste.liked_funnels[idea.funnel] !== undefined) taste.liked_funnels[idea.funnel]++;
+  // Keep last 50
+  if (taste.liked_topics.length > 50) taste.liked_topics = taste.liked_topics.slice(-50);
+  saveTasteProfile(taste);
+
+  // Animate removal
+  const card = document.getElementById('card-' + id);
+  if (card) {
+    card.style.transition = 'all .3s';
+    card.style.opacity = '0';
+    card.style.transform = 'translateX(100px)';
+    setTimeout(() => { renderIdeas(ideas); updateTabCounts(); }, 300);
+  } else {
+    renderIdeas(ideas);
+    updateTabCounts();
+  }
+}
+
+function showRejectForm(id) {
+  const form = document.getElementById('reject-' + id);
+  if (form) form.classList.toggle('show');
+}
+
+async function submitReject(id) {
+  const ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
+  const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
+  if (idx === -1) return;
+
+  const idea = ideas[idx];
+  const reason = document.getElementById('reason-' + id)?.value || '';
+  const text = document.getElementById('fb-text-' + id)?.value || '';
+
+  // Save feedback
+  const feedback = JSON.parse(localStorage.getItem('_feedback') || '[]');
+  feedback.push({ ideaId: idea.id, title: idea.title, funnel: idea.funnel, topic: idea.topic, reason, text, ts: Date.now() });
+  localStorage.setItem('_feedback', JSON.stringify(feedback));
+
+  // Update taste
+  const taste = getTasteProfile();
+  taste.rejected_topics.push(idea.topic);
+  if (reason) taste.rejected_reasons.push(reason);
+  if (text) taste.notes.push(text);
+  if (taste.rejected_topics.length > 50) taste.rejected_topics = taste.rejected_topics.slice(-50);
+  if (taste.rejected_reasons.length > 50) taste.rejected_reasons = taste.rejected_reasons.slice(-50);
+  if (taste.notes.length > 30) taste.notes = taste.notes.slice(-30);
+  saveTasteProfile(taste);
+
+  // Replace with new idea
+  const card = document.getElementById('card-' + id);
+  if (card) card.classList.add('replacing');
+
+  try {
+    const newIdea = await generateOneIdea(idea.funnel);
+    if (newIdea) {
+      ideas[idx] = newIdea;
+    } else {
+      ideas.splice(idx, 1);
+    }
+  } catch(e) {
+    ideas.splice(idx, 1);
+  }
+
+  localStorage.setItem('_ideas', JSON.stringify(ideas));
+  renderIdeas(ideas);
+  updateTabCounts();
+}
+
+async function refreshIdea(id) {
+  const ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
+  const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
+  if (idx === -1) return;
+
+  const idea = ideas[idx];
+  const card = document.getElementById('card-' + id);
+  if (card) card.classList.add('replacing');
+
+  try {
+    const newIdea = await generateOneIdea(idea.funnel);
+    if (newIdea) {
+      ideas[idx] = newIdea;
+    }
+  } catch(e) { /* keep old idea on error */ }
+
+  localStorage.setItem('_ideas', JSON.stringify(ideas));
+  renderIdeas(ideas);
+  updateTabCounts();
+}
+
+async function generateOneIdea(funnel) {
+  const taste = getTasteProfile();
+  const funnelLabel = funnel === 'tof' ? 'TOP OF FUNNEL' : funnel === 'mof' ? 'MIDDLE OF FUNNEL' : 'BOTTOM OF FUNNEL';
+
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': getKey(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 500,
+        system: `You generate content ideas for Somesh (Kay Capitals) — day trading educator, 1M+ IG followers. Return ONLY valid JSON.`,
+        messages: [{role: 'user', content: `Generate 1 new ${funnelLabel} Instagram reel idea. Be SPECIFIC and TIMELY.
+
+Taste profile: ${JSON.stringify(taste)}
+
+Return ONLY: {"idea":{"id":"${Date.now()}_new","funnel":"${funnel}","topic":"trading|psychology|family|lifestyle|news|student_story","title":"...","preview":"2-3 sentences","tags":[]}}`}]
+      })
+    });
+
+    const data = await r.json();
+    if (data.error) return null;
+    const txt = data.content[0].text;
+    const m = txt.match(/\{[\s\S]*"idea"[\s\S]*\}/);
+    if (m) {
+      const parsed = JSON.parse(m[0]);
+      return parsed.idea || null;
+    }
+    return null;
+  } catch(e) { return null; }
+}
+
+// Voice feedback for reject form
+let fbMediaRecorder = null;
+let fbAudioChunks = [];
+let fbRecordingId = null;
+
+async function toggleFbMic(id) {
+  const btn = document.getElementById('fb-mic-' + id);
+  const status = document.getElementById('fb-mic-status-' + id);
+
+  if (fbRecordingId === id) {
+    // Stop recording
+    fbMediaRecorder.stop();
+    btn.classList.remove('recording');
+    btn.textContent = '🎙️';
+    status.textContent = '⏳ Transcribing...';
+    status.style.display = 'block';
+    fbRecordingId = null;
+    return;
+  }
+
+  // Stop any existing recording
+  if (fbRecordingId && fbMediaRecorder) {
+    fbMediaRecorder.stop();
+    const oldBtn = document.getElementById('fb-mic-' + fbRecordingId);
+    if (oldBtn) { oldBtn.classList.remove('recording'); oldBtn.textContent = '🎙️'; }
+  }
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    fbAudioChunks = [];
+    fbMediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+    fbRecordingId = id;
+
+    fbMediaRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) fbAudioChunks.push(e.data);
+    };
+
+    fbMediaRecorder.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop());
+      const blob = new Blob(fbAudioChunks, { type: 'audio/webm' });
+      if (blob.size < 1000) {
+        status.textContent = '⚠️ Too short';
+        setTimeout(() => status.style.display = 'none', 2000);
+        return;
+      }
+
+      status.style.display = 'block';
+      status.textContent = '⏳ Transcribing...';
+
+      try {
+        const formData = new FormData();
+        formData.append('file', blob, 'voice.webm');
+        formData.append('model', 'whisper-1');
+        formData.append('language', 'en');
+
+        const res = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + getOKey() },
+          body: formData
+        });
+
+        const data = await res.json();
+        if (data.text) {
+          const input = document.getElementById('fb-text-' + id);
+          if (input) input.value = input.value ? input.value + ' ' + data.text : data.text;
+          status.textContent = '✅ Got it!';
+          setTimeout(() => status.style.display = 'none', 1500);
+        } else {
+          status.textContent = '❌ ' + (data.error?.message || 'Failed');
+          setTimeout(() => status.style.display = 'none', 3000);
+        }
+      } catch(err) {
+        status.textContent = '❌ ' + err.message;
+        setTimeout(() => status.style.display = 'none', 3000);
+      }
+    };
+
+    fbMediaRecorder.start();
+    btn.classList.add('recording');
+    btn.textContent = '⏹️';
+    status.style.display = 'block';
+    status.textContent = '🔴 Recording...';
+  } catch(err) {
+    status.style.display = 'block';
+    status.textContent = '❌ Mic access denied';
+    setTimeout(() => status.style.display = 'none', 3000);
+  }
+}
+
+// ========== APPROVED TAB ==========
+function renderApproved() {
+  const approved = JSON.parse(localStorage.getItem('_approved') || '[]');
+  const active = approved.filter(a => !a.filmed);
+  const completed = approved.filter(a => a.filmed);
+
+  document.getElementById('approvedCounter').textContent = active.length + ' idea' + (active.length !== 1 ? 's' : '') + ' ready to film';
+
+  let html = '';
+  if (active.length === 0) {
+    html = '<div class="ideas-empty">No approved ideas yet.<br>Go to 💡 Ideas and approve some!</div>';
+  }
+  active.forEach(idea => {
+    const safeId = (idea.id || '').replace(/[^a-zA-Z0-9_-]/g, '');
+    const funnelClass = idea.funnel || 'tof';
+    const funnelLabel = funnelClass === 'tof' ? 'TOF' : funnelClass === 'mof' ? 'MOF' : 'BOF';
+    const topicLabel = TOPIC_LABELS[idea.topic] || idea.topic || 'General';
+
+    html += `<div class="approved-card">
+      <div class="idea-badges">
+        <span class="idea-badge ${funnelClass}">${funnelLabel}</span>
+        <span class="idea-badge topic">${esc(topicLabel)}</span>
+      </div>
+      <div class="approved-title">${esc(idea.title)}</div>
+      <div class="approved-actions">
+        <button class="approved-action generate" onclick="generateFromIdea('${safeId}')">⚡ Generate Scripts</button>
+        <button class="approved-action filmed" onclick="markFilmed('${safeId}')">✅ Filmed</button>
+        <button class="approved-action remove" onclick="removeApproved('${safeId}')">🗑️</button>
+      </div>
+    </div>`;
+  });
+  document.getElementById('approvedList').innerHTML = html;
+
+  // Completed section
+  if (completed.length > 0) {
+    document.getElementById('completedSection').style.display = 'block';
+    document.getElementById('completedCount').textContent = completed.length;
+    let cHtml = '';
+    completed.forEach(idea => {
+      const funnelClass = idea.funnel || 'tof';
+      const funnelLabel = funnelClass === 'tof' ? 'TOF' : funnelClass === 'mof' ? 'MOF' : 'BOF';
+      cHtml += `<div class="completed-card"><div class="idea-badges"><span class="idea-badge ${funnelClass}">${funnelLabel}</span></div><div class="idea-title">${esc(idea.title)}</div></div>`;
+    });
+    document.getElementById('completedList').innerHTML = cHtml;
+  } else {
+    document.getElementById('completedSection').style.display = 'none';
+  }
+
+  updateTabCounts();
+}
+
+function generateFromIdea(id) {
+  const approved = JSON.parse(localStorage.getItem('_approved') || '[]');
+  const idea = approved.find(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
+  if (!idea) return;
+
+  // Switch to generate tab and pre-fill
+  switchTab('generate');
+  const ta = document.getElementById('idea');
+  ta.value = idea.title;
+  ta.focus();
+  // Auto-trigger generation
+  setTimeout(() => generate(), 300);
+}
+
+function markFilmed(id) {
+  const approved = JSON.parse(localStorage.getItem('_approved') || '[]');
+  const idea = approved.find(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
+  if (idea) {
+    idea.filmed = true;
+    idea.filmedAt = Date.now();
+    localStorage.setItem('_approved', JSON.stringify(approved));
+    renderApproved();
+  }
+}
+
+function removeApproved(id) {
+  let approved = JSON.parse(localStorage.getItem('_approved') || '[]');
+  approved = approved.filter(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') !== id);
+  localStorage.setItem('_approved', JSON.stringify(approved));
+  renderApproved();
+}
+
+function toggleCompleted() {
+  const list = document.getElementById('completedList');
+  const arrow = document.getElementById('completedArrow');
+  if (list.style.display === 'none') {
+    list.style.display = 'block';
+    arrow.textContent = '▼';
+  } else {
+    list.style.display = 'none';
+    arrow.textContent = '▶';
+  }
+}
+
+// ========== INIT ==========
 document.addEventListener('DOMContentLoaded', () => {
   if(localStorage.getItem('_cs') === 'true') {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
   }
+  updateTabCounts();
 });
 
 document.addEventListener('keydown', e => {
