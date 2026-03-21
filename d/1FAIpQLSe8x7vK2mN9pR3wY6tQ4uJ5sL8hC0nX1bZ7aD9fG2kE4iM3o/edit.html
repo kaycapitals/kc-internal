@@ -28,14 +28,14 @@ textarea::placeholder{color:#444}
 .error{padding:14px;border-radius:10px;background:#1a0a0a;color:#cc4444;font-size:14px;margin-bottom:16px}
 .results-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .results-hdr h2{color:#fff;font-size:18px}
-.copy-all{padding:6px 14px;border-radius:8px;border:1px solid #d4a843;background:transparent;color:#d4a843;font-size:12px;cursor:pointer}
+.copy-all{padding:10px 14px;border-radius:8px;border:1px solid #d4a843;background:transparent;color:#d4a843;font-size:12px;cursor:pointer;min-height:44px}
 .card{background:#111;border:1px solid #1a1a1a;border-radius:14px;padding:18px;margin-bottom:16px}
 .card-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #1a1a1a}
 .badge{font-size:14px;font-weight:700;color:#d4a843;letter-spacing:.5px}
 .card-meta{display:flex;align-items:center;gap:8px}
 .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
 .dur{color:#555;font-size:12px}
-.copy-btn{background:none;border:none;font-size:16px;cursor:pointer;padding:2px 6px}
+.copy-btn{background:none;border:none;font-size:16px;cursor:pointer;padding:8px;min-height:44px;min-width:44px}
 .section{margin-bottom:14px}
 .lbl{font-size:10px;font-weight:700;color:#d4a843;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px}
 .hook-box{padding:12px;border-radius:10px;background:#161616;border-left:3px solid #d4a843}
@@ -80,7 +80,7 @@ textarea::placeholder{color:#444}
 .idea-title{color:#fff;font-size:15px;font-weight:600;line-height:1.4;margin-bottom:8px}
 .idea-preview{display:none;color:#999;font-size:13px;line-height:1.5;padding:10px;background:#0a0a0a;border-radius:8px;margin-bottom:8px}
 .idea-preview.show{display:block}
-.idea-toggle{background:none;border:none;color:#555;font-size:12px;cursor:pointer;padding:4px 0;margin-bottom:6px}
+.idea-toggle{background:none;border:none;color:#555;font-size:12px;cursor:pointer;padding:10px 0;margin-bottom:6px;min-height:44px}
 .idea-toggle:hover{color:#888}
 .idea-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .idea-action{padding:12px 16px;border-radius:8px;border:1px solid #222;background:#0a0a0a;color:#fff;font-size:14px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:4px;min-height:44px;min-width:44px;justify-content:center}
@@ -97,7 +97,7 @@ textarea::placeholder{color:#444}
 .reject-form select{width:100%;padding:10px;border-radius:8px;border:1px solid #222;background:#111;color:#fff;font-size:14px;margin-bottom:8px;outline:none}
 .reject-form .fb-row{display:flex;gap:6px}
 .reject-form input{flex:1;padding:10px;border-radius:8px;border:1px solid #222;background:#111;color:#fff;font-size:14px;outline:none}
-.reject-form .fb-mic{width:40px;height:40px;border-radius:50%;border:2px solid #333;background:#111;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.reject-form .fb-mic{width:44px;height:44px;border-radius:50%;border:2px solid #333;background:#111;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
 .reject-form .fb-mic.recording{background:#cc2222;border-color:#cc2222}
 .reject-form .fb-submit{width:100%;padding:10px;border-radius:8px;border:none;background:#cc2222;color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px}
 
@@ -106,12 +106,12 @@ textarea::placeholder{color:#444}
 .approved-card{background:#111;border:1px solid #222;border-radius:12px;padding:14px;margin-bottom:10px;display:flex;flex-direction:column;gap:10px}
 .approved-title{color:#fff;font-size:15px;font-weight:600;line-height:1.4}
 .approved-actions{display:flex;gap:6px;flex-wrap:wrap}
-.approved-action{padding:8px 14px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.approved-action{padding:10px 14px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;min-height:44px}
 .approved-action.generate{background:#d4a843;color:#000}
 .approved-action.remove{background:none;border:1px solid #cc2222;color:#cc2222}
 .approved-action.filmed{background:none;border:1px solid #22aa44;color:#22aa44}
 .completed-section{margin-top:24px;border-top:1px solid #222;padding-top:16px}
-.completed-toggle{background:none;border:none;color:#555;font-size:13px;cursor:pointer;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.completed-toggle{background:none;border:none;color:#555;font-size:13px;cursor:pointer;margin-bottom:10px;display:flex;align-items:center;gap:6px;min-height:44px;padding:8px 0}
 .completed-card{background:#0a0a0a;border:1px solid #1a1a1a;border-radius:10px;padding:12px;margin-bottom:8px;opacity:.6}
 .completed-card .idea-title{font-size:13px;color:#666}
 
@@ -166,7 +166,7 @@ textarea::placeholder{color:#444}
     <div class="input-wrap">
       <div style="position:relative">
         <textarea id="idea" rows="3" placeholder="Drop your idea here or tap the mic to speak..." style="padding-right:56px"></textarea>
-        <button id="micBtn" onclick="toggleMic()" style="position:absolute;right:12px;top:12px;width:40px;height:40px;border-radius:50%;border:2px solid #333;background:#111;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s">🎙️</button>
+        <button id="micBtn" onclick="toggleMic()" style="position:absolute;right:12px;top:12px;width:44px;height:44px;border-radius:50%;border:2px solid #333;background:#111;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s">🎙️</button>
       </div>
       <div id="micStatus" style="display:none;text-align:center;padding:8px;color:#d4a843;font-size:13px"></div>
       <div class="btn-row">
@@ -261,13 +261,19 @@ document.getElementById('idea').addEventListener('keydown', e => {
 
 const BRAIN_API = 'https://kc-tools.kaycapitals.co/api/brain';
 
+function fetchWithTimeout(url, opts, ms=60000) {
+  const ctrl = new AbortController();
+  const id = setTimeout(() => ctrl.abort(), ms);
+  return fetch(url, {...opts, signal: ctrl.signal}).finally(() => clearTimeout(id));
+}
+
 async function searchBrain(query, limit=6) {
   try {
-    const r = await fetch(BRAIN_API, {
+    const r = await fetchWithTimeout(BRAIN_API, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({query, limit})
-    });
+    }, 10000);
     const data = await r.json();
     return data.results || [];
   } catch(e) { return []; }
@@ -321,7 +327,7 @@ async function generate() {
   out.innerHTML = `<div class="loading"><div class="bar"><div class="fill"></div></div><p>Crafting scripts in your voice (${totalHits} brain matches: ${reelQuotes.length} reels, ${bookKnowledge.length} books, ${courseContent.length} course)...</p></div>`;
 
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
       method:'POST',
       headers:{
         'Content-Type':'application/json',
@@ -335,10 +341,11 @@ async function generate() {
         system: SYSTEM_PROMPT,
         messages:[{role:'user',content:`Write 4 Instagram reel scripts for this idea:\n\n"${idea}"\n${brainContext}\n\n4 variants:\n1. 🔥 AGGRESSIVE — confrontational, calling people out\n2. 📚 TEACHING — step-by-step breakdown with specifics\n3. 📖 STORY — REAL personal story (from brain context above, NOT made up)\n4. 🌶️ HOT TAKE — controversial opinion, polarizing, debate-starter\n\nCRITICAL:\n- If "YOUR OWN WORDS" section exists above, you MUST use those exact phrases in at least 2 scripts\n- Story variant MUST reference a real experience from the brain context, not a generic "I remember when..."\n- Hot take should be something 50% of traders would disagree with\n- Sound like you're ranting to camera, not reading a script\n- 80-180 words per script MAX\n- Return ONLY valid JSON, no markdown`}]
       })
-    });
+    }, 90000);
 
     const data = await r.json();
     if(data.error) throw new Error(data.error.message);
+    if(!data.content?.length) throw new Error('Empty response from API');
 
     const txt = data.content[0].text;
     let scripts;
@@ -389,17 +396,19 @@ function copyOne(i) {
   const s = window._scripts?.[i];
   if(!s) return;
   const t = `[HOOK]\n${s.hook}\n\n[BODY]\n${s.body}\n\n[CTA]\n${s.cta}\n\n[VISUAL NOTES]\n${s.visual_notes||''}`;
-  navigator.clipboard.writeText(t);
-  document.querySelectorAll('.copy-btn')[i].textContent = '✅';
-  setTimeout(()=>document.querySelectorAll('.copy-btn')[i].textContent='📋',2000);
+  navigator.clipboard.writeText(t).then(() => {
+    document.querySelectorAll('.copy-btn')[i].textContent = '✅';
+    setTimeout(()=>document.querySelectorAll('.copy-btn')[i].textContent='📋',2000);
+  }).catch(() => {});
 }
 
 function copyAll() {
   if(!window._scripts) return;
   const t = window._scripts.map(s => `=== ${(ICONS[s.variant]||'🎬')} ${(s.variant||'').toUpperCase()} ===\n\n[HOOK]\n${s.hook}\n\n[BODY]\n${s.body}\n\n[CTA]\n${s.cta}\n\n[VISUAL NOTES]\n${s.visual_notes||''}`).join('\n\n'+('─'.repeat(50))+'\n\n');
-  navigator.clipboard.writeText(t);
-  document.querySelector('.copy-all').textContent='✅ Copied!';
-  setTimeout(()=>document.querySelector('.copy-all').textContent='📋 Copy All',2000);
+  navigator.clipboard.writeText(t).then(() => {
+    document.querySelector('.copy-all').textContent='✅ Copied!';
+    setTimeout(()=>document.querySelector('.copy-all').textContent='📋 Copy All',2000);
+  }).catch(() => {});
 }
 
 const _e = [56, 40, 0, 34, 1, 26, 89, 4, 30, 29, 29, 1, 29, 65, 89, 72, 58, 58, 126, 4, 22, 1, 25, 58, 34, 30, 123, 118, 111, 90, 98, 107, 7, 122, 90, 15, 35, 0, 32, 20, 4, 76, 104, 0, 86, 117, 117, 70, 34, 44, 120, 28, 24, 56, 89, 3, 7, 39, 95, 123, 115, 125, 124, 69, 7, 1, 117, 54, 9, 32, 54, 81, 30, 2, 84, 81, 81, 123, 94, 116, 38, 33, 78, 112, 34, 57, 2, 38, 36, 31, 122, 11, 69, 125, 80, 107, 50, 59, 90, 110, 59, 61, 61, 54, 61, 19, 108, 115];
@@ -459,11 +468,11 @@ async function toggleMic() {
         formData.append('model', 'whisper-1');
         formData.append('language', 'en');
 
-        const res = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+        const res = await fetchWithTimeout('https://api.openai.com/v1/audio/transcriptions', {
           method: 'POST',
           headers: { 'Authorization': 'Bearer ' + getOKey() },
           body: formData
-        });
+        }, 30000);
 
         const data = await res.json();
         if (data.text) {
@@ -575,7 +584,7 @@ Include non-trading ideas: family moments, lifestyle flex, behind-the-scenes, wi
 
 function loadIdeasTab() {
   const ideas = _safeParse('_ideas', '[]');
-  const ts = parseInt(localStorage.getItem('_ideas_ts') || '0');
+  const ts = parseInt(localStorage.getItem('_ideas_ts') || '0') || 0;
   const age = Date.now() - ts;
 
   if (ideas.length === 0 || age > IDEAS_STALE_MS) {
@@ -640,7 +649,7 @@ async function generateAllIdeas(force) {
     .replace('{trending_context}', trending);
 
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -658,6 +667,7 @@ async function generateAllIdeas(force) {
 
     const data = await r.json();
     if (data.error) throw new Error(data.error.message);
+    if (!data.content?.length) throw new Error('Empty response from API');
 
     const txt = data.content[0].text;
     let parsed;
@@ -715,8 +725,9 @@ function renderIdeas(ideas) {
 
 const TOPIC_LABELS = {trading:'Trading',psychology:'Psychology',family:'Family',lifestyle:'Lifestyle',news:'News',student_story:'Student Story'};
 
+const VALID_FUNNELS = new Set(['tof','mof','bof']);
 function renderIdeaCard(idea) {
-  const funnelClass = idea.funnel || 'tof';
+  const funnelClass = VALID_FUNNELS.has(idea.funnel) ? idea.funnel : 'tof';
   const funnelLabel = funnelClass === 'tof' ? 'TOF' : funnelClass === 'mof' ? 'MOF' : 'BOF';
   const topicLabel = TOPIC_LABELS[idea.topic] || idea.topic || 'General';
   const safeId = (idea.id || '').replace(/[^a-zA-Z0-9_-]/g, '');
@@ -772,39 +783,43 @@ const _busyCards = new Set();
 function approveIdea(id) {
   if (_busyCards.has(id)) return;
   _busyCards.add(id);
-  const ideas = _safeParse('_ideas', '[]');
-  const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
-  if (idx === -1) return;
+  try {
+    const ideas = _safeParse('_ideas', '[]');
+    const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
+    if (idx === -1) return;
 
-  const idea = ideas[idx];
-  ideas.splice(idx, 1);
-  localStorage.setItem('_ideas', JSON.stringify(ideas));
+    const idea = ideas[idx];
+    ideas.splice(idx, 1);
+    localStorage.setItem('_ideas', JSON.stringify(ideas));
 
-  // Add to approved
-  const approved = _safeParse('_approved', '[]');
-  idea.approvedAt = Date.now();
-  idea.filmed = false;
-  approved.unshift(idea);
-  localStorage.setItem('_approved', JSON.stringify(approved));
+    // Add to approved
+    const approved = _safeParse('_approved', '[]');
+    idea.approvedAt = Date.now();
+    idea.filmed = false;
+    approved.unshift(idea);
+    localStorage.setItem('_approved', JSON.stringify(approved));
 
-  // Update taste
-  const taste = getTasteProfile();
-  taste.liked_topics.push(idea.topic);
-  if (taste.liked_funnels[idea.funnel] !== undefined) taste.liked_funnels[idea.funnel]++;
-  // Keep last 50
-  if (taste.liked_topics.length > 50) taste.liked_topics = taste.liked_topics.slice(-50);
-  saveTasteProfile(taste);
+    // Update taste
+    const taste = getTasteProfile();
+    taste.liked_topics.push(idea.topic);
+    if (taste.liked_funnels[idea.funnel] !== undefined) taste.liked_funnels[idea.funnel]++;
+    // Keep last 50
+    if (taste.liked_topics.length > 50) taste.liked_topics = taste.liked_topics.slice(-50);
+    saveTasteProfile(taste);
 
-  // Animate removal
-  const card = document.getElementById('card-' + id);
-  if (card) {
-    card.style.transition = 'all .3s';
-    card.style.opacity = '0';
-    card.style.transform = 'translateX(100px)';
-    setTimeout(() => { renderIdeas(ideas); updateTabCounts(); }, 300);
-  } else {
-    renderIdeas(ideas);
-    updateTabCounts();
+    // Animate removal
+    const card = document.getElementById('card-' + id);
+    if (card) {
+      card.style.transition = 'all .3s';
+      card.style.opacity = '0';
+      card.style.transform = 'translateX(100px)';
+      setTimeout(() => { renderIdeas(ideas); updateTabCounts(); }, 300);
+    } else {
+      renderIdeas(ideas);
+      updateTabCounts();
+    }
+  } finally {
+    _busyCards.delete(id);
   }
 }
 
@@ -816,70 +831,78 @@ function showRejectForm(id) {
 async function submitReject(id) {
   if (_busyCards.has(id)) return;
   _busyCards.add(id);
-  const ideas = _safeParse('_ideas', '[]');
-  const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
-  if (idx === -1) return;
-
-  const idea = ideas[idx];
-  const reason = document.getElementById('reason-' + id)?.value || '';
-  const text = document.getElementById('fb-text-' + id)?.value || '';
-
-  // Save feedback
-  const feedback = _safeParse('_feedback', '[]');
-  feedback.push({ ideaId: idea.id, title: idea.title, funnel: idea.funnel, topic: idea.topic, reason, text, ts: Date.now() });
-  localStorage.setItem('_feedback', JSON.stringify(feedback));
-
-  // Update taste
-  const taste = getTasteProfile();
-  taste.rejected_topics.push(idea.topic);
-  if (reason) taste.rejected_reasons.push(reason);
-  if (text) taste.notes.push(text);
-  if (taste.rejected_topics.length > 50) taste.rejected_topics = taste.rejected_topics.slice(-50);
-  if (taste.rejected_reasons.length > 50) taste.rejected_reasons = taste.rejected_reasons.slice(-50);
-  if (taste.notes.length > 30) taste.notes = taste.notes.slice(-30);
-  saveTasteProfile(taste);
-
-  // Replace with new idea
-  const card = document.getElementById('card-' + id);
-  if (card) card.classList.add('replacing');
-
   try {
-    const newIdea = await generateOneIdea(idea.funnel);
-    if (newIdea) {
-      ideas[idx] = newIdea;
-    } else {
+    const ideas = _safeParse('_ideas', '[]');
+    const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
+    if (idx === -1) return;
+
+    const idea = ideas[idx];
+    const reason = document.getElementById('reason-' + id)?.value || '';
+    const text = document.getElementById('fb-text-' + id)?.value || '';
+
+    // Save feedback
+    const feedback = _safeParse('_feedback', '[]');
+    feedback.push({ ideaId: idea.id, title: idea.title, funnel: idea.funnel, topic: idea.topic, reason, text, ts: Date.now() });
+    localStorage.setItem('_feedback', JSON.stringify(feedback));
+
+    // Update taste
+    const taste = getTasteProfile();
+    taste.rejected_topics.push(idea.topic);
+    if (reason) taste.rejected_reasons.push(reason);
+    if (text) taste.notes.push(text);
+    if (taste.rejected_topics.length > 50) taste.rejected_topics = taste.rejected_topics.slice(-50);
+    if (taste.rejected_reasons.length > 50) taste.rejected_reasons = taste.rejected_reasons.slice(-50);
+    if (taste.notes.length > 30) taste.notes = taste.notes.slice(-30);
+    saveTasteProfile(taste);
+
+    // Replace with new idea
+    const card = document.getElementById('card-' + id);
+    if (card) card.classList.add('replacing');
+
+    try {
+      const newIdea = await generateOneIdea(idea.funnel);
+      if (newIdea) {
+        ideas[idx] = newIdea;
+      } else {
+        ideas.splice(idx, 1);
+      }
+    } catch(e) {
       ideas.splice(idx, 1);
     }
-  } catch(e) {
-    ideas.splice(idx, 1);
-  }
 
-  localStorage.setItem('_ideas', JSON.stringify(ideas));
-  renderIdeas(ideas);
-  updateTabCounts();
+    localStorage.setItem('_ideas', JSON.stringify(ideas));
+    renderIdeas(ideas);
+    updateTabCounts();
+  } finally {
+    _busyCards.delete(id);
+  }
 }
 
 async function refreshIdea(id) {
   if (_busyCards.has(id)) return;
   _busyCards.add(id);
-  const ideas = _safeParse('_ideas', '[]');
-  const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
-  if (idx === -1) return;
-
-  const idea = ideas[idx];
-  const card = document.getElementById('card-' + id);
-  if (card) card.classList.add('replacing');
-
   try {
-    const newIdea = await generateOneIdea(idea.funnel);
-    if (newIdea) {
-      ideas[idx] = newIdea;
-    }
-  } catch(e) { /* keep old idea on error */ }
+    const ideas = _safeParse('_ideas', '[]');
+    const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
+    if (idx === -1) return;
 
-  localStorage.setItem('_ideas', JSON.stringify(ideas));
-  renderIdeas(ideas);
-  updateTabCounts();
+    const idea = ideas[idx];
+    const card = document.getElementById('card-' + id);
+    if (card) card.classList.add('replacing');
+
+    try {
+      const newIdea = await generateOneIdea(idea.funnel);
+      if (newIdea) {
+        ideas[idx] = newIdea;
+      }
+    } catch(e) { /* keep old idea on error */ }
+
+    localStorage.setItem('_ideas', JSON.stringify(ideas));
+    renderIdeas(ideas);
+    updateTabCounts();
+  } finally {
+    _busyCards.delete(id);
+  }
 }
 
 async function refreshNewsOnly() {
@@ -891,7 +914,7 @@ async function refreshNewsOnly() {
 
   try {
     // Fetch real trending news
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -911,6 +934,7 @@ Return: {"ideas":[{"id":"news_${Date.now()}_1","funnel":"tof","topic":"news","ti
 
     const data = await r.json();
     if (data.error) throw new Error(data.error.message);
+    if (!data.content?.length) throw new Error('Empty response from API');
     const txt = data.content[0].text;
     const m = txt.match(/\{[\s\S]*"ideas"[\s\S]*\}/);
     if (!m) throw new Error('Bad response');
@@ -946,7 +970,7 @@ async function generateOneIdea(funnel) {
   const funnelLabel = funnel === 'tof' ? 'TOP OF FUNNEL' : funnel === 'mof' ? 'MIDDLE OF FUNNEL' : 'BOTTOM OF FUNNEL';
 
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -967,7 +991,7 @@ Return ONLY: {"idea":{"id":"${Date.now()}_new","funnel":"${funnel}","topic":"tra
     });
 
     const data = await r.json();
-    if (data.error) return null;
+    if (data.error || !data.content?.length) return null;
     const txt = data.content[0].text;
     const m = txt.match(/\{[\s\S]*"idea"[\s\S]*\}/);
     if (m) {
@@ -1033,11 +1057,11 @@ async function toggleFbMic(id) {
         formData.append('model', 'whisper-1');
         formData.append('language', 'en');
 
-        const res = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+        const res = await fetchWithTimeout('https://api.openai.com/v1/audio/transcriptions', {
           method: 'POST',
           headers: { 'Authorization': 'Bearer ' + getOKey() },
           body: formData
-        });
+        }, 30000);
 
         const data = await res.json();
         if (data.text) {
@@ -1081,7 +1105,7 @@ function renderApproved() {
   }
   active.forEach(idea => {
     const safeId = (idea.id || '').replace(/[^a-zA-Z0-9_-]/g, '');
-    const funnelClass = idea.funnel || 'tof';
+    const funnelClass = VALID_FUNNELS.has(idea.funnel) ? idea.funnel : 'tof';
     const funnelLabel = funnelClass === 'tof' ? 'TOF' : funnelClass === 'mof' ? 'MOF' : 'BOF';
     const topicLabel = TOPIC_LABELS[idea.topic] || idea.topic || 'General';
 
@@ -1106,7 +1130,7 @@ function renderApproved() {
     document.getElementById('completedCount').textContent = completed.length;
     let cHtml = '';
     completed.forEach(idea => {
-      const funnelClass = idea.funnel || 'tof';
+      const funnelClass = VALID_FUNNELS.has(idea.funnel) ? idea.funnel : 'tof';
       const funnelLabel = funnelClass === 'tof' ? 'TOF' : funnelClass === 'mof' ? 'MOF' : 'BOF';
       cHtml += `<div class="completed-card"><div class="idea-badges"><span class="idea-badge ${funnelClass}">${funnelLabel}</span></div><div class="idea-title">${esc(idea.title)}</div></div>`;
     });
