@@ -1779,6 +1779,11 @@ const IDEAS_STALE_MS = 20 * 60 * 60 * 1000;
 
 const IDEAS_SYSTEM_PROMPT = `You are a content strategist for Somesh (Kay Capitals) — a day trading educator with 1M+ Instagram followers who runs a $3K mentorship program (KCU).
 
+TODAY'S DATE: {todays_date}
+DAY OF WEEK: {day_of_week}
+
+CRITICAL: All news/market ideas MUST reference events from THIS WEEK (the week of {todays_date}). Do NOT reference old news, old prices, or events from previous months. If you're unsure of current prices or events, make the idea about a TIMELESS trading concept instead of guessing wrong numbers.
+
 Generate 30 Instagram reel content ideas: 10 for each funnel stage.
 
 TOP OF FUNNEL (10): Goal is REACH. Cold audience. These people don't know Somesh yet.
@@ -1820,8 +1825,16 @@ function loadIdeasTab() {
 
   renderTasteSummary();
 
-  if (!Array.isArray(ideas) || ideas.length === 0 || age > IDEAS_STALE_MS) {
+  if (!Array.isArray(ideas) || ideas.length === 0) {
     generateAllIdeas(false);
+  } else if (age > IDEAS_STALE_MS) {
+    // Show existing ideas but show a subtle "stale" banner — don't auto-regenerate
+    renderIdeas(ideas);
+    updateIdeasAge(ts);
+    const container = document.getElementById('ideasContent');
+    if (container) {
+      container.insertAdjacentHTML('afterbegin', '<div style="text-align:center;padding:12px;color:#d4a843;font-size:13px;border:1px solid #333;border-radius:8px;margin-bottom:12px">⏰ Ideas are ' + Math.round(age/3600000) + 'h old. Tap "🔄 Generate Fresh Ideas" to refresh.</div>');
+    }
   } else {
     renderIdeas(ideas);
     updateIdeasAge(ts);
@@ -1903,7 +1916,13 @@ async function generateAllIdeas(force) {
 
   btn.textContent = '⏳ Generating 30 ideas (TOF → MOF → BOF)...';
 
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const dayStr = now.toLocaleDateString('en-US', { weekday: 'long' });
   const prompt = IDEAS_SYSTEM_PROMPT
+    .replace('{todays_date}', dateStr)
+    .replace('{day_of_week}', dayStr)
+    .replace('{todays_date}', dateStr)
     .replace('{taste_profile}', tasteStr)
     .replace('{trending_context}', trending);
 
@@ -2378,8 +2397,8 @@ async function refreshNewsOnly() {
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 2000,
-        system: 'You generate TOP OF FUNNEL content ideas for Somesh (Kay Capitals) — day trading educator, 1M+ IG followers. Focus on NEWS, CURRENT EVENTS, CONTROVERSY, and TIMELY topics only. Ideas must feel like they happened TODAY or THIS WEEK. Include: market news, earnings, Fed decisions, political moves affecting markets, viral financial topics, breaking economic data. Each idea should be a specific scroll-stopping hook. Return ONLY valid JSON.',
-        messages: [{ role: 'user', content: 'Generate 5 fresh NEWS-BASED top of funnel content ideas. These must be TIMELY — things happening RIGHT NOW in markets, politics, or economy that affect traders. Think: earnings reports, Fed meetings, tariffs, market crashes, viral moments.\n\nReturn: {"ideas":[{"id":"news_' + Date.now() + '_1","funnel":"tof","topic":"news","title":"...","preview":"2-3 sentence script preview","tags":["news","timely"]}]}' }]
+        system: 'You generate TOP OF FUNNEL content ideas for Somesh (Kay Capitals) — day trading educator, 1M+ IG followers. Focus on NEWS, CURRENT EVENTS, CONTROVERSY, and TIMELY topics only.\n\nTODAY IS: ' + new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + '.\n\nCRITICAL: All ideas MUST reference events from THIS WEEK ONLY. Do NOT make up prices, do NOT reference old news from previous months. If unsure about exact current prices, use phrases like "just tanked" or "is mooning" instead of specific numbers. NEVER guess stock/crypto prices.\n\nInclude: market news, earnings, Fed decisions, political moves affecting markets, viral financial topics, breaking economic data. Each idea should be a specific scroll-stopping hook. Return ONLY valid JSON.',
+        messages: [{ role: 'user', content: 'Today is ' + new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + '. Generate 5 fresh NEWS-BASED top of funnel content ideas about what is happening in markets RIGHT NOW this week. Do NOT reference old news or guess prices.\n\nReturn: {"ideas":[{"id":"news_' + Date.now() + '_1","funnel":"tof","topic":"news","title":"...","preview":"2-3 sentence script preview","tags":["news","timely"]}]}' }]
       })
     }, 60000);
 
