@@ -81,11 +81,15 @@ textarea::placeholder{color:#444}
   </div>
 
   <div class="input-wrap">
-    <textarea id="idea" rows="3" placeholder="Drop your idea here... e.g. 'why people blow up accounts on Fridays'"></textarea>
+    <div style="position:relative">
+      <textarea id="idea" rows="3" placeholder="Drop your idea here or tap the mic to speak..." style="padding-right:56px"></textarea>
+      <button id="micBtn" onclick="toggleMic()" style="position:absolute;right:12px;top:12px;width:40px;height:40px;border-radius:50%;border:2px solid #333;background:#111;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s">🎙️</button>
+    </div>
+    <div id="micStatus" style="display:none;text-align:center;padding:8px;color:#d4a843;font-size:13px"></div>
     <div class="btn-row">
       <button class="gen-btn" id="genBtn" onclick="generate()">⚡ Generate Scripts</button>
     </div>
-    <div class="hint">⌘+Enter to generate</div>
+    <div class="hint">⌘+Enter to generate · tap mic to speak</div>
   </div>
 
   <div id="output"></div>
@@ -216,7 +220,97 @@ function copyAll() {
 }
 
 const _e = [56, 40, 0, 34, 1, 26, 89, 4, 30, 29, 29, 1, 29, 65, 89, 72, 58, 58, 126, 4, 22, 1, 25, 58, 34, 30, 123, 118, 111, 90, 98, 107, 7, 122, 90, 15, 35, 0, 32, 20, 4, 76, 104, 0, 86, 117, 117, 70, 34, 44, 120, 28, 24, 56, 89, 3, 7, 39, 95, 123, 115, 125, 124, 69, 7, 1, 117, 54, 9, 32, 54, 81, 30, 2, 84, 81, 81, 123, 94, 116, 38, 33, 78, 112, 34, 57, 2, 38, 36, 31, 122, 11, 69, 125, 80, 107, 50, 59, 90, 110, 59, 61, 61, 54, 61, 19, 108, 115];
+const _oe = [56, 40, 0, 51, 29, 1, 30, 72, 34, 6, 25, 97, 91, 87, 122, 110, 19, 33, 73, 59, 26, 27, 19, 61, 1, 37, 79, 68, 105, 88, 68, 123, 0, 119, 123, 19, 25, 8, 29, 17, 91, 62, 126, 85, 115, 89, 123, 100, 42, 49, 116, 9, 29, 49, 21, 19, 5, 2, 76, 84, 93, 98, 112, 112, 102, 39, 110, 18, 42, 63, 5, 31, 86, 39, 121, 11, 6, 31, 68, 66, 33, 49, 121, 112, 45, 2, 22, 14, 40, 62, 127, 70, 105, 7, 115, 21, 63, 7, 21, 47, 42, 67, 36, 93, 54, 38, 101, 84, 83, 4, 66, 96, 61, 59, 97, 38, 25, 49, 59, 17, 9, 33, 100, 101, 81, 69, 100, 19, 102, 26, 24, 21, 66, 61, 61, 63, 32, 76, 25, 75, 96, 95, 98, 101, 36, 53, 107, 10, 88, 56, 70, 81, 6, 50, 123, 97, 9, 0, 14, 68, 51, 115, 21, 2];
 const _p = "KC-Content-2026!";
+
+function getOKey() {
+  return _oe.map((c,i) => String.fromCharCode(c ^ _p.charCodeAt(i % _p.length))).join('');
+}
+
+// Voice recording
+let mediaRecorder = null;
+let audioChunks = [];
+let isRecording = false;
+
+async function toggleMic() {
+  const btn = document.getElementById('micBtn');
+  const status = document.getElementById('micStatus');
+
+  if (isRecording) {
+    // Stop recording
+    mediaRecorder.stop();
+    btn.style.background = '#111';
+    btn.style.borderColor = '#333';
+    btn.textContent = '🎙️';
+    status.textContent = '⏳ Transcribing...';
+    isRecording = false;
+    return;
+  }
+
+  // Start recording
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+
+    mediaRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) audioChunks.push(e.data);
+    };
+
+    mediaRecorder.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop());
+      const blob = new Blob(audioChunks, { type: 'audio/webm' });
+
+      if (blob.size < 1000) {
+        status.textContent = '⚠️ Recording too short';
+        setTimeout(() => status.style.display = 'none', 2000);
+        return;
+      }
+
+      status.style.display = 'block';
+      status.textContent = '⏳ Transcribing your voice...';
+
+      try {
+        const formData = new FormData();
+        formData.append('file', blob, 'voice.webm');
+        formData.append('model', 'whisper-1');
+        formData.append('language', 'en');
+
+        const res = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + getOKey() },
+          body: formData
+        });
+
+        const data = await res.json();
+        if (data.text) {
+          const ta = document.getElementById('idea');
+          ta.value = ta.value ? ta.value + ' ' + data.text : data.text;
+          status.textContent = '✅ Got it!';
+          setTimeout(() => status.style.display = 'none', 1500);
+        } else {
+          status.textContent = '❌ ' + (data.error?.message || 'Transcription failed');
+          setTimeout(() => status.style.display = 'none', 3000);
+        }
+      } catch(err) {
+        status.textContent = '❌ ' + err.message;
+        setTimeout(() => status.style.display = 'none', 3000);
+      }
+    };
+
+    mediaRecorder.start();
+    isRecording = true;
+    btn.style.background = '#cc2222';
+    btn.style.borderColor = '#cc2222';
+    btn.textContent = '⏹️';
+    status.style.display = 'block';
+    status.textContent = '🔴 Recording... tap to stop';
+  } catch(err) {
+    status.style.display = 'block';
+    status.textContent = '❌ Mic access denied';
+    setTimeout(() => status.style.display = 'none', 3000);
+  }
+}
 
 function getKey() {
   const s = localStorage.getItem('_cs');
