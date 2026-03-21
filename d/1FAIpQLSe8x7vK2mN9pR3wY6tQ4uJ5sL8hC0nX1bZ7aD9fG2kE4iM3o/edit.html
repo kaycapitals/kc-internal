@@ -766,7 +766,10 @@ function getIdeaById(id) {
   return ideas.find(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
 }
 
+const _busyCards = new Set();
 function approveIdea(id) {
+  if (_busyCards.has(id)) return;
+  _busyCards.add(id);
   const ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
   const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
   if (idx === -1) return;
@@ -809,6 +812,8 @@ function showRejectForm(id) {
 }
 
 async function submitReject(id) {
+  if (_busyCards.has(id)) return;
+  _busyCards.add(id);
   const ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
   const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
   if (idx === -1) return;
@@ -853,6 +858,8 @@ async function submitReject(id) {
 }
 
 async function refreshIdea(id) {
+  if (_busyCards.has(id)) return;
+  _busyCards.add(id);
   const ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
   const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
   if (idx === -1) return;
