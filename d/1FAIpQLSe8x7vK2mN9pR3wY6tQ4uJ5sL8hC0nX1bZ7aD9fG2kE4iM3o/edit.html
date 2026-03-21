@@ -128,14 +128,38 @@ document.getElementById('idea').addEventListener('keydown', e => {
   if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)) generate();
 });
 
+const BRAIN_API = 'https://kc-tools.kaycapitals.co/api/brain';
+
+async function searchBrain(query) {
+  try {
+    const r = await fetch(BRAIN_API, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({query, limit: 8})
+    });
+    const data = await r.json();
+    return data.results || [];
+  } catch(e) { return []; }
+}
+
 async function generate() {
   const idea = document.getElementById('idea').value.trim();
   if(!idea) return;
   const btn = document.getElementById('genBtn');
   const out = document.getElementById('output');
   btn.disabled = true;
+  btn.textContent = '⏳ Searching brain...';
+  out.innerHTML = '<div class="loading"><div class="bar"><div class="fill"></div></div><p>Searching your knowledge base...</p></div>';
+
+  // Search brain for relevant context
+  const brainResults = await searchBrain(idea);
+  const brainContext = brainResults.length > 0
+    ? '\n\n## RELEVANT CONTEXT FROM YOUR BRAIN (your own words, books, transcripts):\n' +
+      brainResults.map((r,i) => `[${r.source} — ${r.type}]: ${r.text}`).join('\n\n')
+    : '';
+
   btn.textContent = '⏳ Generating...';
-  out.innerHTML = '<div class="loading"><div class="bar"><div class="fill"></div></div><p>Analyzing your voice DNA and crafting scripts...</p></div>';
+  out.innerHTML = '<div class="loading"><div class="bar"><div class="fill"></div></div><p>Crafting scripts in your voice' + (brainResults.length > 0 ? ` (using ${brainResults.length} brain matches)` : '') + '...</p></div>';
 
   try {
     const r = await fetch('https://api.anthropic.com/v1/messages', {
@@ -150,7 +174,7 @@ async function generate() {
         model:'claude-sonnet-4-20250514',
         max_tokens:3000,
         system: SYSTEM_PROMPT,
-        messages:[{role:'user',content:`Create 3 Instagram reel script variants for this idea:\n\n"${idea}"\n\nGenerate these variants:\n1. 🔥 AGGRESSIVE — high energy, call-out style, confrontational\n2. 📚 TEACHING — educational breakdown, clear explanation\n3. 📖 STORY — personal story or relatable scenario leading to lesson\n\nEach must sound authentically like Somesh. Use his actual phrases and energy. Return ONLY valid JSON.`}]
+        messages:[{role:'user',content:`Create 3 Instagram reel script variants for this idea:\n\n"${idea}"\n${brainContext}\n\nGenerate these variants:\n1. 🔥 AGGRESSIVE — high energy, call-out style, confrontational\n2. 📚 TEACHING — educational breakdown, clear explanation\n3. 📖 STORY — personal story or relatable scenario leading to lesson\n\nEach must sound authentically like Somesh. Use his actual phrases and energy.${brainResults.length > 0 ? ' IMPORTANT: Use the brain context above — weave in those specific examples, stories, and quotes where relevant.' : ''} Return ONLY valid JSON.`}]
       })
     });
 
