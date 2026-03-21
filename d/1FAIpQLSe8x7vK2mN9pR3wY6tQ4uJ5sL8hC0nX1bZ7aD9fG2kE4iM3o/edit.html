@@ -531,8 +531,8 @@ function switchTab(tab) {
 }
 
 function updateTabCounts() {
-  const ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
-  const approved = JSON.parse(localStorage.getItem('_approved') || '[]');
+  const ideas = _safeParse('_ideas', '[]');
+  const approved = _safeParse('_approved', '[]');
   document.getElementById('ideasCount').textContent = '(' + ideas.length + ')';
   document.getElementById('approvedCount').textContent = '(' + approved.filter(a => !a.filmed).length + ')';
 }
@@ -574,7 +574,7 @@ Ideas must be SPECIFIC not generic. "Trump's new tariff just killed tech stocks 
 Include non-trading ideas: family moments, lifestyle flex, behind-the-scenes, wife/dad content.`;
 
 function loadIdeasTab() {
-  const ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
+  const ideas = _safeParse('_ideas', '[]');
   const ts = parseInt(localStorage.getItem('_ideas_ts') || '0');
   const age = Date.now() - ts;
 
@@ -593,8 +593,10 @@ function updateIdeasAge(ts) {
   document.getElementById('ideasAge').textContent = hrs > 0 ? `Generated ${hrs}h ${mins}m ago` : `Generated ${mins}m ago`;
 }
 
+function _safeParse(key, fallback) { try { return JSON.parse(localStorage.getItem(key) || fallback); } catch(e) { localStorage.removeItem(key); return JSON.parse(fallback); } }
+
 function getTasteProfile() {
-  const taste = JSON.parse(localStorage.getItem('_taste') || '{"liked_topics":[],"rejected_topics":[],"liked_funnels":{"tof":0,"mof":0,"bof":0},"rejected_reasons":[],"notes":[]}');
+  const taste = _safeParse('_taste', '{"liked_topics":[],"rejected_topics":[],"liked_funnels":{"tof":0,"mof":0,"bof":0},"rejected_reasons":[],"notes":[]}');
   if (!taste.liked_topics) taste.liked_topics = [];
   if (!taste.rejected_topics) taste.rejected_topics = [];
   if (!taste.liked_funnels) taste.liked_funnels = {tof:0,mof:0,bof:0};
@@ -762,7 +764,7 @@ function togglePreview(id) {
 }
 
 function getIdeaById(id) {
-  const ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
+  const ideas = _safeParse('_ideas', '[]');
   return ideas.find(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
 }
 
@@ -770,7 +772,7 @@ const _busyCards = new Set();
 function approveIdea(id) {
   if (_busyCards.has(id)) return;
   _busyCards.add(id);
-  const ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
+  const ideas = _safeParse('_ideas', '[]');
   const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
   if (idx === -1) return;
 
@@ -779,7 +781,7 @@ function approveIdea(id) {
   localStorage.setItem('_ideas', JSON.stringify(ideas));
 
   // Add to approved
-  const approved = JSON.parse(localStorage.getItem('_approved') || '[]');
+  const approved = _safeParse('_approved', '[]');
   idea.approvedAt = Date.now();
   idea.filmed = false;
   approved.unshift(idea);
@@ -814,7 +816,7 @@ function showRejectForm(id) {
 async function submitReject(id) {
   if (_busyCards.has(id)) return;
   _busyCards.add(id);
-  const ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
+  const ideas = _safeParse('_ideas', '[]');
   const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
   if (idx === -1) return;
 
@@ -823,7 +825,7 @@ async function submitReject(id) {
   const text = document.getElementById('fb-text-' + id)?.value || '';
 
   // Save feedback
-  const feedback = JSON.parse(localStorage.getItem('_feedback') || '[]');
+  const feedback = _safeParse('_feedback', '[]');
   feedback.push({ ideaId: idea.id, title: idea.title, funnel: idea.funnel, topic: idea.topic, reason, text, ts: Date.now() });
   localStorage.setItem('_feedback', JSON.stringify(feedback));
 
@@ -860,7 +862,7 @@ async function submitReject(id) {
 async function refreshIdea(id) {
   if (_busyCards.has(id)) return;
   _busyCards.add(id);
-  const ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
+  const ideas = _safeParse('_ideas', '[]');
   const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
   if (idx === -1) return;
 
@@ -917,7 +919,7 @@ Return: {"ideas":[{"id":"news_${Date.now()}_1","funnel":"tof","topic":"news","ti
     const newNewsIdeas = parsed.ideas || [];
 
     // Replace only news/timely TOF ideas, keep family/lifestyle/trading TOF ideas
-    let ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
+    let ideas = _safeParse('_ideas', '[]');
     const newsTopics = ['news'];
     const oldNewsIdeas = ideas.filter(i => i.funnel === 'tof' && newsTopics.includes(i.topic));
     const nonNewsIdeas = ideas.filter(i => !(i.funnel === 'tof' && newsTopics.includes(i.topic)));
@@ -1067,7 +1069,7 @@ async function toggleFbMic(id) {
 
 // ========== APPROVED TAB ==========
 function renderApproved() {
-  const approved = JSON.parse(localStorage.getItem('_approved') || '[]');
+  const approved = _safeParse('_approved', '[]');
   const active = approved.filter(a => !a.filmed);
   const completed = approved.filter(a => a.filmed);
 
@@ -1117,7 +1119,7 @@ function renderApproved() {
 }
 
 function generateFromIdea(id) {
-  const approved = JSON.parse(localStorage.getItem('_approved') || '[]');
+  const approved = _safeParse('_approved', '[]');
   const idea = approved.find(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
   if (!idea) return;
 
@@ -1131,7 +1133,7 @@ function generateFromIdea(id) {
 }
 
 function markFilmed(id) {
-  const approved = JSON.parse(localStorage.getItem('_approved') || '[]');
+  const approved = _safeParse('_approved', '[]');
   const idea = approved.find(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
   if (idea) {
     idea.filmed = true;
@@ -1142,7 +1144,7 @@ function markFilmed(id) {
 }
 
 function removeApproved(id) {
-  let approved = JSON.parse(localStorage.getItem('_approved') || '[]');
+  let approved = _safeParse('_approved', '[]');
   approved = approved.filter(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') !== id);
   localStorage.setItem('_approved', JSON.stringify(approved));
   renderApproved();
