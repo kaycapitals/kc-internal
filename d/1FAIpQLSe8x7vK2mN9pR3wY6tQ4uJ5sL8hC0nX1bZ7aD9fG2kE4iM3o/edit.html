@@ -283,13 +283,16 @@ textarea::placeholder{color:#444}
 
   <!-- Tab 2: Daily Ideas -->
   <div class="tab-panel" id="panelIdeas">
-    <div class="ptr-indicator" id="ptrIndicator">↓ Pull to refresh</div>
+
     <div id="tasteSummary"></div>
     <div id="ideasContent">
       <div class="ideas-empty">Tap to load today's ideas</div>
     </div>
     <div style="text-align:center;margin-top:16px">
-      <button class="gen-btn" onclick="generateAllIdeas(true)" id="refreshAllBtn" style="max-width:300px">🔄 Generate Fresh Ideas</button>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="gen-btn" onclick="refreshNonNewsIdeas()" id="refreshNonNewsBtn" style="flex:1;max-width:260px">🔄 Refresh Ideas (keep news)</button>
+        <button class="gen-btn" onclick="generateAllIdeas(true)" id="refreshAllBtn" style="flex:1;max-width:260px;background:#1a1a2e;border-color:#444">🔄 Refresh ALL Ideas</button>
+      </div>
       <div class="hint" style="margin-top:8px" id="ideasAge"></div>
     </div>
   </div>
@@ -2374,6 +2377,67 @@ async function refreshIdea(id) {
 }
 
 /**
+ * Refreshes all non-news ideas (keeps news TOF intact, replaces everything else).
+ */
+async function refreshNonNewsIdeas() {
+  if (!checkRateLimit()) return;
+  const btn = document.getElementById('refreshNonNewsBtn');
+  if (!btn) return;
+  btn.disabled = true;
+  btn.textContent = '⏳ Refreshing non-news ideas...';
+
+  try {
+    const ideas = secureLoad('_ideas', []);
+    const newsIdeas = ideas.filter(i => i.funnel === 'tof' && i.topic === 'news');
+    const nonNewsCount = ideas.length - newsIdeas.length;
+
+    const taste = getTasteProfile();
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const dayStr = now.toLocaleDateString('en-US', { weekday: 'long' });
+
+    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': getKey(), 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system: 'You generate content ideas for Somesh (Kay Capitals) — day trading educator, 1M+ IG followers. TODAY IS: ' + dateStr + ' (' + dayStr + '). Generate NON-NEWS ideas only. No market news, no stock prices, no current events. Focus on: trading education, psychology, personal stories, family, lifestyle, student wins, community, CTA.',
+        messages: [{ role: 'user', content: 'Generate ' + nonNewsCount + ' content ideas to replace existing non-news ideas. Keep the same funnel distribution minus news.\n\nNeeded:\n- TOF non-news (relatable, family, lifestyle): ' + ideas.filter(i => i.funnel === 'tof' && i.topic !== 'news').length + '\n- MOF (strategy, psychology, personal stories): ' + ideas.filter(i => i.funnel === 'mof').length + '\n- BOF (student proof, CTA, community): ' + ideas.filter(i => i.funnel === 'bof').length + '\n\nTaste profile: ' + JSON.stringify(taste) + '\n\nReturn ONLY valid JSON: {"ideas":[{"id":"unique","funnel":"tof/mof/bof","topic":"trading/psychology/family/lifestyle/student_story","title":"specific title","preview":"2-3 sentences","tags":["tag1"]}]}' }]
+      })
+    }, 90000);
+
+    const data = await r.json();
+    if (data && data.error) throw new Error(data.error.message);
+    if (!data || !data.content || !data.content.length) throw new Error('Empty response');
+
+    const txt = data.content[0].text;
+    const match = txt.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('No JSON in response');
+
+    const parsed = JSON.parse(match[0]);
+    const newIdeas = (parsed.ideas || []).filter(validateIdea);
+
+    if (newIdeas.length > 0) {
+      const combined = [...newsIdeas, ...newIdeas];
+      secureStore('_ideas', combined);
+      localStorage.setItem('_ideas_ts', String(Date.now()));
+      renderIdeas(combined);
+      updateTabCounts();
+      showToast('✅ ' + newIdeas.length + ' ideas refreshed (news kept)', 'success');
+      haptic(15);
+    } else {
+      throw new Error('No valid ideas returned');
+    }
+  } catch (e) {
+    showToast('❌ ' + (e.message || 'Failed to refresh'), 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🔄 Refresh Ideas (keep news)';
+  }
+}
+
+/**
  * Refreshes only the news/timely TOF ideas.
  */
 async function refreshNewsOnly() {
@@ -2588,50 +2652,7 @@ const PTR_THRESHOLD = 60;
  * Initializes pull-to-refresh on the Ideas panel.
  */
 function initPullToRefresh() {
-  const panel = document.getElementById('panelIdeas');
-  if (!panel) return;
-
-  panel.addEventListener('touchstart', (e) => {
-    if (panel.scrollTop > 0) return;
-    const touch = e.touches[0];
-    if (!touch) return;
-    _ptrState = { startY: touch.clientY, pulling: false };
-  }, { passive: true });
-
-  panel.addEventListener('touchmove', (e) => {
-    if (!_ptrState) return;
-    const touch = e.touches[0];
-    if (!touch) return;
-    const dy = touch.clientY - _ptrState.startY;
-
-    if (dy > 20) {
-      _ptrState.pulling = true;
-      const indicator = document.getElementById('ptrIndicator');
-      if (indicator) {
-        indicator.classList.add('pulling');
-        indicator.textContent = dy > PTR_THRESHOLD ? '↑ Release to refresh' : '↓ Pull to refresh';
-      }
-    }
-  }, { passive: true });
-
-  panel.addEventListener('touchend', (e) => {
-    if (!_ptrState || !_ptrState.pulling) { _ptrState = null; return; }
-
-    const touch = e.changedTouches[0];
-    if (!touch) { _ptrState = null; return; }
-    const dy = touch.clientY - _ptrState.startY;
-
-    const indicator = document.getElementById('ptrIndicator');
-    if (dy > PTR_THRESHOLD) {
-      if (indicator) { indicator.textContent = '⏳ Refreshing...'; indicator.classList.add('refreshing'); }
-      generateAllIdeas(true).finally(() => {
-        if (indicator) { indicator.classList.remove('pulling', 'refreshing'); }
-      });
-    } else {
-      if (indicator) indicator.classList.remove('pulling');
-    }
-    _ptrState = null;
-  }, { passive: true });
+  // Pull-to-refresh DISABLED — too sensitive on mobile, causes accidental refreshes
 }
 
 // ========== APPROVED TAB ==========
