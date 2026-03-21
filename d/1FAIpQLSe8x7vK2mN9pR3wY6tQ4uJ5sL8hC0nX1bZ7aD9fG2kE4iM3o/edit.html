@@ -694,7 +694,7 @@ function renderIdeas(ideas) {
   let html = '';
 
   // TOF Section
-  html += '<div class="funnel-section"><div class="funnel-hdr tof">🔴 TOP OF FUNNEL — Reach & Traffic (' + tof.length + ')</div>';
+  html += '<div class="funnel-section"><div class="funnel-hdr tof" style="justify-content:space-between">🔴 TOP OF FUNNEL — Reach & Traffic (' + tof.length + ')<button onclick="refreshNewsOnly()" id="refreshNewsBtn" style="padding:6px 12px;border-radius:8px;border:1px solid #cc2222;background:none;color:#cc2222;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap">🔥 Refresh News</button></div>';
   tof.forEach(idea => { html += renderIdeaCard(idea); });
   html += '</div>';
 
@@ -871,6 +871,65 @@ async function refreshIdea(id) {
   localStorage.setItem('_ideas', JSON.stringify(ideas));
   renderIdeas(ideas);
   updateTabCounts();
+}
+
+async function refreshNewsOnly() {
+  const btn = document.getElementById('refreshNewsBtn');
+  if (!btn) return;
+  const origText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '⏳ Fetching fresh news...';
+
+  try {
+    // Fetch real trending news
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': getKey(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        system: `You generate TOP OF FUNNEL content ideas for Somesh (Kay Capitals) — day trading educator, 1M+ IG followers. Focus on NEWS, CURRENT EVENTS, CONTROVERSY, and TIMELY topics only. Ideas must feel like they happened TODAY or THIS WEEK. Include: market news, earnings, Fed decisions, political moves affecting markets, viral financial topics, breaking economic data. Each idea should be a specific scroll-stopping hook. Return ONLY valid JSON.`,
+        messages: [{role: 'user', content: `Generate 5 fresh NEWS-BASED top of funnel content ideas. These must be TIMELY — things happening RIGHT NOW in markets, politics, or economy that affect traders. Think: earnings reports, Fed meetings, tariffs, market crashes, viral moments.
+
+Return: {"ideas":[{"id":"news_${Date.now()}_1","funnel":"tof","topic":"news","title":"...","preview":"2-3 sentence script preview","tags":["news","timely"]}]}`}]
+      })
+    });
+
+    const data = await r.json();
+    if (data.error) throw new Error(data.error.message);
+    const txt = data.content[0].text;
+    const m = txt.match(/\{[\s\S]*"ideas"[\s\S]*\}/);
+    if (!m) throw new Error('Bad response');
+
+    const parsed = JSON.parse(m[0]);
+    const newNewsIdeas = parsed.ideas || [];
+
+    // Replace only news/timely TOF ideas, keep family/lifestyle/trading TOF ideas
+    let ideas = JSON.parse(localStorage.getItem('_ideas') || '[]');
+    const newsTopics = ['news'];
+    const oldNewsIdeas = ideas.filter(i => i.funnel === 'tof' && newsTopics.includes(i.topic));
+    const nonNewsIdeas = ideas.filter(i => !(i.funnel === 'tof' && newsTopics.includes(i.topic)));
+
+    // Replace old news with new, keep everything else
+    ideas = [...nonNewsIdeas, ...newNewsIdeas.map((idea, idx) => ({
+      ...idea,
+      id: idea.id || `news_${Date.now()}_${idx}`
+    }))];
+
+    localStorage.setItem('_ideas', JSON.stringify(ideas));
+    renderIdeas(ideas);
+    updateTabCounts();
+    btn.textContent = '✅ News refreshed!';
+    setTimeout(() => { btn.textContent = '🔥 Refresh News'; btn.disabled = false; }, 2000);
+  } catch(e) {
+    btn.textContent = '❌ ' + (e.message || 'Failed');
+    setTimeout(() => { btn.textContent = origText; btn.disabled = false; }, 3000);
+  }
 }
 
 async function generateOneIdea(funnel) {
