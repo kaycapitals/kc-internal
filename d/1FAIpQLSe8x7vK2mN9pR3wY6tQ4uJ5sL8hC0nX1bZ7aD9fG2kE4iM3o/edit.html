@@ -865,11 +865,11 @@ let recordingTimerInterval = null;
 let audioContext = null;
 let analyserNode = null;
 let waveformAnimId = null;
-const MAX_RECORDING_SECONDS = 60;
+const MAX_RECORDING_SECONDS = 300;
 
 /**
  * Toggles the main microphone recording on/off.
- * Includes waveform visualization, recording timer, and 60s auto-stop.
+ * Includes waveform visualization, recording timer, and 5-min auto-stop.
  */
 async function toggleMic() {
   const btn = document.getElementById('micBtn');
@@ -961,6 +961,27 @@ async function toggleMic() {
 
     mediaRecorder.start(250);
     isRecording = true;
+
+    // Prevent tab suspension when minimized (keeps recording alive in background)
+    if (navigator.locks) {
+      navigator.locks.request('recording_lock', { mode: 'exclusive' }, () => {
+        return new Promise(resolve => { window._releaseRecordingLock = resolve; });
+      });
+    }
+    // Also use a silent audio context to keep the tab alive on iOS
+    if (!window._keepAliveCtx) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        gain.gain.value = 0.001; // inaudible
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        window._keepAliveCtx = ctx;
+        window._keepAliveOsc = osc;
+      } catch(_) {}
+    }
     btn.style.background = '#cc2222';
     btn.style.borderColor = '#cc2222';
     btn.textContent = '⏹️';
@@ -976,7 +997,7 @@ async function toggleMic() {
     setTimeout(() => {
       if (isRecording) {
         stopMainRecording();
-        showToast('Recording auto-stopped at 60s', 'info');
+        showToast('Recording auto-stopped at 5 min', 'info');
       }
     }, MAX_RECORDING_SECONDS * 1000);
 
@@ -999,6 +1020,9 @@ function stopMainRecording() {
     mediaRecorder.stop();
   }
   isRecording = false;
+  // Release background lock
+  if (window._releaseRecordingLock) { window._releaseRecordingLock(); window._releaseRecordingLock = null; }
+  if (window._keepAliveCtx) { try { window._keepAliveOsc.stop(); window._keepAliveCtx.close(); } catch(_){} window._keepAliveCtx = null; window._keepAliveOsc = null; }
   const btn = document.getElementById('micBtn');
   if (btn) {
     btn.style.background = '#111';
@@ -1203,7 +1227,7 @@ async function toggleFbMic(id) {
         btn.classList.remove('recording');
         btn.textContent = '🎙️';
         fbRecordingId = null;
-        showToast('Recording auto-stopped at 60s', 'info');
+        showToast('Recording auto-stopped at 5 min', 'info');
       }
     }, MAX_RECORDING_SECONDS * 1000);
 
