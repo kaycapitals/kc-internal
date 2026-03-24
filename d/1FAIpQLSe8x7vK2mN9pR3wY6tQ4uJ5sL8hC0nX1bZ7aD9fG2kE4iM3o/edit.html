@@ -273,10 +273,19 @@ textarea::placeholder{color:#444}
         <canvas id="waveformCanvas" class="waveform-canvas" width="120" height="32"></canvas>
         <span class="rec-timer" id="recTimer">0:00</span>
       </div>
+      <!-- Chart upload -->
+      <div id="chartUploadArea" style="margin:8px 0">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <label for="chartInput" style="padding:10px 16px;border-radius:8px;border:1px solid #333;background:#111;color:#d4a843;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px;min-height:44px">📷 Add Chart</label>
+          <input type="file" id="chartInput" accept="image/*" multiple capture="environment" style="display:none" onchange="handleChartUpload(event)">
+          <span id="chartCount" style="color:#666;font-size:12px"></span>
+        </div>
+        <div id="chartPreviews" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"></div>
+      </div>
       <div class="btn-row">
         <button class="gen-btn" id="genBtn" onclick="generate()">⚡ Generate Scripts</button>
       </div>
-      <div class="hint">⌘+Enter to generate · tap mic to speak</div>
+      <div class="hint">⌘+Enter to generate · 🎙️ speak · 📷 add charts for visual context</div>
     </div>
     <div id="output"></div>
   </div>
@@ -350,6 +359,75 @@ textarea::placeholder{color:#444}
 
 <script>
 // ========== VOICE DNA ==========
+// ========== CHART UPLOAD ==========
+const _uploadedCharts = []; // {base64, mimeType, name}
+const MAX_CHARTS = 4;
+
+/**
+ * Handles chart image upload from file input.
+ */
+function handleChartUpload(event) {
+  const files = Array.from(event.target.files || []);
+  if (_uploadedCharts.length + files.length > MAX_CHARTS) {
+    showToast('Max ' + MAX_CHARTS + ' charts allowed', 'error');
+    event.target.value = '';
+    return;
+  }
+  files.forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    if (file.size > 10 * 1024 * 1024) { showToast('Image too large (max 10MB)', 'error'); return; }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64 = e.target.result.split(',')[1];
+      _uploadedCharts.push({ base64, mimeType: file.type, name: file.name });
+      renderChartPreviews();
+    };
+    reader.readAsDataURL(file);
+  });
+  event.target.value = '';
+}
+
+/**
+ * Renders chart thumbnail previews with remove buttons.
+ */
+function renderChartPreviews() {
+  const container = document.getElementById('chartPreviews');
+  const count = document.getElementById('chartCount');
+  if (!container) return;
+  if (count) count.textContent = _uploadedCharts.length > 0 ? _uploadedCharts.length + '/' + MAX_CHARTS + ' charts' : '';
+  container.innerHTML = _uploadedCharts.map((c, i) =>
+    '<div style="position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden;border:1px solid #333">'
+    + '<img src="data:' + c.mimeType + ';base64,' + c.base64 + '" style="width:100%;height:100%;object-fit:cover">'
+    + '<button onclick="removeChart(' + i + ')" style="position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,0.7);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>'
+    + '</div>'
+  ).join('');
+}
+
+/**
+ * Removes a chart from the upload queue.
+ */
+function removeChart(index) {
+  _uploadedCharts.splice(index, 1);
+  renderChartPreviews();
+  haptic(5);
+}
+
+/**
+ * Builds the Claude API message content array with text and optional images.
+ */
+function buildMessageContent(textPrompt) {
+  const content = [];
+  // Add chart images first so Claude sees them before the text
+  _uploadedCharts.forEach(c => {
+    content.push({
+      type: 'image',
+      source: { type: 'base64', media_type: c.mimeType, data: c.base64 }
+    });
+  });
+  content.push({ type: 'text', text: textPrompt });
+  return content;
+}
+
 const VOICE_DNA = {"hooks": ["today was one of the best trading days in the history of the stock market", "breaking news", "this strategy is called", "me sitting on the f***ing chair like this, you know i'm f***ing printed", "90% of traders ignore this one thing", "i think i found out the biggest trading psychology cheat code", "before every single trade that i take, i have a checklist", "you cannot keep trading new stocks every single day", "one of the biggest mistakes that day traders make", "somebody asked me a question today", "i love trading same day expiration contracts, but i didn't take any trade", "you know what it is justin, i'll keep it real with you bro", "any level that's holding in the pre-market becomes a level", "revenge trading used to destroy me", "jose, what's good my brother", "now here's the thing, not every trade", "now most people see a gap down in the market and they freeze", "you should understand this, most traders stay broke", "today was one of the best trading days", "so many people are scared of trading spx", "most of you all are losing money because you can't take action", "i literally laugh at people when they tell me", "a lot of you all want to become a full time day trader", "let's say you take 1 trade with a $2000 position size", "today i actually didn't follow my trading rules"], "phrases": ["check this out", "absolutely beautiful", "let's make it happen", "it is what it is", "here's the thing", "keeping it real", "absolutely insane", "at the end of the day", "you understand what i'm saying?", "let me break it down", "if you want to learn", "i promise you", "i'll send you all the details right away", "let's go", "just comment the word system down below", "you got nothing to lose", "let me show you", "let me put you on some sauce", "bro", "that's exactly what happened", "let me break down", "absolutely printed", "like this video first and comment", "let's freaking go", "matter of fact"], "slang": ["man", "bro", "like", "literally", "absolutely", "freaking", "f***ing", "alright", "i mean", "you know what", "beautiful", "yo", "hey", "honestly", "straight away"], "ctas": ["let's make it happen", "you got nothing to lose", "just comment the word system down below and i'll send you all the details right away", "comment the word [x] and i'll dm you the link straight away", "let me put you on some sauce", "just comment the word system down below and i'll reach out", "just comment the word mentor down below and i'll reach out", "like this video first and comment [word]", "comment the word [x] and i'll dm you", "like this video first and comment the word [x]", "i'll dm you the link straight away", "let's freaking go", "like this video first and comment the word yes and i'll dm you the link straight away", "i'll send you all the details right away", "comment the word mentor and i'll send you all the details"], "power_words": ["beautiful", "absolutely", "insane", "literally", "massive", "freaking", "printed", "exactly", "sauce", "critical", "perfect", "life-changing", "sexy", "life changing", "fire", "straight away", "clean", "huge", "brutal", "conviction"], "quotes": ["you're comparing your chapter 1 with other people's chapter 533", "Bro, whether you like it or not, this is a profession. You want to do this for life, then stop trading it like it's a side hustle", "you're gonna risk it for the biscuit man at the end of the day", "my grandmother's 90 plus and she can walk faster than this", "If you try to eat everything you're going to be extremely overweight. That means you can only catch your piece and that's it. Leave the rest of the food for the rest of the people.", "Crashes are exactly where day traders like you and me print", "More volatility means more confusion around FOMC. And more confusion means you're risking your house for a f***ing dent", "People who rely on wages are getting crushed. People who know how to extract money from the markets are making an absolute fuck ton.", "anything in the middle is where the emotions live", "You know why? Because it's not sexy. So for people who are serious about this in 2026, and you're done with having fantasy timelines, I got something for you", "I mean it's for free so you got nothing to lose.", "You can't be a student and the rock star at the same time.", "top 1% of people will actually watch this and change their lives, so I'm making this video for you", "Patience pays the patient hand that waits patiently to be paid.", "When power clashes at the top, we as traders are who get paid", "You do not break your rules. You break your character.", "Trading is meant to be super simple, especially when you have a small trading account.", "there's so much food on the table you can only eat your bit and yeah there'll be a few days where you try to eat the whole thing but if you keep on doing the whole thing eating the whole thing you're gonna turn into a really really really big freaking guy", "Because the long term investors will simply wait for months or years for this stuff to play out. Day traders do not wait, we trade the reaction of this stuff.", "I make the money, money don't make me", "You do not understand when the market is easy you need to go hard. When the market is hard you need to go easy.", "I'd rather walk away at zero than walking away with minus $4,000 just because I know how to trade and also how not to trade in a way.", "There's only so much food on the table and I can only eat this much and I ate my piece and I'm leaving the rest of the food for the rest of the people", "All the money that I'm making from trading has to be making me more money. And that more money should be making me even more money and that more money should be making me more money and on and on and on.", "nobody goes broke taking profits? Nobody actually gets rich taking small profits", "This right here, this is earned freaking confidence. If you built it yourself, if you paid the price, if you bled for it, bro, flex that shit.", "nothing is broken, you're just in the stage three", "They just wanna look cool, not actually be cool. They wanna pretend they're cool.", "All I'm saying is this might be a little bit too much sauce for you. So make sure you save this video for later because you will need to circle back to this video later as well", "All the pain and the sleepless nights are mine and the joy is yours. But you know what? You're mine.", "In God we trust, but the rest of you, Papa Trump included, better bring the numbers", "That's why you keep going back to the same old mistakes that you were making before.", "I make the money money don't make me I'm gonna make content regardless", "Me personally, I don't think I'm that smart to understand all those tough concepts. I make enough money using my easy concepts man so, I mean it works out for me.", "all those guys that laughed at me, they do not live in such a beautiful f***ing house now, while I live the freaking life", "When you cap risk pricing, banks don't lose money, they just stop lending.", "But because now you stayed at your P&L, now you're holding on to the trade based off greed and now you're sitting in there, please, maybe I'll get paid more", "Market doesn't move on the truth, market moves on the perception and speed", "For me, trading is not about hope, Hopium doesn't pay in trading and hope is never going to be a position.", "And then the classic dad response. He sends me a thumbs up for the $50,000 transfer."], "energy": ["Teaching mode uses slower pace with repeated explanations", "Reflective and personal when sharing losses or personal stories", "Passionate and fired up when discussing politics/economics and their market impact", "Intense urgency during live trading calls with short commands like 'yo', 'take some off'", "Boastful and celebratory when showing lifestyle/success", "Calm and methodical when explaining technical setups step-by-step", "High energy and excited when describing big wins and profitable trades", "High intensity when discussing winning trades or big moves", "Fired up and aggressive when defending trading against critics", "Aggressive/confrontational when addressing critics or market conditions"], "teaching": ["Shows before/after examples with specific trade results", "Breaks down step-by-step technical setup process", "Uses 'Now what does that mean?' to transition to explanations", "Picasso comparison for trading mastery", "Subway Surfers game metaphor for levels breaking", "References specific levels and percentages", "Contrasts right way vs wrong way approaches", "Uses food metaphors: 'there's so much food on the table you can only eat your bit'", "Step-by-step breakdowns: 'First... Second... Third...'", "Relates to food metaphors: 'there's so much food on the table'"], "story": ["Admits mistakes and vulnerabilities for relatability", "Ends with transformation or success", "Shows the emotional journey within trades", "Creates urgency around missed opportunities", "Builds to revelation or lesson learned", "Uses cliffhangers: 'but most of you would have...'", "Timeline-based narratives (what happened first, then, finally)", "Admits mistakes openly then explains the lesson learned", "Uses callback phrases like 'and that's exactly what happened'", "Builds anticipation then reveals results"], "contrast": ["Fear-based decisions vs educated positioning", "SPY moving up while QQQ moving down (red flag) vs both moving same direction (green flag)", "Most people vs real traders", "Some people risk freedom for money, while some risk money for freedom", "Hard market vs easy market", "While you were stuck in your own head, I took a 40% trade", "Losses you can learn from vs losses you can't learn anything from", "day trading vs scalping: 'Day trading can go for hours sometimes. Scalping goes for max minutes'", "While others panic vs opportunity for us: 'While others are freezing or waiting, you can use tight setups'", "Red days vs. winning days with position sizing"], "direct_address": ["If you're going on your trading journey man", "Stop lying to yourself", "you're comparing your chapter 1 with other people's chapter 533", "I promise you...", "You want something moving with a little bit of conviction", "Some of you all", "You don't need a lot of money to make money bro", "You need to", "Listen if you want to...", "don't tell me that you have tried everything"], "tone_shifts": ["Transitions from technical analysis to emotional/psychological insights", "Goes from calm explanation to frustrated when talking about excuses", "Begins frustrated about losses, transitions to philosophical acceptance", "Moves from personal story to direct teaching to strong CTA", "Becomes excited when describing successful trades", "Starts humble/vulnerable, builds to confident teaching", "Goes from analytical to protective when warning about risks", "Goes from sympathetic about losses to tough love about taking responsibility", "Begins with specific example, generalizes to broader lesson", "Builds intensity during chart analysis, calms for educational segments"], "emotional": ["Gets fired up about unrealistic trading timelines - 'that's disrespect to people who actually made it'", "Other traders' bad habits make him want to teach and correct", "Wrong conventional wisdom about trading - fires him up to correct", "Greed and fear controlling decisions", "People making excuses or saying trading is impossible", "Criticism of his methods makes him argumentative", "Defending his wife and relationship", "People getting distracted by news instead of focusing on skills", "Complex strategies frustrate him - he prefers simple", "Memories of being hungry/poor - deep emotion and vulnerability"], "topics": ["trading psychology and mindset", "risk management and position sizing", "student success stories", "live trade breakdowns", "risk management lessons", "technical analysis tutorials", "trading psychology and discipline", "student success stories and testimonials", "course/mentorship promotion", "trading mistakes and lessons", "trading rules and discipline", "trading strategy breakdowns", "risk management", "live trading commentary", "trading psychology and emotions", "specific trade breakdowns", "trade breakdowns with specific profit percentages", "technical analysis education", "risk management principles", "market conditions analysis"]};
 
 // ========== SYSTEM PROMPT ==========
@@ -1468,13 +1546,14 @@ async function generate() {
 
   const totalHits = allResults.length;
   btn.textContent = '⏳ Generating 4 scripts...';
-  out.innerHTML = '<div class="loading"><div class="bar"><div class="fill"></div></div><p>Crafting scripts in your voice (' + totalHits + ' brain matches: ' + reelQuotes.length + ' reels, ' + bookKnowledge.length + ' books, ' + courseContent.length + ' course)...</p></div>';
+  const chartNote = _uploadedCharts.length > 0 ? ' + ' + _uploadedCharts.length + ' chart(s) attached' : '';
+  out.innerHTML = '<div class="loading"><div class="bar"><div class="fill"></div></div><p>Crafting scripts in your voice (' + totalHits + ' brain matches' + chartNote + ')...</p></div>';
 
   const apiBody = {
     model: 'claude-sonnet-4-20250514',
     max_tokens: 3000,
     system: SYSTEM_PROMPT,
-    messages: [{ role: 'user', content: 'Write 4 Instagram reel scripts for this idea:\n\n"' + idea + '"\n' + brainContext + '\n\n4 variants:\n1. 🔥 AGGRESSIVE — confrontational, calling people out\n2. 📚 TEACHING — step-by-step breakdown with specifics\n3. 📖 STORY — REAL personal story (from brain context above, NOT made up)\n4. 🌶️ HOT TAKE — controversial opinion, polarizing, debate-starter\n\nCRITICAL:\n- If "YOUR OWN WORDS" section exists above, you MUST use those exact phrases in at least 2 scripts\n- Story variant MUST reference a real experience from the brain context, not a generic "I remember when..."\n- Hot take should be something 50% of traders would disagree with\n- Sound like you\'re ranting to camera, not reading a script\n- 80-180 words per script MAX\n- Return ONLY valid JSON, no markdown' }]
+    messages: [{ role: 'user', content: buildMessageContent((_uploadedCharts.length > 0 ? 'I\'ve attached ' + _uploadedCharts.length + ' chart screenshot(s). Analyze the chart patterns, levels, and setups visible. Reference what you SEE in the chart(s) when writing the scripts — mention specific patterns, support/resistance levels, candle formations, or indicators visible.\n\n' : '') + 'Write 4 Instagram reel scripts for this idea:\n\n"' + idea + '"\n' + brainContext + '\n\n4 variants:\n1. 🔥 AGGRESSIVE — confrontational, calling people out\n2. 📚 TEACHING — step-by-step breakdown with specifics\n3. 📖 STORY — REAL personal story (from brain context above, NOT made up)\n4. 🌶️ HOT TAKE — controversial opinion, polarizing, debate-starter\n\nCRITICAL:\n- If "YOUR OWN WORDS" section exists above, you MUST use those exact phrases in at least 2 scripts\n- Story variant MUST reference a real experience from the brain context, not a generic "I remember when..."\n- Hot take should be something 50% of traders would disagree with\n- Sound like you\'re ranting to camera, not reading a script\n- 80-180 words per script MAX\n- Return ONLY valid JSON, no markdown') }]
   };
 
   let scripts = null;
@@ -1538,6 +1617,9 @@ async function generate() {
 
   if (scripts && scripts.length > 0) {
     window._scripts = scripts;
+    // Clear charts after successful generation
+    _uploadedCharts.length = 0;
+    renderChartPreviews();
     let h = '<div class="results-hdr"><h2>Your Scripts</h2><button class="copy-all" onclick="copyAll()">📋 Copy All</button></div>';
 
     scripts.forEach((s, i) => {
