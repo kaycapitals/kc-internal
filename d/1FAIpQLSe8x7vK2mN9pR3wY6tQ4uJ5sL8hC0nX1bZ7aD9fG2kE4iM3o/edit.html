@@ -2529,7 +2529,9 @@ function loadIdeasTab() {
   renderTasteSummary();
 
   if (!Array.isArray(ideas) || ideas.length === 0) {
-    generateAllIdeas(false);
+    // Don't auto-generate — show empty state with manual button
+    const container = document.getElementById('ideasContent');
+    if (container) container.innerHTML = '<div class="ideas-empty" style="padding:40px 20px;text-align:center"><p style="color:#d4a843;font-size:16px;margin-bottom:12px">💡 No ideas yet</p><p style="color:#666;font-size:13px;margin-bottom:16px">Tap below to generate 30 fresh content ideas</p><button class="gen-btn" onclick="generateAllIdeas(false)" style="max-width:280px;margin:0 auto">⚡ Generate Ideas</button></div>';
   } else if (age > IDEAS_STALE_MS) {
     // Show existing ideas but show a subtle "stale" banner — don't auto-regenerate
     renderIdeas(ideas);
