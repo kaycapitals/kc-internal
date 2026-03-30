@@ -215,6 +215,51 @@ textarea::placeholder{color:#444}
 .rate-limit-fill.warning{background:#cc8800}
 .rate-limit-fill.danger{background:#cc2222}
 
+/* Next Reel Suggestion */
+.next-reel-card{background:#111;border:1px solid #d4a843;border-radius:12px;padding:16px;margin:16px 0;position:relative}
+.next-reel-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#d4a843,#ffcc66);border-radius:12px 12px 0 0}
+.next-reel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.next-reel-title{color:#d4a843;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.next-reel-content h4{color:#fff;font-size:15px;margin-bottom:6px;font-weight:600}
+.next-reel-hook{color:#d4a843;font-size:14px;font-style:italic;margin-bottom:8px;padding:8px 12px;background:#1a1a0a;border-radius:8px;border-left:3px solid #d4a843}
+.next-reel-why{color:#888;font-size:13px;line-height:1.5}
+.next-reel-btn{padding:12px 20px;border-radius:8px;border:none;background:#d4a843;color:#000;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;min-height:44px}
+.next-reel-btn:hover{opacity:.85;transform:translateY(-1px)}
+
+/* Chat Interface */
+.chat-interface{margin-top:24px;border-top:2px solid #222;padding-top:16px}
+.chat-header{color:#d4a843;font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.chat-messages{max-height:400px;overflow-y:auto;margin-bottom:16px;padding:8px 0;scrollbar-width:thin;scrollbar-color:#333 #0a0a0a}
+.chat-messages::-webkit-scrollbar{width:6px}
+.chat-messages::-webkit-scrollbar-track{background:#0a0a0a}
+.chat-messages::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+.chat-message{margin-bottom:16px;display:flex;gap:12px}
+.chat-message.user{flex-direction:row-reverse}
+.chat-message.user .chat-bubble{background:#1a1a2a;border:1px solid #333;color:#fff;text-align:right}
+.chat-message.assistant .chat-bubble{background:#111;border:1px solid #d4a843;color:#e0e0e0}
+.chat-bubble{max-width:80%;padding:12px 16px;border-radius:16px;line-height:1.5;font-size:14px;position:relative;word-wrap:break-word}
+.chat-bubble p{margin:0 0 8px 0}
+.chat-bubble p:last-child{margin-bottom:0}
+.chat-bubble strong{color:#d4a843}
+.chat-bubble em{color:#888;font-style:italic}
+.chat-bubble code{background:#0a0a0a;padding:2px 4px;border-radius:4px;font-family:monospace;font-size:12px}
+.chat-input-area{position:relative}
+.chat-textarea{width:100%;padding:14px 56px 14px 16px;border-radius:12px;border:1px solid #222;background:#111;color:#fff;font-size:15px;resize:none;outline:none;font-family:inherit;min-height:60px;transition:border-color .2s}
+.chat-textarea:focus{border-color:#d4a843}
+.chat-textarea::placeholder{color:#444}
+.chat-send-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:2px solid #d4a843;background:#111;color:#d4a843;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.chat-send-btn:hover{background:#d4a843;color:#000}
+.chat-send-btn:disabled{opacity:.4;cursor:not-allowed}
+.chat-mic-btn{position:absolute;right:60px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:2px solid #333;background:#111;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.chat-mic-btn.recording{background:#cc2222;border-color:#cc2222;color:#fff}
+.chat-loading{display:flex;align-items:center;gap:8px;color:#d4a843;font-size:13px;margin-top:8px}
+.chat-loading .spinner{width:16px;height:16px;border:2px solid #222;border-top-color:#d4a843;border-radius:50%;animation:spin .8s linear infinite}
+.chat-hint{color:#333;font-size:11px;text-align:center;margin-top:6px}
+
+/* Reset button for chat */
+.reset-btn{background:none;border:1px solid #333;color:#666;padding:8px 16px;border-radius:8px;font-size:12px;cursor:pointer;transition:all .15s;margin-bottom:16px;min-height:40px}
+.reset-btn:hover{border-color:#d4a843;color:#d4a843}
+
 @media(max-width:600px){
   body{padding:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px))}
   .hdr h1{font-size:20px}
@@ -477,7 +522,7 @@ EMOTIONAL TRIGGERS: ${JSON.stringify(VOICE_DNA.emotional)}
 
 ## OUTPUT FORMAT
 Return ONLY valid JSON (no markdown, no backticks):
-{"scripts":[{"variant":"aggressive","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"high"},{"variant":"teaching","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"medium"},{"variant":"story","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"calm"},{"variant":"hot_take","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":30,"energy":"high"}]}`;
+{"scripts":[{"variant":"aggressive","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"high"},{"variant":"teaching","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"medium"},{"variant":"story","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"calm"},{"variant":"hot_take","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":30,"energy":"high"}],"next_reel":{"title":"...","hook":"...","why":"..."}}`;
 
 const ICONS = {aggressive:'🔥',teaching:'📚',story:'📖',hot_take:'🌶️'};
 const ECOLORS = {high:'#ff4444',medium:'#d4a843',calm:'#44aa88'};
@@ -1486,6 +1531,16 @@ window._scriptRatings = _safeParse('_scriptRatings', '{}');
 /** @type {Object} Script copy tracking */
 window._scriptCopies = _safeParse('_scriptCopies', '{}');
 
+// ========== CHAT MODE ==========
+/** @type {Array} Chat conversation history */
+let _chatHistory = [];
+/** @type {string} System context for chat refinements */
+let _chatSystemContext = '';
+/** @type {boolean} Chat loading state */
+let _chatLoading = false;
+/** @type {Object|null} Follow-up reel suggestion */
+let _nextReelSuggestion = null;
+
 /**
  * Generates 4 script variants from the user's idea input.
  * Includes triple brain search, retry logic, and progress indicators.
@@ -1555,7 +1610,7 @@ async function generate() {
     model: 'claude-sonnet-4-20250514',
     max_tokens: 3000,
     system: SYSTEM_PROMPT,
-    messages: [{ role: 'user', content: buildMessageContent((_uploadedCharts.length > 0 ? 'I\'ve attached ' + _uploadedCharts.length + ' chart screenshot(s). Analyze the chart patterns, levels, and setups visible. Reference what you SEE in the chart(s) when writing the scripts — mention specific patterns, support/resistance levels, candle formations, or indicators visible.\n\n' : '') + 'Write 4 Instagram reel scripts for this idea:\n\n"' + idea + '"\n' + brainContext + '\n\n4 variants:\n1. 🔥 AGGRESSIVE — confrontational, calling people out\n2. 📚 TEACHING — step-by-step breakdown with specifics\n3. 📖 STORY — REAL personal story (from brain context above, NOT made up)\n4. 🌶️ HOT TAKE — controversial opinion, polarizing, debate-starter\n\nCRITICAL:\n- If "YOUR OWN WORDS" section exists above, you MUST use those exact phrases in at least 2 scripts\n- Story variant MUST reference a real experience from the brain context, not a generic "I remember when..."\n- Hot take should be something 50% of traders would disagree with\n- Sound like you\'re ranting to camera, not reading a script\n- 80-180 words per script MAX\n- Return ONLY valid JSON, no markdown') }]
+    messages: [{ role: 'user', content: buildMessageContent((_uploadedCharts.length > 0 ? 'I\'ve attached ' + _uploadedCharts.length + ' chart screenshot(s). Analyze the chart patterns, levels, and setups visible. Reference what you SEE in the chart(s) when writing the scripts — mention specific patterns, support/resistance levels, candle formations, or indicators visible.\n\n' : '') + 'Write 4 Instagram reel scripts for this idea:\n\n"' + idea + '"\n' + brainContext + '\n\n4 variants:\n1. 🔥 AGGRESSIVE — confrontational, calling people out\n2. 📚 TEACHING — step-by-step breakdown with specifics\n3. 📖 STORY — REAL personal story (from brain context above, NOT made up)\n4. 🌶️ HOT TAKE — controversial opinion, polarizing, debate-starter\n\nCRITICAL:\n- If "YOUR OWN WORDS" section exists above, you MUST use those exact phrases in at least 2 scripts\n- Story variant MUST reference a real experience from the brain context, not a generic "I remember when..."\n- Hot take should be something 50% of traders would disagree with\n- Sound like you\'re ranting to camera, not reading a script\n- 80-180 words per script MAX\n- Return ONLY valid JSON, no markdown\n- ALSO include a "next_reel" object with: title (follow-up reel idea that chains naturally), hook (sample hook for it), why (why it chains well with this reel)') }]
   };
 
   let scripts = null;
@@ -1594,6 +1649,10 @@ async function generate() {
         if (parsed && Array.isArray(parsed.scripts)) {
           // Validate and filter scripts
           scripts = parsed.scripts.filter(validateScript);
+          // Extract next reel suggestion if present
+          if (parsed.next_reel && parsed.next_reel.title && parsed.next_reel.hook) {
+            _nextReelSuggestion = parsed.next_reel;
+          }
           if (scripts.length > 0) break; // Success
         }
       } catch (parseErr) {
@@ -1619,6 +1678,8 @@ async function generate() {
 
   if (scripts && scripts.length > 0) {
     window._scripts = scripts;
+    // Build chat system context
+    buildChatSystemContext(idea, scripts);
     // Clear charts after successful generation
     _uploadedCharts.length = 0;
     renderChartPreviews();
@@ -1668,8 +1729,24 @@ async function generate() {
       h += '</div>';
     });
 
+    // Add Next Reel Suggestion
+    if (_nextReelSuggestion) {
+      h += renderNextReelSuggestion(_nextReelSuggestion);
+    }
+
+    // Add Chat Interface
+    h += renderChatInterface();
+
     h += '<div class="cost">Cost: $' + cost.toFixed(4) + ' · ' + (iT + oT) + ' tokens</div>';
     out.innerHTML = h;
+    
+    // Scroll to chat after rendering
+    setTimeout(() => {
+      const chatEl = document.getElementById('chatInterface');
+      if (chatEl) {
+        chatEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 100);
   } else {
     out.innerHTML = '<div class="error">❌ No valid scripts generated. Please try again.</div>';
   }
@@ -1772,6 +1849,80 @@ async function regenerateVariant(idx) {
 }
 
 /**
+ * Builds the system context for chat refinements based on generated scripts.
+ * @param {string} originalIdea - The original idea that was used to generate scripts
+ * @param {Array} scripts - The generated script variants
+ */
+function buildChatSystemContext(originalIdea, scripts) {
+  let context = `You are helping Somesh (Kay Capitals) refine Instagram reel scripts. You already generated 4 script variants for this idea: "${originalIdea}"\n\n`;
+  
+  context += `GENERATED SCRIPTS:\n`;
+  scripts.forEach((s, i) => {
+    context += `\n${s.variant.toUpperCase()} (${i + 1}):\n`;
+    context += `Hook: ${s.hook}\n`;
+    context += `Body: ${s.body}\n`;
+    context += `CTA: ${s.cta}\n`;
+    if (s.visual_notes) context += `Visual: ${s.visual_notes}\n`;
+  });
+  
+  context += `\n\nNow the user wants to refine these scripts. When they ask for changes:
+- Keep Somesh's authentic voice and speech patterns (filler words, run-on sentences, slang)
+- Make specific improvements based on their feedback
+- If they reference "the aggressive one" or "the teaching script", you know which variant they mean
+- For hooks: make them more scroll-stopping and pattern-interrupting
+- For CTAs: keep his exact format ("just comment the word X down below and I'll send you all the details right away")
+- Keep it conversational and direct - you're helping him perfect his content
+
+Respond in a helpful, direct tone as if you're his content partner who knows his voice inside and out.`;
+
+  _chatSystemContext = context;
+}
+
+/**
+ * Renders the Next Reel Suggestion card.
+ * @param {Object} nextReel - The next reel suggestion object
+ * @returns {string} HTML string
+ */
+function renderNextReelSuggestion(nextReel) {
+  if (!nextReel || !nextReel.title) return '';
+  
+  return `<div class="next-reel-card">
+    <div class="next-reel-header">
+      <div class="next-reel-title">🔗 Next Reel Idea</div>
+      <button class="next-reel-btn" onclick="useNextReelIdea()">⚡ Use This Idea</button>
+    </div>
+    <div class="next-reel-content">
+      <h4>${esc(nextReel.title)}</h4>
+      ${nextReel.hook ? '<div class="next-reel-hook">"' + esc(nextReel.hook) + '"</div>' : ''}
+      ${nextReel.why ? '<div class="next-reel-why"><strong>Why this chains well:</strong> ' + esc(nextReel.why) + '</div>' : ''}
+    </div>
+  </div>`;
+}
+
+/**
+ * Renders the chat interface HTML.
+ * @returns {string} HTML string
+ */
+function renderChatInterface() {
+  return `<div class="chat-interface" id="chatInterface">
+    <button class="reset-btn" onclick="resetGeneration()">🔄 Reset (clear scripts, chat, idea, charts)</button>
+    <div class="chat-header">💬 Refine Your Scripts</div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-area">
+      <textarea id="chatInput" class="chat-textarea" placeholder="Tell me how to improve the scripts... (e.g., 'make the hook more aggressive', 'change the CTA', 'add a story about X')" rows="3"></textarea>
+      <button class="chat-mic-btn" id="chatMicBtn" onclick="toggleChatMic()" title="Voice input">🎙️</button>
+      <button class="chat-send-btn" id="chatSendBtn" onclick="sendChatMessage()" title="Send message">➤</button>
+    </div>
+    <div id="chatMicStatus" style="display:none;text-align:center;padding:4px;color:#d4a843;font-size:12px"></div>
+    <div id="chatLoading" class="chat-loading" style="display:none">
+      <div class="spinner"></div>
+      <span>Claude is refining your scripts...</span>
+    </div>
+    <div class="chat-hint">Enter to send • Shift+Enter for new line • 🎙️ for voice input</div>
+  </div>`;
+}
+
+/**
  * Re-renders the scripts output from window._scripts.
  */
 function generate_renderScripts() {
@@ -1819,7 +1970,19 @@ function generate_renderScripts() {
       + '<button class="script-regen" onclick="regenerateVariant(' + i + ')">🔄 Regen</button>'
       + '</div></div>';
   });
+  
+  // Add Next Reel Suggestion
+  if (_nextReelSuggestion) {
+    h += renderNextReelSuggestion(_nextReelSuggestion);
+  }
+
+  // Add Chat Interface
+  h += renderChatInterface();
+  
   out.innerHTML = h;
+  
+  // Re-render chat messages if they exist
+  renderChatMessages();
 }
 
 /**
@@ -1883,6 +2046,269 @@ function fallbackCopy(text) {
   document.body.removeChild(ta);
   showToast('Copied!', 'success', { duration: 1500 });
 }
+
+// ========== CHAT FUNCTIONS ==========
+
+/**
+ * Sends a chat message to refine scripts.
+ */
+async function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('chatSendBtn');
+  if (!input || !sendBtn) return;
+  
+  const message = input.value.trim();
+  if (!message) return;
+  if (_chatLoading) return;
+  if (!checkRateLimit()) return;
+  
+  // Add user message
+  _chatHistory.push({ role: 'user', content: message });
+  input.value = '';
+  input.style.height = 'auto';
+  renderChatMessages();
+  
+  // Show loading
+  _chatLoading = true;
+  sendBtn.disabled = true;
+  const loadingEl = document.getElementById('chatLoading');
+  if (loadingEl) loadingEl.style.display = 'flex';
+  
+  try {
+    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': getKey(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        system: _chatSystemContext,
+        messages: _chatHistory
+      })
+    }, 60000);
+    
+    const data = await r.json();
+    if (data && data.error) throw new Error(data.error.message || 'API error');
+    if (!data || !data.content || !data.content.length) throw new Error('Empty response');
+    
+    const reply = data.content[0].text;
+    _chatHistory.push({ role: 'assistant', content: reply });
+    renderChatMessages();
+    
+  } catch (e) {
+    _chatHistory.push({ role: 'assistant', content: '❌ Error: ' + (e.message || 'Failed to get response. Try again.') });
+    renderChatMessages();
+  } finally {
+    _chatLoading = false;
+    sendBtn.disabled = false;
+    if (loadingEl) loadingEl.style.display = 'none';
+  }
+}
+
+/**
+ * Renders chat messages in the chat container.
+ */
+function renderChatMessages() {
+  const container = document.getElementById('chatMessages');
+  if (!container) return;
+  
+  if (_chatHistory.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:#333;font-size:13px;padding:20px">No messages yet. Ask me to refine your scripts!</div>';
+    return;
+  }
+  
+  let html = '';
+  _chatHistory.forEach(msg => {
+    const isUser = msg.role === 'user';
+    html += '<div class="chat-message ' + msg.role + '">'
+      + '<div class="chat-bubble">' + formatChatText(msg.content) + '</div>'
+      + '</div>';
+  });
+  
+  container.innerHTML = html;
+  container.scrollTop = container.scrollHeight;
+}
+
+/**
+ * Formats chat text with basic markdown-like rendering.
+ * @param {string} text - Raw text
+ * @returns {string} HTML formatted text
+ */
+function formatChatText(text) {
+  if (!text) return '';
+  let html = esc(text);
+  // Bold: **text**
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  // Italic: *text*
+  html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  // Inline code: `text`
+  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+  // Line breaks
+  html = html.replace(/\n/g, '<br>');
+  return html;
+}
+
+/**
+ * Resets the generation: clears scripts, chat, idea input, and charts.
+ */
+function resetGeneration() {
+  window._scripts = null;
+  _chatHistory = [];
+  _chatSystemContext = '';
+  _chatLoading = false;
+  _nextReelSuggestion = null;
+  _uploadedCharts.length = 0;
+  renderChartPreviews();
+  
+  const ideaEl = document.getElementById('idea');
+  if (ideaEl) ideaEl.value = '';
+  
+  const out = document.getElementById('output');
+  if (out) out.innerHTML = '';
+  
+  haptic(10);
+  showToast('🔄 Reset — ready for a new idea', 'success', { duration: 2000 });
+}
+
+/**
+ * Uses the next reel suggestion: populates the idea input and generates.
+ */
+function useNextReelIdea() {
+  if (!_nextReelSuggestion || !_nextReelSuggestion.title) return;
+  
+  const nextTitle = _nextReelSuggestion.title;
+  
+  // Reset chat but keep the flow going
+  _chatHistory = [];
+  _chatSystemContext = '';
+  _chatLoading = false;
+  _nextReelSuggestion = null;
+  
+  const ideaEl = document.getElementById('idea');
+  if (ideaEl) ideaEl.value = nextTitle;
+  
+  haptic(10);
+  showToast('Loading next reel idea...', 'info', { duration: 1500 });
+  setTimeout(() => generate(), 300);
+}
+
+// Chat voice recording state
+let _chatMediaRecorder = null;
+let _chatAudioChunks = [];
+let _chatRecording = false;
+
+/**
+ * Toggles voice recording for chat input.
+ */
+async function toggleChatMic() {
+  const btn = document.getElementById('chatMicBtn');
+  const status = document.getElementById('chatMicStatus');
+  if (!btn) return;
+  
+  if (_chatRecording) {
+    if (_chatMediaRecorder && _chatMediaRecorder.state !== 'inactive') _chatMediaRecorder.stop();
+    _chatRecording = false;
+    btn.classList.remove('recording');
+    btn.textContent = '🎙️';
+    if (status) { status.textContent = '⏳ Transcribing...'; status.style.display = 'block'; }
+    return;
+  }
+  
+  if (typeof MediaRecorder === 'undefined') {
+    if (status) { status.style.display = 'block'; status.textContent = '⚠️ Voice not supported'; setTimeout(() => { status.style.display = 'none'; }, 3000); }
+    return;
+  }
+  
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    _chatAudioChunks = [];
+    
+    const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+      ? 'audio/webm;codecs=opus'
+      : MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : '';
+    
+    const opts = mimeType ? { mimeType, audioBitsPerSecond: 32000 } : { audioBitsPerSecond: 32000 };
+    _chatMediaRecorder = new MediaRecorder(stream, opts);
+    _chatRecording = true;
+    
+    _chatMediaRecorder.ondataavailable = (e) => {
+      if (e.data && e.data.size > 0) _chatAudioChunks.push(e.data);
+    };
+    
+    _chatMediaRecorder.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop());
+      _chatRecording = false;
+      
+      const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
+      const blob = new Blob(_chatAudioChunks, { type: mimeType || 'audio/webm' });
+      if (blob.size < 1000) {
+        if (status) { status.textContent = '⚠️ Too short'; status.style.display = 'block'; setTimeout(() => { status.style.display = 'none'; }, 2000); }
+        return;
+      }
+      
+      if (status) { status.style.display = 'block'; status.textContent = '⏳ Transcribing...'; }
+      
+      try {
+        const formData = new FormData();
+        formData.append('file', blob, 'voice.' + ext);
+        formData.append('model', 'whisper-1');
+        formData.append('language', 'en');
+        
+        const res = await fetchWithTimeout('https://api.openai.com/v1/audio/transcriptions', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + getOKey() },
+          body: formData
+        }, 30000);
+        
+        const data = await res.json();
+        if (data && data.text) {
+          const input = document.getElementById('chatInput');
+          if (input) input.value = input.value ? input.value + ' ' + data.text : data.text;
+          if (status) { status.textContent = '✅ Got it!'; setTimeout(() => { status.style.display = 'none'; }, 1500); }
+        } else {
+          if (status) { status.textContent = '❌ Failed'; setTimeout(() => { status.style.display = 'none'; }, 3000); }
+        }
+      } catch (err) {
+        if (status) { status.textContent = '❌ ' + (err.message || 'Failed'); setTimeout(() => { status.style.display = 'none'; }, 3000); }
+      }
+    };
+    
+    _chatMediaRecorder.start(250);
+    btn.classList.add('recording');
+    btn.textContent = '⏹️';
+    if (status) { status.style.display = 'block'; status.textContent = '🔴 Recording...'; }
+    
+    // Auto-stop at 60s
+    setTimeout(() => {
+      if (_chatRecording && _chatMediaRecorder && _chatMediaRecorder.state !== 'inactive') {
+        _chatMediaRecorder.stop();
+        btn.classList.remove('recording');
+        btn.textContent = '🎙️';
+        _chatRecording = false;
+      }
+    }, 60000);
+    
+  } catch (err) {
+    if (status) {
+      status.style.display = 'block';
+      status.textContent = err.name === 'NotAllowedError' ? '🚫 Mic access denied' : '❌ ' + (err.message || 'Mic error');
+      setTimeout(() => { status.style.display = 'none'; }, 4000);
+    }
+  }
+}
+
+// Chat keyboard shortcut: Enter to send, Shift+Enter for newline
+document.addEventListener('keydown', function(e) {
+  const chatInput = document.getElementById('chatInput');
+  if (e.target === chatInput && e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChatMessage();
+  }
+});
 
 // ========== IDEAS TAB ==========
 
