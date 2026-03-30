@@ -1556,6 +1556,63 @@ let _chatLoading = false;
 /** @type {Object|null} Follow-up reel suggestion */
 let _nextReelSuggestion = null;
 
+// ========== SESSION PERSISTENCE ==========
+
+/**
+ * Saves the current generation session state to localStorage.
+ * Called after any state change (script generation, chat message, etc.)
+ */
+function saveSessionState() {
+  const state = {
+    scripts: window._scripts,
+    chatHistory: _chatHistory,
+    chatSystemContext: _chatSystemContext,
+    nextReelSuggestion: _nextReelSuggestion,
+    brainSources: window._brainSources || [],
+    idea: document.getElementById('idea')?.value || '',
+    savedAt: Date.now()
+  };
+  secureStore('_session', state);
+}
+
+/**
+ * Restores generation session state from localStorage.
+ * Called on page load if a saved session exists.
+ * Returns true if state was restored.
+ */
+function restoreSessionState() {
+  const state = secureLoad('_session', null);
+  if (!state || !state.scripts || !Array.isArray(state.scripts) || state.scripts.length === 0) return false;
+  
+  // Don't restore sessions older than 4 hours
+  if (state.savedAt && (Date.now() - state.savedAt > 4 * 60 * 60 * 1000)) {
+    localStorage.removeItem('_session');
+    localStorage.removeItem('_session_h');
+    return false;
+  }
+  
+  window._scripts = state.scripts;
+  _chatHistory = Array.isArray(state.chatHistory) ? state.chatHistory : [];
+  _chatSystemContext = state.chatSystemContext || '';
+  _nextReelSuggestion = state.nextReelSuggestion || null;
+  window._brainSources = Array.isArray(state.brainSources) ? state.brainSources : [];
+  
+  // Restore idea text
+  const ideaEl = document.getElementById('idea');
+  if (ideaEl && state.idea) ideaEl.value = state.idea;
+  
+  // Re-render the scripts output
+  generate_renderScripts();
+  
+  // Re-render chat messages if any exist
+  if (_chatHistory.length > 0) {
+    renderChatMessages();
+  }
+  
+  showToast('✅ Session restored', 'success', { duration: 2000 });
+  return true;
+}
+
 /**
  * Generates 4 script variants from the user's idea input.
  * Includes triple brain search, retry logic, and progress indicators.
@@ -1756,6 +1813,9 @@ async function generate() {
     h += renderChatInterface();
     out.innerHTML = h;
     
+    // Save session state after successful generation
+    saveSessionState();
+    
     // Scroll to chat after rendering
     setTimeout(() => {
       const chatEl = document.getElementById('chatInterface');
@@ -1852,6 +1912,8 @@ async function regenerateVariant(idx) {
           showToast('Variant regenerated!', 'success');
           // Quick re-render of just this card
           generate_renderScripts();
+          // Save updated session state
+          saveSessionState();
         }
         return;
       }
@@ -2000,6 +2062,9 @@ function generate_renderScripts() {
   
   // Re-render chat messages if they exist
   renderChatMessages();
+  
+  // Save session state after rendering scripts
+  saveSessionState();
 }
 
 /**
@@ -2133,10 +2198,12 @@ async function sendChatMessage() {
       _chatHistory = _chatHistory.slice(-30);
     }
     renderChatMessages();
+    saveSessionState();
     
   } catch (e) {
     _chatHistory.push({ role: 'assistant', content: '❌ Error: ' + (e.message || 'Failed to get response. Try again.') });
     renderChatMessages();
+    saveSessionState();
   } finally {
     _chatLoading = false;
     sendBtn.disabled = false;
@@ -2205,6 +2272,10 @@ function resetGeneration() {
   _nextReelSuggestion = null;
   _uploadedCharts.length = 0;
   renderChartPreviews();
+  
+  // Clear saved session
+  localStorage.removeItem('_session');
+  localStorage.removeItem('_session_h');
   
   const ideaEl = document.getElementById('idea');
   if (ideaEl) ideaEl.value = '';
@@ -3415,12 +3486,31 @@ document.addEventListener('DOMContentLoaded', () => {
     if (loginScreen) loginScreen.style.display = 'none';
     if (mainApp) mainApp.style.display = 'block';
     initTabIndicator();
+    
+    // Restore session if coming back from background
+    restoreSessionState();
   }
   updateTabCounts();
   initPullToRefresh();
 
   // Resize handler for tab indicator
   window.addEventListener('resize', updateTabIndicator);
+});
+
+// Save state when app is about to be suspended/hidden (iOS PWA background)
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden' && window._scripts) {
+    saveSessionState();
+  } else if (document.visibilityState === 'visible' && (!window._scripts || window._scripts.length === 0)) {
+    restoreSessionState();
+  }
+});
+
+// Also save on beforeunload as fallback
+window.addEventListener('beforeunload', () => {
+  if (window._scripts) {
+    saveSessionState();
+  }
 });
 </script>
 </body>
