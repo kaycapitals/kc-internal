@@ -1107,11 +1107,13 @@ async function toggleMic() {
     isRecording = true;
 
     // Prevent tab suspension when minimized (keeps recording alive in background)
-    if (navigator.locks) {
-      navigator.locks.request('recording_lock', { mode: 'exclusive' }, () => {
-        return new Promise(resolve => { window._releaseRecordingLock = resolve; });
-      });
-    }
+    try {
+      if (navigator.locks && navigator.locks.request) {
+        navigator.locks.request('recording_lock', { mode: 'exclusive' }, () => {
+          return new Promise(resolve => { window._releaseRecordingLock = resolve; });
+        }).catch(() => {}); // Silently fail on unsupported browsers
+      }
+    } catch(e) {} // Silently fail
     // Also use a silent audio context to keep the tab alive on iOS
     if (!window._keepAliveCtx) {
       try {
@@ -1137,11 +1139,11 @@ async function toggleMic() {
     if (waveformWrap) waveformWrap.style.display = 'flex';
     startRecordingTimer('recTimer');
 
-    // Auto-stop at 60 seconds
+    // Auto-stop at MAX_RECORDING_SECONDS
     setTimeout(() => {
       if (isRecording) {
         stopMainRecording();
-        showToast('Recording auto-stopped at 5 min', 'info');
+        showToast('Recording auto-stopped at ' + (MAX_RECORDING_SECONDS / 60) + ' min', 'info');
       }
     }, MAX_RECORDING_SECONDS * 1000);
 
@@ -1271,6 +1273,16 @@ let fbWaveformAnim = null;
  * @param {string} id - The card ID or '_bs' for bottom sheet
  */
 async function toggleFbMic(id) {
+  // Conflict checks
+  if (isRecording) {
+    showToast('Stop main mic first', 'error');
+    return;
+  }
+  if (_chatRecording) {
+    showToast('Stop chat mic first', 'error');
+    return;
+  }
+  
   const btn = document.getElementById('fb-mic-' + id) || document.getElementById('bsMic');
   const status = document.getElementById('fb-mic-status-' + id);
 
@@ -1364,14 +1376,14 @@ async function toggleFbMic(id) {
     btn.textContent = '⏹️';
     if (status) { status.style.display = 'block'; status.textContent = '🔴 Recording...'; }
 
-    // Auto-stop at 60s
+    // Auto-stop at MAX_RECORDING_SECONDS
     setTimeout(() => {
       if (fbRecordingId === id && fbMediaRecorder && fbMediaRecorder.state !== 'inactive') {
         fbMediaRecorder.stop();
         btn.classList.remove('recording');
         btn.textContent = '🎙️';
         fbRecordingId = null;
-        showToast('Recording auto-stopped at 5 min', 'info');
+        showToast('Recording auto-stopped at ' + (MAX_RECORDING_SECONDS / 60) + ' min', 'info');
       }
     }, MAX_RECORDING_SECONDS * 1000);
 
@@ -2436,15 +2448,16 @@ async function toggleChatMic() {
     btn.textContent = '⏹️';
     if (status) { status.style.display = 'block'; status.textContent = '🔴 Recording...'; }
     
-    // Auto-stop at 60s
+    // Auto-stop at MAX_RECORDING_SECONDS
     setTimeout(() => {
       if (_chatRecording && _chatMediaRecorder && _chatMediaRecorder.state !== 'inactive') {
         _chatMediaRecorder.stop();
         btn.classList.remove('recording');
         btn.textContent = '🎙️';
         _chatRecording = false;
+        showToast('Chat recording auto-stopped at ' + (MAX_RECORDING_SECONDS / 60) + ' min', 'info');
       }
-    }, 60000);
+    }, MAX_RECORDING_SECONDS * 1000);
     
   } catch (err) {
     if (status) {
@@ -3228,17 +3241,32 @@ async function generateOneIdea(funnel) {
 
 const SWIPE_THRESHOLD = 80;
 let _swipeState = null;
+let _swipeContainerBound = false;
 
 /**
- * Attaches swipe event handlers to all idea cards.
+ * Attaches swipe event handlers using event delegation.
  */
 function attachSwipeHandlers() {
-  const cards = document.querySelectorAll('.idea-card');
-  cards.forEach(card => {
-    card.addEventListener('touchstart', onSwipeStart, { passive: true });
-    card.addEventListener('touchmove', onSwipeMove, { passive: false });
-    card.addEventListener('touchend', onSwipeEnd, { passive: true });
-  });
+  if (_swipeContainerBound) return; // Only bind once
+  const container = document.getElementById('ideasContent');
+  if (!container) return;
+  _swipeContainerBound = true;
+  
+  container.addEventListener('touchstart', (e) => {
+    const card = e.target.closest('.idea-card');
+    if (!card) return;
+    onSwipeStart({ ...e, currentTarget: card, touches: e.touches });
+  }, { passive: true });
+  
+  container.addEventListener('touchmove', (e) => {
+    if (!_swipeState) return;
+    onSwipeMove(e);
+  }, { passive: false });
+  
+  container.addEventListener('touchend', (e) => {
+    if (!_swipeState) return;
+    onSwipeEnd(e);
+  }, { passive: true });
 }
 
 /**
@@ -3248,11 +3276,13 @@ function attachSwipeHandlers() {
 function onSwipeStart(e) {
   const touch = e.touches[0];
   if (!touch) return;
+  const card = e.target.closest('.idea-card');
+  if (!card) return;
   _swipeState = {
     startX: touch.clientX,
     startY: touch.clientY,
-    card: e.currentTarget,
-    id: e.currentTarget.dataset.ideaId,
+    card: card,
+    id: card.dataset.ideaId,
     moved: false
   };
 }
@@ -3569,6 +3599,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Resize handler for tab indicator
   window.addEventListener('resize', updateTabIndicator);
 });
+
+// Periodic auto-save (fix beforeunload iOS unreliability)
+setInterval(() => {
+  if (window._scripts && window._scripts.length > 0 && !_isRestoring) {
+    saveSessionState();
+  }
+}, 30000);
 
 // Save state when app is about to be suspended/hidden (iOS PWA background)
 document.addEventListener('visibilitychange', () => {
