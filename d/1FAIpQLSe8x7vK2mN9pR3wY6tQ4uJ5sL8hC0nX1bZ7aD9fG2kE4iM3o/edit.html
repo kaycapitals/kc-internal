@@ -3,6 +3,10 @@
 <head>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='20' width='100' height='100' fill='%230a0a0a'/><text x='50' y='72' font-size='60' text-anchor='middle' fill='%23d4a843'>⚡</text></svg>">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='20' width='100' height='100' fill='%230a0a0a'/><text x='50' y='72' font-size='60' text-anchor='middle' fill='%23d4a843'>⚡</text></svg>">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Content Engine">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://api.anthropic.com https://api.openai.com https://kc-tools.kaycapitals.co; img-src 'self' data:; font-src 'self';">
@@ -1553,8 +1557,12 @@ let _chatHistory = [];
 let _chatSystemContext = '';
 /** @type {boolean} Chat loading state */
 let _chatLoading = false;
+/** @type {number} Chat loading start time */
+let _chatLoadingStarted = 0;
 /** @type {Object|null} Follow-up reel suggestion */
 let _nextReelSuggestion = null;
+/** @type {boolean} Restore guard flag */
+let _isRestoring = false;
 
 // ========== SESSION PERSISTENCE ==========
 
@@ -1563,6 +1571,7 @@ let _nextReelSuggestion = null;
  * Called after any state change (script generation, chat message, etc.)
  */
 function saveSessionState() {
+  if (_isRestoring) return; // Don't save during restore
   const state = {
     scripts: window._scripts,
     chatHistory: _chatHistory,
@@ -1591,22 +1600,27 @@ function restoreSessionState() {
     return false;
   }
   
-  window._scripts = state.scripts;
-  _chatHistory = Array.isArray(state.chatHistory) ? state.chatHistory : [];
-  _chatSystemContext = state.chatSystemContext || '';
-  _nextReelSuggestion = state.nextReelSuggestion || null;
-  window._brainSources = Array.isArray(state.brainSources) ? state.brainSources : [];
-  
-  // Restore idea text
-  const ideaEl = document.getElementById('idea');
-  if (ideaEl && state.idea) ideaEl.value = state.idea;
-  
-  // Re-render the scripts output
-  generate_renderScripts();
-  
-  // Re-render chat messages if any exist
-  if (_chatHistory.length > 0) {
-    renderChatMessages();
+  _isRestoring = true;
+  try {
+    window._scripts = state.scripts;
+    _chatHistory = Array.isArray(state.chatHistory) ? state.chatHistory : [];
+    _chatSystemContext = state.chatSystemContext || '';
+    _nextReelSuggestion = state.nextReelSuggestion || null;
+    window._brainSources = Array.isArray(state.brainSources) ? state.brainSources : [];
+    
+    // Restore idea text
+    const ideaEl = document.getElementById('idea');
+    if (ideaEl && state.idea) ideaEl.value = state.idea;
+    
+    // Re-render the scripts output
+    generate_renderScripts();
+    
+    // Re-render chat messages if any exist
+    if (_chatHistory.length > 0) {
+      renderChatMessages();
+    }
+  } finally {
+    _isRestoring = false;
   }
   
   showToast('✅ Session restored', 'success', { duration: 2000 });
@@ -1618,6 +1632,8 @@ function restoreSessionState() {
  * Includes triple brain search, retry logic, and progress indicators.
  */
 async function generate() {
+  const btn = document.getElementById('genBtn');
+  if (btn && btn.disabled) return; // Already generating
   const ideaEl = document.getElementById('idea');
   const idea = ideaEl ? ideaEl.value.trim() : '';
   if (!idea) return;
@@ -2146,8 +2162,15 @@ async function sendChatMessage() {
   
   const message = input.value.trim();
   if (!message) return;
+  
+  // Safety timeout check
+  if (_chatLoading && _chatLoadingStarted && (Date.now() - _chatLoadingStarted > 90000)) {
+    _chatLoading = false; // Force reset stuck state
+  }
+  
   if (_chatLoading) return;
   _chatLoading = true;
+  _chatLoadingStarted = Date.now();
   sendBtn.disabled = true;
   
   if (!checkRateLimit()) {
@@ -2202,11 +2225,18 @@ async function sendChatMessage() {
     
   } catch (e) {
     _chatHistory.push({ role: 'assistant', content: '❌ Error: ' + (e.message || 'Failed to get response. Try again.') });
-    renderChatMessages();
+    try {
+      renderChatMessages();
+    } catch (renderErr) {
+      // Fallback if renderChatMessages throws
+      console.error('Failed to render chat messages:', renderErr);
+    }
     saveSessionState();
   } finally {
     _chatLoading = false;
-    sendBtn.disabled = false;
+    const sendBtn = document.getElementById('chatSendBtn');
+    if (sendBtn) sendBtn.disabled = false;
+    const loadingEl = document.getElementById('chatLoading');
     if (loadingEl) loadingEl.style.display = 'none';
   }
 }
@@ -2824,11 +2854,9 @@ function approveIdea(id) {
           delete undone.approvedAt;
           delete undone.filmed;
           secureStore('_approved', currentApproved);
-
           const currentIdeas = secureLoad('_ideas', []);
-          currentIdeas.splice(idx, 0, undone);
+          currentIdeas.push(undone); // Push to end instead of using stale idx
           secureStore('_ideas', currentIdeas);
-
           renderIdeas(currentIdeas);
           updateTabCounts();
           showToast('Approve undone', 'info', { duration: 1500 });
@@ -3478,8 +3506,53 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && document.getElementById('loginScreen')?.style.display !== 'none') checkLogin();
 });
 
+// ========== UNBOUNDED STORAGE CLEANUP ==========
+function cleanupUnboundedStorage() {
+  // Cap _feedback to last 50 entries
+  try {
+    const fb = JSON.parse(localStorage.getItem('_feedback') || '[]');
+    if (Array.isArray(fb) && fb.length > 50) {
+      localStorage.setItem('_feedback', JSON.stringify(fb.slice(-50)));
+    }
+  } catch(e) {
+    localStorage.removeItem('_feedback');
+  }
+  
+  // Cap _scriptRatings to last 100 entries
+  try {
+    const sr = JSON.parse(localStorage.getItem('_scriptRatings') || '{}');
+    const keys = Object.keys(sr);
+    if (keys.length > 100) {
+      const trimmed = {};
+      keys.slice(-100).forEach(k => {
+        trimmed[k] = sr[k];
+      });
+      localStorage.setItem('_scriptRatings', JSON.stringify(trimmed));
+    }
+  } catch(e) {
+    localStorage.removeItem('_scriptRatings');
+  }
+  
+  // Cap _scriptCopies to last 100 entries
+  try {
+    const sc = JSON.parse(localStorage.getItem('_scriptCopies') || '{}');
+    const keys = Object.keys(sc);
+    if (keys.length > 100) {
+      const trimmed = {};
+      keys.slice(-100).forEach(k => {
+        trimmed[k] = sc[k];
+      });
+      localStorage.setItem('_scriptCopies', JSON.stringify(trimmed));
+    }
+  } catch(e) {
+    localStorage.removeItem('_scriptCopies');
+  }
+}
+
 // ========== INIT ==========
 document.addEventListener('DOMContentLoaded', () => {
+  cleanupUnboundedStorage();
+  
   if (localStorage.getItem('_cs') === 'true') {
     const loginScreen = document.getElementById('loginScreen');
     const mainApp = document.getElementById('mainApp');
