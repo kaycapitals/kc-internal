@@ -702,6 +702,32 @@ function getOKey() {
 /**
  * Validates the login password and shows the main app.
  */
+// Auto-retry ideas if app was backgrounded mid-generation
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible' && localStorage.getItem('_cs') === 'true') {
+    // If ideas tab is active and generation was interrupted, retry
+    const ideasPanel = document.getElementById('panelIdeas');
+    const wasGenerating = localStorage.getItem('_ideas_generating') === '1';
+    if (wasGenerating && !_ideasGenerating) {
+      localStorage.removeItem('_ideas_generating');
+      // Check if we have cached ideas first
+      const cached = secureLoad('_ideas', []);
+      if (cached && cached.length > 0) {
+        renderIdeas(cached);
+      } else if (ideasPanel && ideasPanel.classList.contains('active')) {
+        // Auto-retry generation
+        setTimeout(() => generateAllIdeas(true), 500);
+      } else {
+        // Just reset the button state for when they switch to ideas tab
+        const btn = document.getElementById('refreshAllBtn');
+        if (btn) { btn.disabled = false; btn.textContent = '🔄 Generate Fresh Ideas'; }
+        const container = document.getElementById('ideasContent');
+        if (container) container.innerHTML = '<div class="error" style="background:#1a1a0a;color:#d4a843;border:1px solid #332a11">⏳ Generation was interrupted — tap <strong>🔄 Generate Fresh Ideas</strong> to retry.</div>';
+      }
+    }
+  }
+});
+
 function checkLogin() {
   const pwd = document.getElementById('loginPwd');
   if (!pwd) return;
@@ -1924,6 +1950,9 @@ function renderSkeletonCards(container) {
   container.innerHTML = html;
 }
 
+// Track in-progress generation so we can resume on return
+let _ideasGenerating = false;
+
 /**
  * Generates all 30 daily ideas with retry logic and progress indicators.
  * @param {boolean} force - If true, always regenerate
@@ -1933,8 +1962,11 @@ async function generateAllIdeas(force) {
   const btn = document.getElementById('refreshAllBtn');
   if (!container || !btn) return;
 
+  if (_ideasGenerating) return; // Already running
   if (!checkRateLimit()) return;
 
+  _ideasGenerating = true;
+  localStorage.setItem('_ideas_generating', '1');
   btn.disabled = true;
   btn.textContent = '🧠 Searching brain for trends...';
   renderSkeletonCards(container);
@@ -1984,7 +2016,7 @@ async function generateAllIdeas(force) {
           system: prompt,
           messages: [{ role: 'user', content: 'Generate 30 fresh content ideas for today. Be SPECIFIC and TIMELY. Return valid JSON only.' }]
         })
-      }, 90000);
+      }, 120000);
 
       const data = await r.json();
       if (data && data.error) throw new Error(data.error.message || 'API error');
@@ -2012,6 +2044,15 @@ async function generateAllIdeas(force) {
       if (attempt === 0) continue; // Retry
       container.innerHTML = '<div class="error">Failed to parse ideas. Raw response:<br><pre style="white-space:pre-wrap;font-size:12px;color:#888;margin-top:8px">' + esc((txt || '').substring(0, 500)) + '</pre></div>';
     } catch (e) {
+      // If aborted (user backgrounded the app), show friendly message and stop
+      if (e && (e.name === 'AbortError' || (e.message && e.message.toLowerCase().includes('abort')))) {
+        container.innerHTML = '<div class="error" style="background:#1a1a0a;color:#d4a843;border:1px solid #332a11">⏳ Still generating — tap <strong>🔄 Generate Fresh Ideas</strong> to try again, or just wait a moment.</div>';
+        _ideasGenerating = false;
+        localStorage.removeItem('_ideas_generating');
+        btn.disabled = false;
+        btn.textContent = '🔄 Generate Fresh Ideas';
+        return;
+      }
       if (attempt === 1) {
         container.innerHTML = '<div class="error">❌ ' + esc(e.message || 'Failed to generate ideas') + '</div>';
       }
@@ -2026,6 +2067,8 @@ async function generateAllIdeas(force) {
     updateTabCounts();
   }
 
+  _ideasGenerating = false;
+  localStorage.removeItem('_ideas_generating');
   btn.disabled = false;
   btn.textContent = '🔄 Generate Fresh Ideas';
 }
