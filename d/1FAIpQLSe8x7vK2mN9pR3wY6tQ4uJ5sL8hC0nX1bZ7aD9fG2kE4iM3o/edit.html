@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://api.anthropic.com https://api.openai.com https://kc-tools.kaycapitals.co; img-src 'self' data:; font-src 'self';">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://api.anthropic.com https://api.openai.com https://kc-tools.kaycapitals.co https://api.allorigins.win; img-src 'self' data:; font-src 'self';">
 <title>Content Engine</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -804,6 +804,7 @@ function validateIdea(idea) {
   for (const field of IDEA_REQUIRED_FIELDS) {
     if (!idea[field] || typeof idea[field] !== 'string' || idea[field].trim() === '') return false;
   }
+  if (!['tof', 'mof', 'bof'].includes(idea.funnel)) return false;
   return true;
 }
 
@@ -1515,10 +1516,10 @@ async function generate() {
 
       h += '<div class="card" id="card' + i + '">'
         + '<div class="card-hdr">'
-        + '<span class="badge">' + (ICONS[variant] || '🎬') + ' ' + variant.toUpperCase() + '</span>'
+        + '<span class="badge">' + (ICONS[variant] || '🎬') + ' ' + esc(variant.toUpperCase()) + '</span>'
         + '<div class="card-meta">'
         + '<span class="dot" style="background:' + (ECOLORS[energy] || '#888') + '"></span>'
-        + '<span class="dur">~' + (s.estimated_seconds || 45) + 's</span>'
+        + '<span class="dur">~' + Math.max(10, Math.min(300, parseInt(s.estimated_seconds) || 45)) + 's</span>'
         + '<button class="copy-btn" onclick="copyOne(' + i + ')">📋</button>'
         + '</div></div>'
         + '<div class="section"><div class="lbl">🎯 Hook</div><div class="hook-box"><p>' + esc(s.hook) + '</p></div></div>'
@@ -1671,10 +1672,10 @@ function generate_renderScripts() {
 
     h += '<div class="card" id="card' + i + '">'
       + '<div class="card-hdr">'
-      + '<span class="badge">' + (ICONS[variant] || '🎬') + ' ' + variant.toUpperCase() + '</span>'
+      + '<span class="badge">' + (ICONS[variant] || '🎬') + ' ' + esc(variant.toUpperCase()) + '</span>'
       + '<div class="card-meta">'
       + '<span class="dot" style="background:' + (ECOLORS[energy] || '#888') + '"></span>'
-      + '<span class="dur">~' + (s.estimated_seconds || 45) + 's</span>'
+      + '<span class="dur">~' + Math.max(10, Math.min(300, parseInt(s.estimated_seconds) || 45)) + 's</span>'
       + '<button class="copy-btn" onclick="copyOne(' + i + ')">📋</button>'
       + '</div></div>'
       + '<div class="section"><div class="lbl">🎯 Hook</div><div class="hook-box"><p>' + esc(s.hook) + '</p></div></div>'
@@ -1860,11 +1861,13 @@ async function fetchTrendingContext() {
     const today = new Date();
     const todayStr = today.toDateString();
 
-    for (const feedUrl of feeds) {
+    // Fetch all feeds in parallel — a slow/failed feed no longer blocks the others.
+    const perFeed = await Promise.all(feeds.map(async (feedUrl) => {
+      const out = [];
       try {
         const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(feedUrl);
         const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(5000) });
-        if (!res.ok) continue;
+        if (!res.ok) return out;
         const text = await res.text();
         const doc = parser.parseFromString(text, 'text/xml');
         const items = doc.querySelectorAll('item');
@@ -1875,11 +1878,13 @@ async function fetchTrendingContext() {
           if (title && title.length > 10) {
             const itemDate = pubDate ? new Date(pubDate).toDateString() : '';
             const isToday = itemDate === todayStr || !pubDate;
-            headlines.push({ title, desc: desc?.replace(/<[^>]*>/g, '').slice(0, 120), isToday });
+            out.push({ title, desc: desc?.replace(/<[^>]*>/g, '').slice(0, 120), isToday });
           }
         });
       } catch (e) { /* feed failed, skip */ }
-    }
+      return out;
+    }));
+    perFeed.forEach(arr => headlines.push(...arr));
 
     if (headlines.length === 0) throw new Error('No headlines');
 
@@ -1947,8 +1952,8 @@ async function generateAllIdeas(force) {
   btn.textContent = '⏳ Generating 30 ideas (TOF → MOF → BOF)...';
 
   const prompt = IDEAS_SYSTEM_PROMPT
-    .replace('{taste_profile}', tasteStr)
-    .replace('{trending_context}', trending);
+    .replace('{taste_profile}', () => tasteStr)
+    .replace('{trending_context}', () => trending);
 
   let ideas = null;
 
@@ -1957,7 +1962,12 @@ async function generateAllIdeas(force) {
     try {
       if (attempt === 1) {
         btn.textContent = '🔄 Retrying...';
-        if (!checkRateLimit()) break;
+        if (!checkRateLimit()) {
+          container.innerHTML = '<div class="error">⏱️ Rate limited — try again in a moment.</div>';
+          btn.disabled = false;
+          btn.textContent = '🔄 Generate Fresh Ideas';
+          return;
+        }
       }
 
       const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
@@ -1970,7 +1980,7 @@ async function generateAllIdeas(force) {
         },
         body: JSON.stringify({
           model: 'claude-sonnet-4-20250514',
-          max_tokens: 4000,
+          max_tokens: 8000,
           system: prompt,
           messages: [{ role: 'user', content: 'Generate 30 fresh content ideas for today. Be SPECIFIC and TIMELY. Return valid JSON only.' }]
         })
@@ -2096,4 +2106,485 @@ function renderIdeaCard(idea) {
       + '<select id="reason-' + safeId + '"><option value="">Why not?</option><option value="done_before">Done before</option><option value="boring">Boring</option><option value="not_my_style">Not my style</option><option value="wrong_timing">Wrong timing</option><option value="too_generic">Too generic</option><option value="other">Other</option></select>'
       + '<div class="fb-row"><input type="text" id="fb-text-' + safeId + '" placeholder="Optional feedback...">'
       + '<button class="fb-mic" id="fb-mic-' + safeId + '" onclick="toggleFbMic(\'' + safeId + '\')">🎙️</button></div>'
-      + '<div id="fb-mic-status-' + safeId + '" style="display:none;text-align:center;padding:4px;color:#d4a843;font-size:12px;margin
+      + '<div id="fb-mic-status-' + safeId + '" style="display:none;text-align:center;padding:4px;color:#d4a843;font-size:12px;margin-top:4px"></div>'
+      + '<button class="fb-submit" onclick="submitReject(\'' + safeId + '\')">Reject & Replace</button>'
+      + '</div>')
+    + '</div>';
+}
+
+// ========== IDEA CARD ACTIONS ==========
+
+/**
+ * Strips an id down to the same safe form used when rendering cards.
+ * @param {string} rawId
+ * @returns {string}
+ */
+function _toSafeId(rawId) {
+  return String(rawId || '').replace(/[^a-zA-Z0-9_-]/g, '');
+}
+
+/**
+ * Finds the index of an item in an array by its safe id.
+ * @param {Array} arr
+ * @param {string} safeId
+ * @returns {number} Index or -1
+ */
+function _findBySafeId(arr, safeId) {
+  if (!Array.isArray(arr)) return -1;
+  return arr.findIndex(it => it && _toSafeId(it.id) === safeId);
+}
+
+/**
+ * Records an approve/reject signal into the taste profile.
+ * @param {Object} idea - The idea acted on
+ * @param {'approve'|'reject'} action
+ * @param {string} [reason] - Reject reason (reject only)
+ * @param {string} [feedback] - Free-text feedback (reject only)
+ */
+function recordTaste(idea, action, reason, feedback) {
+  if (!idea) return;
+  const taste = getTasteProfile();
+  const topic = idea.topic || 'unknown';
+  const funnel = VALID_FUNNELS.has(idea.funnel) ? idea.funnel : 'tof';
+
+  if (action === 'approve') {
+    taste.liked_topics.push(topic);
+    taste.liked_funnels[funnel] = (taste.liked_funnels[funnel] || 0) + 1;
+  } else if (action === 'reject') {
+    taste.rejected_topics.push(topic);
+    if (reason) taste.rejected_reasons.push(reason);
+    if (feedback) taste.notes.push(feedback);
+  }
+
+  taste.history.push({ topic, funnel, action, reason: reason || '', ts: Date.now() });
+  // Cap history so localStorage doesn't grow unbounded
+  if (taste.history.length > 50) taste.history = taste.history.slice(-50);
+
+  saveTasteProfile(taste);
+}
+
+/**
+ * Approves an idea: records taste, moves it to the film queue, removes from ideas.
+ * @param {string} id - Safe idea id
+ */
+function approveIdea(id) {
+  const ideas = secureLoad('_ideas', []);
+  const idx = _findBySafeId(ideas, id);
+  if (idx === -1) return;
+  const idea = ideas[idx];
+
+  recordTaste(idea, 'approve');
+
+  const approved = secureLoad('_approved', []);
+  if (!approved.some(a => _toSafeId(a.id) === id)) {
+    approved.push({ ...idea, filmed: false, approvedAt: Date.now() });
+    secureStore('_approved', approved);
+  }
+
+  ideas.splice(idx, 1);
+  secureStore('_ideas', ideas);
+  haptic(10);
+
+  const card = document.getElementById('card-' + id);
+  const finish = () => { renderIdeas(ideas); updateTabCounts(); renderTasteSummary(); };
+  if (card) {
+    card.classList.add('slide-out-right');
+    setTimeout(finish, 300);
+  } else {
+    finish();
+  }
+
+  showToast('✅ Approved — added to film queue', 'success', { onUndo: () => undoApprove(idea) });
+}
+
+/**
+ * Reverses an approve action.
+ * @param {Object} idea
+ */
+function undoApprove(idea) {
+  const sid = _toSafeId(idea.id);
+  const approved = secureLoad('_approved', []);
+  const ai = approved.findIndex(a => _toSafeId(a.id) === sid);
+  if (ai !== -1) { approved.splice(ai, 1); secureStore('_approved', approved); }
+  const ideas = secureLoad('_ideas', []);
+  if (!ideas.some(i => _toSafeId(i.id) === sid)) { ideas.push(idea); secureStore('_ideas', ideas); }
+  renderIdeas(ideas); updateTabCounts(); renderTasteSummary();
+}
+
+/**
+ * Handles a reject tap: bottom sheet on mobile, inline form on desktop.
+ * @param {string} id - Safe idea id
+ */
+function handleReject(id) {
+  if (isMobile()) { openBottomSheet(id); return; }
+  const form = document.getElementById('reject-' + id);
+  if (form) form.classList.toggle('show');
+}
+
+/**
+ * Submits the desktop inline reject form.
+ * @param {string} id - Safe idea id
+ */
+function submitReject(id) {
+  const reasonEl = document.getElementById('reason-' + id);
+  const fbEl = document.getElementById('fb-text-' + id);
+  const reason = reasonEl ? reasonEl.value : '';
+  const feedback = fbEl ? fbEl.value.trim() : '';
+  doReject(id, reason, feedback);
+}
+
+/**
+ * Performs a rejection: records taste and removes the idea.
+ * @param {string} id - Safe idea id
+ * @param {string} reason
+ * @param {string} feedback
+ */
+function doReject(id, reason, feedback) {
+  const ideas = secureLoad('_ideas', []);
+  const idx = _findBySafeId(ideas, id);
+  if (idx === -1) return;
+  const idea = ideas[idx];
+
+  recordTaste(idea, 'reject', reason, feedback);
+
+  ideas.splice(idx, 1);
+  secureStore('_ideas', ideas);
+  haptic(10);
+
+  const card = document.getElementById('card-' + id);
+  const finish = () => { renderIdeas(ideas); updateTabCounts(); renderTasteSummary(); };
+  if (card) {
+    card.classList.add('slide-out-left');
+    setTimeout(finish, 300);
+  } else {
+    finish();
+  }
+
+  showToast('❌ Rejected — learning your taste', 'info', { onUndo: () => undoReject(idea) });
+}
+
+/**
+ * Reverses a reject action (restores the idea, taste signal stays).
+ * @param {Object} idea
+ */
+function undoReject(idea) {
+  const sid = _toSafeId(idea.id);
+  const ideas = secureLoad('_ideas', []);
+  if (!ideas.some(i => _toSafeId(i.id) === sid)) { ideas.push(idea); secureStore('_ideas', ideas); }
+  renderIdeas(ideas); updateTabCounts(); renderTasteSummary();
+}
+
+/**
+ * Regenerates a single idea in place via the Anthropic API.
+ * @param {string} id - Safe idea id
+ */
+async function refreshIdea(id) {
+  if (!checkRateLimit()) return;
+  const ideas = secureLoad('_ideas', []);
+  const idx = _findBySafeId(ideas, id);
+  if (idx === -1) return;
+  const old = ideas[idx];
+
+  const card = document.getElementById('card-' + id);
+  if (card) card.classList.add('replacing');
+
+  try {
+    const existingTitles = ideas.map(i => i.title).filter(Boolean).slice(0, 30).join(' | ');
+    const funnel = VALID_FUNNELS.has(old.funnel) ? old.funnel : 'tof';
+    const topic = old.topic || 'trading';
+
+    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': getKey(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: 'You generate a single Instagram reel content idea for Somesh (Kay Capitals), a raw/direct, no-BS day trading educator. Return ONLY valid JSON.',
+        messages: [{ role: 'user', content: 'Generate ONE fresh ' + funnel + ' content idea on the topic "' + topic + '". Make it specific and timely. Do NOT repeat any of these existing titles: ' + existingTitles + '\n\nReturn ONLY valid JSON: {"idea":{"id":"unique_id","funnel":"' + funnel + '","topic":"' + topic + '","title":"...","preview":"3-4 sentence script preview in his raw voice","tags":["tag1","tag2"]}}' }]
+      })
+    }, 60000);
+
+    const data = await r.json();
+    if (data && data.error) throw new Error(data.error.message || 'API error');
+    if (!data || !data.content || !data.content.length) throw new Error('Empty response');
+
+    const txt = data.content[0].text;
+    const m = txt.match(/\{[\s\S]*"idea"[\s\S]*\}/);
+    const parsed = m ? JSON.parse(m[0]) : null;
+    if (parsed && parsed.idea && validateIdea(parsed.idea)) {
+      const fresh = parsed.idea;
+      if (!fresh.id) fresh.id = 'idea_' + Date.now();
+      if (!fresh.preview) fresh.preview = '';
+      if (!Array.isArray(fresh.tags)) fresh.tags = [];
+      ideas[idx] = fresh;
+      secureStore('_ideas', ideas);
+      renderIdeas(ideas);
+      showToast('🔄 Fresh idea generated', 'success');
+      return;
+    }
+    throw new Error('Bad response');
+  } catch (e) {
+    if (card) card.classList.remove('replacing');
+    showToast('Refresh failed: ' + (e.message || 'unknown'), 'error');
+  }
+}
+
+/**
+ * Toggles the preview section of an idea card.
+ * @param {string} id - Safe idea id
+ */
+function togglePreview(id) {
+  const preview = document.getElementById('preview-' + id);
+  if (!preview) return;
+  const shown = preview.classList.toggle('show');
+  const card = document.getElementById('card-' + id);
+  if (card) {
+    const toggle = card.querySelector('.idea-toggle');
+    if (toggle) toggle.textContent = shown ? '▼ Hide' : '▶ Preview';
+  }
+}
+
+// ========== MOBILE REJECT BOTTOM SHEET ==========
+
+/** @type {string|null} Safe id of the idea currently in the bottom sheet */
+let _bsRejectId = null;
+
+/**
+ * Opens the mobile reject bottom sheet for an idea.
+ * @param {string} id - Safe idea id
+ */
+function openBottomSheet(id) {
+  _bsRejectId = id;
+  const ideas = secureLoad('_ideas', []);
+  const idx = _findBySafeId(ideas, id);
+  const titleEl = document.getElementById('bsTitle');
+  if (titleEl) titleEl.textContent = idx !== -1 ? (ideas[idx].title || '') : '';
+  const reasonEl = document.getElementById('bsReason');
+  const fbEl = document.getElementById('bsFeedback');
+  if (reasonEl) reasonEl.value = '';
+  if (fbEl) fbEl.value = '';
+  const overlay = document.getElementById('bsOverlay');
+  if (overlay) overlay.classList.add('show');
+}
+
+/**
+ * Closes the mobile reject bottom sheet.
+ * @param {Event} [event] - Click event (ignored if the click was inside the sheet)
+ */
+function closeBottomSheet(event) {
+  if (event && event.target && event.target.id !== 'bsOverlay') return;
+  const overlay = document.getElementById('bsOverlay');
+  if (overlay) overlay.classList.remove('show');
+  _bsRejectId = null;
+}
+
+/**
+ * Submits the bottom-sheet reject form.
+ */
+function submitBottomSheetReject() {
+  const id = _bsRejectId;
+  const overlay = document.getElementById('bsOverlay');
+  if (overlay) overlay.classList.remove('show');
+  _bsRejectId = null;
+  if (!id) return;
+  const reasonEl = document.getElementById('bsReason');
+  const fbEl = document.getElementById('bsFeedback');
+  const reason = reasonEl ? reasonEl.value : '';
+  const feedback = fbEl ? fbEl.value.trim() : '';
+  doReject(id, reason, feedback);
+}
+
+// ========== APPROVED QUEUE ==========
+
+/**
+ * Renders the approved (film queue) and completed sections.
+ */
+function renderApproved() {
+  const list = document.getElementById('approvedList');
+  const counter = document.getElementById('approvedCounter');
+  const completedSection = document.getElementById('completedSection');
+  const completedList = document.getElementById('completedList');
+  const completedCount = document.getElementById('completedCount');
+  if (!list) return;
+
+  const approved = secureLoad('_approved', []);
+  const arr = Array.isArray(approved) ? approved : [];
+  const pending = arr.filter(a => a && !a.filmed);
+  const filmed = arr.filter(a => a && a.filmed);
+
+  if (counter) {
+    counter.textContent = pending.length + (pending.length === 1 ? ' idea ready to film' : ' ideas ready to film');
+  }
+
+  if (pending.length === 0) {
+    list.innerHTML = '<div class="ideas-empty">No approved ideas yet. Approve ideas from the 💡 Ideas tab.</div>';
+  } else {
+    list.innerHTML = pending.map(renderApprovedCard).join('');
+  }
+
+  if (completedSection) {
+    if (filmed.length > 0) {
+      completedSection.style.display = 'block';
+      if (completedCount) completedCount.textContent = String(filmed.length);
+      if (completedList) completedList.innerHTML = filmed.map(renderCompletedCard).join('');
+    } else {
+      completedSection.style.display = 'none';
+    }
+  }
+}
+
+/**
+ * Renders a single approved (pending) card.
+ * @param {Object} a - Approved idea
+ * @returns {string} HTML
+ */
+function renderApprovedCard(a) {
+  if (!a) return '';
+  const safeId = _toSafeId(a.id);
+  const funnelClass = VALID_FUNNELS.has(a.funnel) ? a.funnel : 'tof';
+  const funnelLabel = funnelClass.toUpperCase();
+  const topicLabel = TOPIC_LABELS[a.topic] || a.topic || 'General';
+  return '<div class="approved-card" id="approved-' + safeId + '">'
+    + '<div class="idea-badges"><span class="idea-badge ' + funnelClass + '">' + funnelLabel + '</span><span class="idea-badge topic">' + esc(topicLabel) + '</span></div>'
+    + '<div class="approved-title">' + esc(a.title) + '</div>'
+    + (a.preview ? '<div class="idea-preview show">' + esc(a.preview) + '</div>' : '')
+    + '<div class="approved-actions">'
+    + '<button class="approved-action filmed" onclick="markFilmed(\'' + safeId + '\')">🎬 Mark Filmed</button>'
+    + '<button class="approved-action remove" onclick="removeApproved(\'' + safeId + '\')">🗑 Remove</button>'
+    + '</div></div>';
+}
+
+/**
+ * Renders a single completed (filmed) card.
+ * @param {Object} a - Filmed idea
+ * @returns {string} HTML
+ */
+function renderCompletedCard(a) {
+  if (!a) return '';
+  const safeId = _toSafeId(a.id);
+  return '<div class="completed-card" id="completed-' + safeId + '">'
+    + '<div class="idea-title">' + esc(a.title) + '</div>'
+    + '<div class="approved-actions"><button class="approved-action remove" onclick="removeApproved(\'' + safeId + '\')">🗑 Remove</button></div>'
+    + '</div>';
+}
+
+/**
+ * Marks an approved idea as filmed.
+ * @param {string} id - Safe idea id
+ */
+function markFilmed(id) {
+  const approved = secureLoad('_approved', []);
+  const i = approved.findIndex(a => _toSafeId(a.id) === id);
+  if (i === -1) return;
+  approved[i].filmed = true;
+  approved[i].filmedAt = Date.now();
+  secureStore('_approved', approved);
+  haptic(10);
+  renderApproved();
+  updateTabCounts();
+  showToast('🎬 Marked as filmed', 'success');
+}
+
+/**
+ * Removes an idea from the approved queue.
+ * @param {string} id - Safe idea id
+ */
+function removeApproved(id) {
+  const approved = secureLoad('_approved', []);
+  const i = approved.findIndex(a => _toSafeId(a.id) === id);
+  if (i === -1) return;
+  const removed = approved[i];
+  approved.splice(i, 1);
+  secureStore('_approved', approved);
+  haptic(10);
+  renderApproved();
+  updateTabCounts();
+  showToast('Removed from queue', 'info', { onUndo: () => {
+    const cur = secureLoad('_approved', []);
+    cur.push(removed);
+    secureStore('_approved', cur);
+    renderApproved();
+    updateTabCounts();
+  } });
+}
+
+/**
+ * Toggles the completed (filmed) list visibility.
+ */
+function toggleCompleted() {
+  const list = document.getElementById('completedList');
+  const arrow = document.getElementById('completedArrow');
+  if (!list) return;
+  const shown = list.style.display !== 'none';
+  list.style.display = shown ? 'none' : 'block';
+  if (arrow) arrow.textContent = shown ? '▶' : '▼';
+}
+
+// ========== NEWS REFRESH ==========
+
+/**
+ * Refreshes ideas with the latest live news (re-pulls today's headlines).
+ */
+function refreshNewsOnly() {
+  showToast('🔥 Refreshing with latest news...', 'info', { duration: 1500 });
+  generateAllIdeas(true);
+}
+
+// ========== SWIPE GESTURES (mobile) ==========
+
+/**
+ * Attaches swipe-to-approve (right) / swipe-to-reject (left) handlers to idea cards.
+ */
+function attachSwipeHandlers() {
+  const cards = document.querySelectorAll('.idea-card');
+  cards.forEach(card => {
+    if (card._swipeBound) return;
+    card._swipeBound = true;
+
+    let startX = 0, startY = 0, dx = 0, dy = 0, dragging = false;
+
+    card.addEventListener('touchstart', (e) => {
+      const t = e.touches[0];
+      startX = t.clientX; startY = t.clientY; dx = 0; dy = 0; dragging = true;
+      card.classList.add('swiping');
+    }, { passive: true });
+
+    card.addEventListener('touchmove', (e) => {
+      if (!dragging) return;
+      const t = e.touches[0];
+      dx = t.clientX - startX; dy = t.clientY - startY;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        card.style.transform = 'translateX(' + dx + 'px)';
+        card.style.opacity = String(Math.max(0.3, 1 - Math.abs(dx) / 400));
+      }
+    }, { passive: true });
+
+    const onEnd = () => {
+      if (!dragging) return;
+      dragging = false;
+      card.classList.remove('swiping');
+      const id = card.getAttribute('data-idea-id');
+      const THRESHOLD = 90;
+      if (id && Math.abs(dx) > THRESHOLD && Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 0) {
+          approveIdea(id);
+          return;
+        }
+        handleReject(id);
+      }
+      card.style.transform = '';
+      card.style.opacity = '';
+    };
+
+    card.addEventListener('touchend', onEnd);
+    card.addEventListener('touchcancel', onEnd);
+  });
+}
+</script>
+</body>
+</html>
