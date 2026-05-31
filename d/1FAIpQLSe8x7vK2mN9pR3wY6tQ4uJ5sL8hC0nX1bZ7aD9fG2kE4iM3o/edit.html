@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='20' width='100' height='100' fill='%230a0a0a'/><text x='50' y='72' font-size='60' text-anchor='middle' fill='%23d4a843'>⚡</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='20' width='100' height='100' fill='%230a0a0a'/><text x='50' y='72' font-size='60' text-anchor='middle' fill='%23d4a843'>⚡</text></svg>">
-<link rel="manifest" href="manifest.json">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Content Engine">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://api.anthropic.com https://api.openai.com https://kc-tools.kaycapitals.co; img-src 'self' data:; font-src 'self';">
@@ -219,52 +213,6 @@ textarea::placeholder{color:#444}
 .rate-limit-fill.warning{background:#cc8800}
 .rate-limit-fill.danger{background:#cc2222}
 
-/* Next Reel Suggestion */
-.next-reel-card{background:#111;border:1px solid #d4a843;border-radius:12px;padding:16px;margin:16px 0;position:relative}
-.next-reel-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#d4a843,#ffcc66);border-radius:12px 12px 0 0}
-.next-reel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.next-reel-title{color:#d4a843;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
-.next-reel-content h4{color:#fff;font-size:15px;margin-bottom:6px;font-weight:600}
-.next-reel-hook{color:#d4a843;font-size:14px;font-style:italic;margin-bottom:8px;padding:8px 12px;background:#1a1a0a;border-radius:8px;border-left:3px solid #d4a843}
-.next-reel-why{color:#888;font-size:13px;line-height:1.5}
-.next-reel-btn{padding:12px 20px;border-radius:8px;border:none;background:#d4a843;color:#000;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;min-height:44px}
-.next-reel-btn:hover{opacity:.85;transform:translateY(-1px)}
-
-/* Chat Interface */
-.chat-interface{margin-top:24px;border-top:2px solid #222;padding-top:16px}
-.chat-header{color:#d4a843;font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.chat-messages{max-height:400px;overflow-y:auto;margin-bottom:16px;padding:8px 0;scrollbar-width:thin;scrollbar-color:#333 #0a0a0a}
-.chat-messages::-webkit-scrollbar{width:6px}
-.chat-messages::-webkit-scrollbar-track{background:#0a0a0a}
-.chat-messages::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
-.chat-message{margin-bottom:16px;display:flex;gap:12px}
-.chat-message.user{flex-direction:row-reverse}
-.chat-message.user .chat-bubble{background:#1a1a2a;border:1px solid #333;color:#fff;text-align:right}
-.chat-message.assistant .chat-bubble{background:#111;border:1px solid #d4a843;color:#e0e0e0}
-.chat-bubble{max-width:80%;padding:12px 16px;border-radius:16px;line-height:1.5;font-size:14px;position:relative;word-wrap:break-word}
-.chat-bubble p{margin:0 0 8px 0}
-.chat-bubble p:last-child{margin-bottom:0}
-.chat-bubble strong{color:#d4a843}
-.chat-bubble em{color:#888;font-style:italic}
-.chat-bubble code{background:#0a0a0a;padding:2px 4px;border-radius:4px;font-family:monospace;font-size:12px}
-.chat-input-area{position:relative}
-.chat-textarea{width:100%;padding:14px 110px 14px 16px;border-radius:12px;border:1px solid #222;background:#111;color:#fff;font-size:15px;resize:none;outline:none;font-family:inherit;min-height:60px;transition:border-color .2s}
-.chat-textarea:focus{border-color:#d4a843}
-.chat-textarea::placeholder{color:#444}
-.chat-send-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:2px solid #d4a843;background:#111;color:#d4a843;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.chat-send-btn:hover{background:#d4a843;color:#000}
-.chat-send-btn:disabled{opacity:.4;cursor:not-allowed}
-.chat-mic-btn{position:absolute;right:60px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:2px solid #333;background:#111;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.chat-mic-btn.recording{background:#cc2222;border-color:#cc2222;color:#fff}
-.chat-loading{display:flex;align-items:center;gap:8px;color:#d4a843;font-size:13px;margin-top:8px}
-.chat-loading .spinner{width:16px;height:16px;border:2px solid #222;border-top-color:#d4a843;border-radius:50%;animation:spin .8s linear infinite}
-.chat-hint{color:#333;font-size:11px;text-align:center;margin-top:6px}
-.chat-hint-mobile{display:none;color:#333;font-size:11px;text-align:center;margin-top:6px}
-
-/* Reset button for chat */
-.reset-btn{background:none;border:1px solid #333;color:#666;padding:8px 16px;border-radius:8px;font-size:12px;cursor:pointer;transition:all .15s;margin-bottom:16px;min-height:40px}
-.reset-btn:hover{border-color:#d4a843;color:#d4a843}
-
 @media(max-width:600px){
   body{padding:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px))}
   .hdr h1{font-size:20px}
@@ -275,15 +223,6 @@ textarea::placeholder{color:#444}
   .idea-action{padding:10px 14px;font-size:13px;min-height:44px;min-width:44px}
   /* On mobile, hide inline reject form — use bottom sheet instead */
   .reject-form{display:none !important}
-  .chat-textarea{font-size:16px;padding:12px 110px 12px 12px}
-  .chat-messages{max-height:30vh;min-height:100px}
-  .chat-mic-btn{right:68px;width:44px;height:44px}
-  .chat-send-btn{width:44px;height:44px}
-  .reset-btn{min-height:44px;width:100%}
-  .next-reel-header{flex-direction:column;align-items:stretch;gap:10px}
-  .next-reel-btn{width:100%}
-  .chat-hint{display:none}
-  .chat-hint-mobile{display:block}
 }
 </style>
 </head>
@@ -334,35 +273,23 @@ textarea::placeholder{color:#444}
         <canvas id="waveformCanvas" class="waveform-canvas" width="120" height="32"></canvas>
         <span class="rec-timer" id="recTimer">0:00</span>
       </div>
-      <!-- Chart upload -->
-      <div id="chartUploadArea" style="margin:8px 0">
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <label for="chartInput" style="padding:10px 16px;border-radius:8px;border:1px solid #333;background:#111;color:#d4a843;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px;min-height:44px">📷 Add Chart</label>
-          <input type="file" id="chartInput" accept="image/*" multiple style="display:none" onchange="handleChartUpload(event)">
-          <span id="chartCount" style="color:#666;font-size:12px"></span>
-        </div>
-        <div id="chartPreviews" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"></div>
-      </div>
       <div class="btn-row">
         <button class="gen-btn" id="genBtn" onclick="generate()">⚡ Generate Scripts</button>
       </div>
-      <div class="hint">⌘+Enter to generate · 🎙️ speak · 📷 add charts for visual context</div>
+      <div class="hint">⌘+Enter to generate · tap mic to speak</div>
     </div>
     <div id="output"></div>
   </div>
 
   <!-- Tab 2: Daily Ideas -->
   <div class="tab-panel" id="panelIdeas">
-
+    <div class="ptr-indicator" id="ptrIndicator">↓ Pull to refresh</div>
     <div id="tasteSummary"></div>
     <div id="ideasContent">
       <div class="ideas-empty">Tap to load today's ideas</div>
     </div>
     <div style="text-align:center;margin-top:16px">
-      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-        <button class="gen-btn" onclick="refreshNonNewsIdeas()" id="refreshNonNewsBtn" style="flex:1;max-width:260px">🔄 Refresh Ideas (keep news)</button>
-        <button class="gen-btn" onclick="generateAllIdeas(true)" id="refreshAllBtn" style="flex:1;max-width:260px;background:#1a1a2e;border-color:#444">🔄 Refresh ALL Ideas</button>
-      </div>
+      <button class="gen-btn" onclick="generateAllIdeas(true)" id="refreshAllBtn" style="max-width:300px">🔄 Generate Fresh Ideas</button>
       <div class="hint" style="margin-top:8px" id="ideasAge"></div>
     </div>
   </div>
@@ -420,75 +347,6 @@ textarea::placeholder{color:#444}
 
 <script>
 // ========== VOICE DNA ==========
-// ========== CHART UPLOAD ==========
-const _uploadedCharts = []; // {base64, mimeType, name}
-const MAX_CHARTS = 4;
-
-/**
- * Handles chart image upload from file input.
- */
-function handleChartUpload(event) {
-  const files = Array.from(event.target.files || []);
-  if (_uploadedCharts.length + files.length > MAX_CHARTS) {
-    showToast('Max ' + MAX_CHARTS + ' charts allowed', 'error');
-    event.target.value = '';
-    return;
-  }
-  files.forEach(file => {
-    if (!file.type.startsWith('image/')) return;
-    if (file.size > 10 * 1024 * 1024) { showToast('Image too large (max 10MB)', 'error'); return; }
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const base64 = e.target.result.split(',')[1];
-      _uploadedCharts.push({ base64, mimeType: file.type, name: file.name });
-      renderChartPreviews();
-    };
-    reader.readAsDataURL(file);
-  });
-  event.target.value = '';
-}
-
-/**
- * Renders chart thumbnail previews with remove buttons.
- */
-function renderChartPreviews() {
-  const container = document.getElementById('chartPreviews');
-  const count = document.getElementById('chartCount');
-  if (!container) return;
-  if (count) count.textContent = _uploadedCharts.length > 0 ? _uploadedCharts.length + '/' + MAX_CHARTS + ' charts' : '';
-  container.innerHTML = _uploadedCharts.map((c, i) =>
-    '<div style="position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden;border:1px solid #333">'
-    + '<img src="data:' + c.mimeType + ';base64,' + c.base64 + '" style="width:100%;height:100%;object-fit:cover">'
-    + '<button onclick="removeChart(' + i + ')" style="position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,0.7);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>'
-    + '</div>'
-  ).join('');
-}
-
-/**
- * Removes a chart from the upload queue.
- */
-function removeChart(index) {
-  _uploadedCharts.splice(index, 1);
-  renderChartPreviews();
-  haptic(5);
-}
-
-/**
- * Builds the Claude API message content array with text and optional images.
- */
-function buildMessageContent(textPrompt) {
-  const content = [];
-  // Add chart images first so Claude sees them before the text
-  _uploadedCharts.forEach(c => {
-    content.push({
-      type: 'image',
-      source: { type: 'base64', media_type: c.mimeType, data: c.base64 }
-    });
-  });
-  content.push({ type: 'text', text: textPrompt });
-  return content;
-}
-
 const VOICE_DNA = {"hooks": ["today was one of the best trading days in the history of the stock market", "breaking news", "this strategy is called", "me sitting on the f***ing chair like this, you know i'm f***ing printed", "90% of traders ignore this one thing", "i think i found out the biggest trading psychology cheat code", "before every single trade that i take, i have a checklist", "you cannot keep trading new stocks every single day", "one of the biggest mistakes that day traders make", "somebody asked me a question today", "i love trading same day expiration contracts, but i didn't take any trade", "you know what it is justin, i'll keep it real with you bro", "any level that's holding in the pre-market becomes a level", "revenge trading used to destroy me", "jose, what's good my brother", "now here's the thing, not every trade", "now most people see a gap down in the market and they freeze", "you should understand this, most traders stay broke", "today was one of the best trading days", "so many people are scared of trading spx", "most of you all are losing money because you can't take action", "i literally laugh at people when they tell me", "a lot of you all want to become a full time day trader", "let's say you take 1 trade with a $2000 position size", "today i actually didn't follow my trading rules"], "phrases": ["check this out", "absolutely beautiful", "let's make it happen", "it is what it is", "here's the thing", "keeping it real", "absolutely insane", "at the end of the day", "you understand what i'm saying?", "let me break it down", "if you want to learn", "i promise you", "i'll send you all the details right away", "let's go", "just comment the word system down below", "you got nothing to lose", "let me show you", "let me put you on some sauce", "bro", "that's exactly what happened", "let me break down", "absolutely printed", "like this video first and comment", "let's freaking go", "matter of fact"], "slang": ["man", "bro", "like", "literally", "absolutely", "freaking", "f***ing", "alright", "i mean", "you know what", "beautiful", "yo", "hey", "honestly", "straight away"], "ctas": ["let's make it happen", "you got nothing to lose", "just comment the word system down below and i'll send you all the details right away", "comment the word [x] and i'll dm you the link straight away", "let me put you on some sauce", "just comment the word system down below and i'll reach out", "just comment the word mentor down below and i'll reach out", "like this video first and comment [word]", "comment the word [x] and i'll dm you", "like this video first and comment the word [x]", "i'll dm you the link straight away", "let's freaking go", "like this video first and comment the word yes and i'll dm you the link straight away", "i'll send you all the details right away", "comment the word mentor and i'll send you all the details"], "power_words": ["beautiful", "absolutely", "insane", "literally", "massive", "freaking", "printed", "exactly", "sauce", "critical", "perfect", "life-changing", "sexy", "life changing", "fire", "straight away", "clean", "huge", "brutal", "conviction"], "quotes": ["you're comparing your chapter 1 with other people's chapter 533", "Bro, whether you like it or not, this is a profession. You want to do this for life, then stop trading it like it's a side hustle", "you're gonna risk it for the biscuit man at the end of the day", "my grandmother's 90 plus and she can walk faster than this", "If you try to eat everything you're going to be extremely overweight. That means you can only catch your piece and that's it. Leave the rest of the food for the rest of the people.", "Crashes are exactly where day traders like you and me print", "More volatility means more confusion around FOMC. And more confusion means you're risking your house for a f***ing dent", "People who rely on wages are getting crushed. People who know how to extract money from the markets are making an absolute fuck ton.", "anything in the middle is where the emotions live", "You know why? Because it's not sexy. So for people who are serious about this in 2026, and you're done with having fantasy timelines, I got something for you", "I mean it's for free so you got nothing to lose.", "You can't be a student and the rock star at the same time.", "top 1% of people will actually watch this and change their lives, so I'm making this video for you", "Patience pays the patient hand that waits patiently to be paid.", "When power clashes at the top, we as traders are who get paid", "You do not break your rules. You break your character.", "Trading is meant to be super simple, especially when you have a small trading account.", "there's so much food on the table you can only eat your bit and yeah there'll be a few days where you try to eat the whole thing but if you keep on doing the whole thing eating the whole thing you're gonna turn into a really really really big freaking guy", "Because the long term investors will simply wait for months or years for this stuff to play out. Day traders do not wait, we trade the reaction of this stuff.", "I make the money, money don't make me", "You do not understand when the market is easy you need to go hard. When the market is hard you need to go easy.", "I'd rather walk away at zero than walking away with minus $4,000 just because I know how to trade and also how not to trade in a way.", "There's only so much food on the table and I can only eat this much and I ate my piece and I'm leaving the rest of the food for the rest of the people", "All the money that I'm making from trading has to be making me more money. And that more money should be making me even more money and that more money should be making me more money and on and on and on.", "nobody goes broke taking profits? Nobody actually gets rich taking small profits", "This right here, this is earned freaking confidence. If you built it yourself, if you paid the price, if you bled for it, bro, flex that shit.", "nothing is broken, you're just in the stage three", "They just wanna look cool, not actually be cool. They wanna pretend they're cool.", "All I'm saying is this might be a little bit too much sauce for you. So make sure you save this video for later because you will need to circle back to this video later as well", "All the pain and the sleepless nights are mine and the joy is yours. But you know what? You're mine.", "In God we trust, but the rest of you, Papa Trump included, better bring the numbers", "That's why you keep going back to the same old mistakes that you were making before.", "I make the money money don't make me I'm gonna make content regardless", "Me personally, I don't think I'm that smart to understand all those tough concepts. I make enough money using my easy concepts man so, I mean it works out for me.", "all those guys that laughed at me, they do not live in such a beautiful f***ing house now, while I live the freaking life", "When you cap risk pricing, banks don't lose money, they just stop lending.", "But because now you stayed at your P&L, now you're holding on to the trade based off greed and now you're sitting in there, please, maybe I'll get paid more", "Market doesn't move on the truth, market moves on the perception and speed", "For me, trading is not about hope, Hopium doesn't pay in trading and hope is never going to be a position.", "And then the classic dad response. He sends me a thumbs up for the $50,000 transfer."], "energy": ["Teaching mode uses slower pace with repeated explanations", "Reflective and personal when sharing losses or personal stories", "Passionate and fired up when discussing politics/economics and their market impact", "Intense urgency during live trading calls with short commands like 'yo', 'take some off'", "Boastful and celebratory when showing lifestyle/success", "Calm and methodical when explaining technical setups step-by-step", "High energy and excited when describing big wins and profitable trades", "High intensity when discussing winning trades or big moves", "Fired up and aggressive when defending trading against critics", "Aggressive/confrontational when addressing critics or market conditions"], "teaching": ["Shows before/after examples with specific trade results", "Breaks down step-by-step technical setup process", "Uses 'Now what does that mean?' to transition to explanations", "Picasso comparison for trading mastery", "Subway Surfers game metaphor for levels breaking", "References specific levels and percentages", "Contrasts right way vs wrong way approaches", "Uses food metaphors: 'there's so much food on the table you can only eat your bit'", "Step-by-step breakdowns: 'First... Second... Third...'", "Relates to food metaphors: 'there's so much food on the table'"], "story": ["Admits mistakes and vulnerabilities for relatability", "Ends with transformation or success", "Shows the emotional journey within trades", "Creates urgency around missed opportunities", "Builds to revelation or lesson learned", "Uses cliffhangers: 'but most of you would have...'", "Timeline-based narratives (what happened first, then, finally)", "Admits mistakes openly then explains the lesson learned", "Uses callback phrases like 'and that's exactly what happened'", "Builds anticipation then reveals results"], "contrast": ["Fear-based decisions vs educated positioning", "SPY moving up while QQQ moving down (red flag) vs both moving same direction (green flag)", "Most people vs real traders", "Some people risk freedom for money, while some risk money for freedom", "Hard market vs easy market", "While you were stuck in your own head, I took a 40% trade", "Losses you can learn from vs losses you can't learn anything from", "day trading vs scalping: 'Day trading can go for hours sometimes. Scalping goes for max minutes'", "While others panic vs opportunity for us: 'While others are freezing or waiting, you can use tight setups'", "Red days vs. winning days with position sizing"], "direct_address": ["If you're going on your trading journey man", "Stop lying to yourself", "you're comparing your chapter 1 with other people's chapter 533", "I promise you...", "You want something moving with a little bit of conviction", "Some of you all", "You don't need a lot of money to make money bro", "You need to", "Listen if you want to...", "don't tell me that you have tried everything"], "tone_shifts": ["Transitions from technical analysis to emotional/psychological insights", "Goes from calm explanation to frustrated when talking about excuses", "Begins frustrated about losses, transitions to philosophical acceptance", "Moves from personal story to direct teaching to strong CTA", "Becomes excited when describing successful trades", "Starts humble/vulnerable, builds to confident teaching", "Goes from analytical to protective when warning about risks", "Goes from sympathetic about losses to tough love about taking responsibility", "Begins with specific example, generalizes to broader lesson", "Builds intensity during chart analysis, calms for educational segments"], "emotional": ["Gets fired up about unrealistic trading timelines - 'that's disrespect to people who actually made it'", "Other traders' bad habits make him want to teach and correct", "Wrong conventional wisdom about trading - fires him up to correct", "Greed and fear controlling decisions", "People making excuses or saying trading is impossible", "Criticism of his methods makes him argumentative", "Defending his wife and relationship", "People getting distracted by news instead of focusing on skills", "Complex strategies frustrate him - he prefers simple", "Memories of being hungry/poor - deep emotion and vulnerability"], "topics": ["trading psychology and mindset", "risk management and position sizing", "student success stories", "live trade breakdowns", "risk management lessons", "technical analysis tutorials", "trading psychology and discipline", "student success stories and testimonials", "course/mentorship promotion", "trading mistakes and lessons", "trading rules and discipline", "trading strategy breakdowns", "risk management", "live trading commentary", "trading psychology and emotions", "specific trade breakdowns", "trade breakdowns with specific profit percentages", "technical analysis education", "risk management principles", "market conditions analysis"]};
 
 // ========== SYSTEM PROMPT ==========
@@ -524,9 +382,11 @@ EMOTIONAL TRIGGERS: ${JSON.stringify(VOICE_DNA.emotional)}
 4. **CTAs must be HIS format:** "just comment the word [X] down below and I'll send you all the details right away" or "like this video first and comment the word [word] and I'll DM you the link straight away." FULL sentence, not shortened.
 5. **BODY should have ONE clear lesson, not three.** He hammers ONE point with examples, metaphors, and repetition.
 6. **Include his metaphors:** food on the table, chapter 1 vs chapter 533, Subway Surfers for levels, being the house not the gambler.
-7. **80-180 words MAX.** If it reads like an article, it's too long.
+7. **100-200 words for body.** Too short = lazy. Scripts that are under 100 words body feel incomplete. Every script MUST have at least one extended thought — don't cut it off right when it gets good.
 8. **NEVER sound like ChatGPT.** No "In this video I'll show you", no "Are you tired of losing?", no "Here are 3 tips." He doesn't talk like that.
 9. **Accidental vulnerability > strategic vulnerability.** Don't plan the emotional moment. Let it slip out naturally mid-rant like real life.
+10. **ADD THE EXTRA LINE.** After you think the script is done, add one more line — the one that makes it land harder. The gut-punch at the end before the CTA. Never end abruptly.
+11. **IF THERE'S A CURRENT EVENT in the idea title — USE IT.** Name the stock. Name the person. Name the specific number. Don't make it vague after a specific title.
 
 ## VARIANT DEFINITIONS
 - **AGGRESSIVE (🔥):** Confrontational. Calling people out. "Stop lying to yourself." Pissed off energy. The reel that starts arguments in the comments. Controversial take.
@@ -536,7 +396,7 @@ EMOTIONAL TRIGGERS: ${JSON.stringify(VOICE_DNA.emotional)}
 
 ## OUTPUT FORMAT
 Return ONLY valid JSON (no markdown, no backticks):
-{"scripts":[{"variant":"aggressive","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"high"},{"variant":"teaching","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"medium"},{"variant":"story","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"calm"},{"variant":"hot_take","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":30,"energy":"high"}],"next_reel":{"title":"...","hook":"...","why":"..."}}`;
+{"scripts":[{"variant":"aggressive","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"high"},{"variant":"teaching","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"medium"},{"variant":"story","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"calm"},{"variant":"hot_take","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":30,"energy":"high"}]}`;
 
 const ICONS = {aggressive:'🔥',teaching:'📚',story:'📖',hot_take:'🌶️'};
 const ECOLORS = {high:'#ff4444',medium:'#d4a843',calm:'#44aa88'};
@@ -676,16 +536,8 @@ function simpleHash(str) {
 function secureStore(key, data) {
   const json = JSON.stringify(data);
   const hash = simpleHash(json);
-  try {
-    localStorage.setItem(key, json);
-    localStorage.setItem(key + '_h', String(hash));
-  } catch(e) {
-    if (e.name === 'QuotaExceededError' || e.code === 22) {
-      showToast('Storage full — clearing old data...', 'error');
-      try { localStorage.removeItem('_feedback'); localStorage.removeItem('_scriptRatings'); localStorage.removeItem('_scriptCopies'); } catch(_){}
-      try { localStorage.setItem(key, json); localStorage.setItem(key + '_h', String(hash)); } catch(_) { showToast('Storage still full. Clear browser data.', 'error'); }
-    }
-  }
+  localStorage.setItem(key, json);
+  localStorage.setItem(key + '_h', String(hash));
 }
 
 /**
@@ -1004,11 +856,11 @@ let recordingTimerInterval = null;
 let audioContext = null;
 let analyserNode = null;
 let waveformAnimId = null;
-const MAX_RECORDING_SECONDS = 300;
+const MAX_RECORDING_SECONDS = 60;
 
 /**
  * Toggles the main microphone recording on/off.
- * Includes waveform visualization, recording timer, and 5-min auto-stop.
+ * Includes waveform visualization, recording timer, and 60s auto-stop.
  */
 async function toggleMic() {
   const btn = document.getElementById('micBtn');
@@ -1019,11 +871,6 @@ async function toggleMic() {
 
   if (isRecording) {
     stopMainRecording();
-    return;
-  }
-
-  if (_chatRecording) {
-    showToast('Stop chat mic first', 'error');
     return;
   }
 
@@ -1105,29 +952,6 @@ async function toggleMic() {
 
     mediaRecorder.start(250);
     isRecording = true;
-
-    // Prevent tab suspension when minimized (keeps recording alive in background)
-    try {
-      if (navigator.locks && navigator.locks.request) {
-        navigator.locks.request('recording_lock', { mode: 'exclusive' }, () => {
-          return new Promise(resolve => { window._releaseRecordingLock = resolve; });
-        }).catch(() => {}); // Silently fail on unsupported browsers
-      }
-    } catch(e) {} // Silently fail
-    // Also use a silent audio context to keep the tab alive on iOS
-    if (!window._keepAliveCtx) {
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        gain.gain.value = 0.001; // inaudible
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        window._keepAliveCtx = ctx;
-        window._keepAliveOsc = osc;
-      } catch(_) {}
-    }
     btn.style.background = '#cc2222';
     btn.style.borderColor = '#cc2222';
     btn.textContent = '⏹️';
@@ -1139,11 +963,11 @@ async function toggleMic() {
     if (waveformWrap) waveformWrap.style.display = 'flex';
     startRecordingTimer('recTimer');
 
-    // Auto-stop at MAX_RECORDING_SECONDS
+    // Auto-stop at 60 seconds
     setTimeout(() => {
       if (isRecording) {
         stopMainRecording();
-        showToast('Recording auto-stopped at ' + (MAX_RECORDING_SECONDS / 60) + ' min', 'info');
+        showToast('Recording auto-stopped at 60s', 'info');
       }
     }, MAX_RECORDING_SECONDS * 1000);
 
@@ -1166,9 +990,6 @@ function stopMainRecording() {
     mediaRecorder.stop();
   }
   isRecording = false;
-  // Release background lock
-  if (window._releaseRecordingLock) { window._releaseRecordingLock(); window._releaseRecordingLock = null; }
-  if (window._keepAliveCtx) { try { window._keepAliveOsc.stop(); window._keepAliveCtx.close(); } catch(_){} window._keepAliveCtx = null; window._keepAliveOsc = null; }
   const btn = document.getElementById('micBtn');
   if (btn) {
     btn.style.background = '#111';
@@ -1273,16 +1094,6 @@ let fbWaveformAnim = null;
  * @param {string} id - The card ID or '_bs' for bottom sheet
  */
 async function toggleFbMic(id) {
-  // Conflict checks
-  if (isRecording) {
-    showToast('Stop main mic first', 'error');
-    return;
-  }
-  if (_chatRecording) {
-    showToast('Stop chat mic first', 'error');
-    return;
-  }
-  
   const btn = document.getElementById('fb-mic-' + id) || document.getElementById('bsMic');
   const status = document.getElementById('fb-mic-status-' + id);
 
@@ -1376,14 +1187,14 @@ async function toggleFbMic(id) {
     btn.textContent = '⏹️';
     if (status) { status.style.display = 'block'; status.textContent = '🔴 Recording...'; }
 
-    // Auto-stop at MAX_RECORDING_SECONDS
+    // Auto-stop at 60s
     setTimeout(() => {
       if (fbRecordingId === id && fbMediaRecorder && fbMediaRecorder.state !== 'inactive') {
         fbMediaRecorder.stop();
         btn.classList.remove('recording');
         btn.textContent = '🎙️';
         fbRecordingId = null;
-        showToast('Recording auto-stopped at ' + (MAX_RECORDING_SECONDS / 60) + ' min', 'info');
+        showToast('Recording auto-stopped at 60s', 'info');
       }
     }, MAX_RECORDING_SECONDS * 1000);
 
@@ -1562,96 +1373,18 @@ window._scriptRatings = _safeParse('_scriptRatings', '{}');
 /** @type {Object} Script copy tracking */
 window._scriptCopies = _safeParse('_scriptCopies', '{}');
 
-// ========== CHAT MODE ==========
-/** @type {Array} Chat conversation history */
-let _chatHistory = [];
-/** @type {string} System context for chat refinements */
-let _chatSystemContext = '';
-/** @type {boolean} Chat loading state */
-let _chatLoading = false;
-/** @type {number} Chat loading start time */
-let _chatLoadingStarted = 0;
-/** @type {Object|null} Follow-up reel suggestion */
-let _nextReelSuggestion = null;
-/** @type {boolean} Restore guard flag */
-let _isRestoring = false;
-
-// ========== SESSION PERSISTENCE ==========
-
-/**
- * Saves the current generation session state to localStorage.
- * Called after any state change (script generation, chat message, etc.)
- */
-function saveSessionState() {
-  if (_isRestoring) return; // Don't save during restore
-  const state = {
-    scripts: window._scripts,
-    chatHistory: _chatHistory,
-    chatSystemContext: _chatSystemContext,
-    nextReelSuggestion: _nextReelSuggestion,
-    brainSources: window._brainSources || [],
-    idea: document.getElementById('idea')?.value || '',
-    savedAt: Date.now()
-  };
-  secureStore('_session', state);
-}
-
-/**
- * Restores generation session state from localStorage.
- * Called on page load if a saved session exists.
- * Returns true if state was restored.
- */
-function restoreSessionState() {
-  const state = secureLoad('_session', null);
-  if (!state || !state.scripts || !Array.isArray(state.scripts) || state.scripts.length === 0) return false;
-  
-  // Don't restore sessions older than 4 hours
-  if (state.savedAt && (Date.now() - state.savedAt > 4 * 60 * 60 * 1000)) {
-    localStorage.removeItem('_session');
-    localStorage.removeItem('_session_h');
-    return false;
-  }
-  
-  _isRestoring = true;
-  try {
-    window._scripts = state.scripts;
-    _chatHistory = Array.isArray(state.chatHistory) ? state.chatHistory : [];
-    _chatSystemContext = state.chatSystemContext || '';
-    _nextReelSuggestion = state.nextReelSuggestion || null;
-    window._brainSources = Array.isArray(state.brainSources) ? state.brainSources : [];
-    
-    // Restore idea text
-    const ideaEl = document.getElementById('idea');
-    if (ideaEl && state.idea) ideaEl.value = state.idea;
-    
-    // Re-render the scripts output
-    generate_renderScripts();
-    
-    // Re-render chat messages if any exist
-    if (_chatHistory.length > 0) {
-      renderChatMessages();
-    }
-  } finally {
-    _isRestoring = false;
-  }
-  
-  showToast('✅ Session restored', 'success', { duration: 2000 });
-  return true;
-}
-
 /**
  * Generates 4 script variants from the user's idea input.
  * Includes triple brain search, retry logic, and progress indicators.
  */
 async function generate() {
-  const btn = document.getElementById('genBtn');
-  if (btn && btn.disabled) return; // Already generating
   const ideaEl = document.getElementById('idea');
   const idea = ideaEl ? ideaEl.value.trim() : '';
   if (!idea) return;
 
   if (!checkRateLimit()) return;
 
+  const btn = document.getElementById('genBtn');
   const out = document.getElementById('output');
   if (!btn || !out) return;
 
@@ -1702,14 +1435,13 @@ async function generate() {
 
   const totalHits = allResults.length;
   btn.textContent = '⏳ Generating 4 scripts...';
-  const chartNote = _uploadedCharts.length > 0 ? ' + ' + _uploadedCharts.length + ' chart(s) attached' : '';
-  out.innerHTML = '<div class="loading"><div class="bar"><div class="fill"></div></div><p>Crafting scripts in your voice (' + totalHits + ' brain matches' + chartNote + ')...</p></div>';
+  out.innerHTML = '<div class="loading"><div class="bar"><div class="fill"></div></div><p>Crafting scripts in your voice (' + totalHits + ' brain matches: ' + reelQuotes.length + ' reels, ' + bookKnowledge.length + ' books, ' + courseContent.length + ' course)...</p></div>';
 
   const apiBody = {
     model: 'claude-sonnet-4-20250514',
     max_tokens: 3000,
     system: SYSTEM_PROMPT,
-    messages: [{ role: 'user', content: buildMessageContent((_uploadedCharts.length > 0 ? 'I\'ve attached ' + _uploadedCharts.length + ' chart screenshot(s). Analyze the chart patterns, levels, and setups visible. Reference what you SEE in the chart(s) when writing the scripts — mention specific patterns, support/resistance levels, candle formations, or indicators visible.\n\n' : '') + 'Write 4 Instagram reel scripts for this idea:\n\n"' + idea + '"\n' + brainContext + '\n\n4 variants:\n1. 🔥 AGGRESSIVE — confrontational, calling people out\n2. 📚 TEACHING — step-by-step breakdown with specifics\n3. 📖 STORY — REAL personal story (from brain context above, NOT made up)\n4. 🌶️ HOT TAKE — controversial opinion, polarizing, debate-starter\n\nCRITICAL:\n- If "YOUR OWN WORDS" section exists above, you MUST use those exact phrases in at least 2 scripts\n- Story variant MUST reference a real experience from the brain context, not a generic "I remember when..."\n- Hot take should be something 50% of traders would disagree with\n- Sound like you\'re ranting to camera, not reading a script\n- 80-180 words per script MAX\n- Return ONLY valid JSON, no markdown\n- ALSO include a "next_reel" object with: title (follow-up reel idea that chains naturally), hook (sample hook for it), why (why it chains well with this reel)') }]
+    messages: [{ role: 'user', content: 'Write 4 Instagram reel scripts for this idea:\n\n"' + idea + '"\n' + brainContext + '\n\n4 variants:\n1. 🔥 AGGRESSIVE — confrontational, calling people out\n2. 📚 TEACHING — step-by-step breakdown with specifics\n3. 📖 STORY — REAL personal story (from brain context above, NOT made up)\n4. 🌶️ HOT TAKE — controversial opinion, polarizing, debate-starter\n\nCRITICAL:\n- If "YOUR OWN WORDS" section exists above, you MUST use those exact phrases in at least 2 scripts\n- Story variant MUST reference a real experience from the brain context, not a generic "I remember when..."\n- Hot take should be something 50% of traders would disagree with\n- Sound like you\'re ranting to camera, not reading a script\n- 80-180 words per script MAX\n- Return ONLY valid JSON, no markdown' }]
   };
 
   let scripts = null;
@@ -1748,10 +1480,6 @@ async function generate() {
         if (parsed && Array.isArray(parsed.scripts)) {
           // Validate and filter scripts
           scripts = parsed.scripts.filter(validateScript);
-          // Extract next reel suggestion if present
-          if (parsed.next_reel && parsed.next_reel.title && parsed.next_reel.hook) {
-            _nextReelSuggestion = parsed.next_reel;
-          }
           if (scripts.length > 0) break; // Success
         }
       } catch (parseErr) {
@@ -1777,11 +1505,6 @@ async function generate() {
 
   if (scripts && scripts.length > 0) {
     window._scripts = scripts;
-    // Build chat system context
-    buildChatSystemContext(idea, scripts);
-    // Clear charts after successful generation
-    _uploadedCharts.length = 0;
-    renderChartPreviews();
     let h = '<div class="results-hdr"><h2>Your Scripts</h2><button class="copy-all" onclick="copyAll()">📋 Copy All</button></div>';
 
     scripts.forEach((s, i) => {
@@ -1828,28 +1551,8 @@ async function generate() {
       h += '</div>';
     });
 
-    // Add Next Reel Suggestion
-    if (_nextReelSuggestion) {
-      h += renderNextReelSuggestion(_nextReelSuggestion);
-    }
-
-    // Add cost display
     h += '<div class="cost">Cost: $' + cost.toFixed(4) + ' · ' + (iT + oT) + ' tokens</div>';
-
-    // Add Chat Interface
-    h += renderChatInterface();
     out.innerHTML = h;
-    
-    // Save session state after successful generation
-    saveSessionState();
-    
-    // Scroll to chat after rendering
-    setTimeout(() => {
-      const chatEl = document.getElementById('chatInterface');
-      if (chatEl) {
-        chatEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-    }, 100);
   } else {
     out.innerHTML = '<div class="error">❌ No valid scripts generated. Please try again.</div>';
   }
@@ -1939,8 +1642,6 @@ async function regenerateVariant(idx) {
           showToast('Variant regenerated!', 'success');
           // Quick re-render of just this card
           generate_renderScripts();
-          // Save updated session state
-          saveSessionState();
         }
         return;
       }
@@ -1951,81 +1652,6 @@ async function regenerateVariant(idx) {
   } finally {
     if (card) card.style.opacity = '1';
   }
-}
-
-/**
- * Builds the system context for chat refinements based on generated scripts.
- * @param {string} originalIdea - The original idea that was used to generate scripts
- * @param {Array} scripts - The generated script variants
- */
-function buildChatSystemContext(originalIdea, scripts) {
-  let context = `You are helping Somesh (Kay Capitals) refine Instagram reel scripts. You already generated 4 script variants for this idea: "${originalIdea}"\n\n`;
-  
-  context += `GENERATED SCRIPTS:\n`;
-  scripts.forEach((s, i) => {
-    context += `\n${s.variant.toUpperCase()} (${i + 1}):\n`;
-    context += `Hook: ${s.hook}\n`;
-    context += `Body: ${s.body}\n`;
-    context += `CTA: ${s.cta}\n`;
-    if (s.visual_notes) context += `Visual: ${s.visual_notes}\n`;
-  });
-  
-  context += `\n\nNow the user wants to refine these scripts. When they ask for changes:
-- Keep Somesh's authentic voice and speech patterns (filler words, run-on sentences, slang)
-- Make specific improvements based on their feedback
-- If they reference "the aggressive one" or "the teaching script", you know which variant they mean
-- For hooks: make them more scroll-stopping and pattern-interrupting
-- For CTAs: keep his exact format ("just comment the word X down below and I'll send you all the details right away")
-- Keep it conversational and direct - you're helping him perfect his content
-
-Respond in a helpful, direct tone as if you're his content partner who knows his voice inside and out.`;
-
-  _chatSystemContext = context;
-}
-
-/**
- * Renders the Next Reel Suggestion card.
- * @param {Object} nextReel - The next reel suggestion object
- * @returns {string} HTML string
- */
-function renderNextReelSuggestion(nextReel) {
-  if (!nextReel || !nextReel.title) return '';
-  
-  return `<div class="next-reel-card">
-    <div class="next-reel-header">
-      <div class="next-reel-title">🔗 Next Reel Idea</div>
-      <button class="next-reel-btn" onclick="useNextReelIdea()">⚡ Use This Idea</button>
-    </div>
-    <div class="next-reel-content">
-      <h4>${esc(nextReel.title)}</h4>
-      ${nextReel.hook ? '<div class="next-reel-hook">"' + esc(nextReel.hook) + '"</div>' : ''}
-      ${nextReel.why ? '<div class="next-reel-why"><strong>Why this chains well:</strong> ' + esc(nextReel.why) + '</div>' : ''}
-    </div>
-  </div>`;
-}
-
-/**
- * Renders the chat interface HTML.
- * @returns {string} HTML string
- */
-function renderChatInterface() {
-  return `<div class="chat-interface" id="chatInterface">
-    <button class="reset-btn" onclick="resetGeneration()">🔄 Reset (clear scripts, chat, idea, charts)</button>
-    <div class="chat-header">💬 Refine Your Scripts</div>
-    <div class="chat-messages" id="chatMessages"></div>
-    <div class="chat-input-area">
-      <textarea id="chatInput" class="chat-textarea" placeholder="Tell me how to improve the scripts... (e.g., 'make the hook more aggressive', 'change the CTA', 'add a story about X')" rows="3" maxlength="2000"></textarea>
-      <button class="chat-mic-btn" id="chatMicBtn" onclick="toggleChatMic()" title="Voice input">🎙️</button>
-      <button class="chat-send-btn" id="chatSendBtn" onclick="sendChatMessage()" title="Send message">➤</button>
-    </div>
-    <div id="chatMicStatus" style="display:none;text-align:center;padding:4px;color:#d4a843;font-size:12px"></div>
-    <div id="chatLoading" class="chat-loading" style="display:none">
-      <div class="spinner"></div>
-      <span>Claude is refining your scripts...</span>
-    </div>
-    <div class="chat-hint">Enter to send • Shift+Enter for new line • 🎙️ for voice input</div>
-    <div class="chat-hint-mobile">Tap ➤ to send · 🎙️ for voice</div>
-  </div>`;
 }
 
 /**
@@ -2076,22 +1702,7 @@ function generate_renderScripts() {
       + '<button class="script-regen" onclick="regenerateVariant(' + i + ')">🔄 Regen</button>'
       + '</div></div>';
   });
-  
-  // Add Next Reel Suggestion
-  if (_nextReelSuggestion) {
-    h += renderNextReelSuggestion(_nextReelSuggestion);
-  }
-
-  // Add Chat Interface
-  h += renderChatInterface();
-  
   out.innerHTML = h;
-  
-  // Re-render chat messages if they exist
-  renderChatMessages();
-  
-  // Save session state after rendering scripts
-  saveSessionState();
 }
 
 /**
@@ -2156,367 +1767,49 @@ function fallbackCopy(text) {
   showToast('Copied!', 'success', { duration: 1500 });
 }
 
-// ========== CHAT FUNCTIONS ==========
-
-/**
- * Sends a chat message to refine scripts.
- */
-async function sendChatMessage() {
-  if (!_chatSystemContext) {
-    showToast('Generate scripts first before using chat', 'error');
-    return;
-  }
-  
-  const input = document.getElementById('chatInput');
-  const sendBtn = document.getElementById('chatSendBtn');
-  if (!input || !sendBtn) return;
-  
-  const message = input.value.trim();
-  if (!message) return;
-  
-  // Safety timeout check
-  if (_chatLoading && _chatLoadingStarted && (Date.now() - _chatLoadingStarted > 90000)) {
-    _chatLoading = false; // Force reset stuck state
-  }
-  
-  if (_chatLoading) return;
-  _chatLoading = true;
-  _chatLoadingStarted = Date.now();
-  sendBtn.disabled = true;
-  
-  if (!checkRateLimit()) {
-    _chatLoading = false;
-    sendBtn.disabled = false;
-    return;
-  }
-  
-  // Add user message
-  _chatHistory.push({ role: 'user', content: message });
-  if (_chatHistory.length > 30) {
-    _chatHistory = _chatHistory.slice(-30);
-  }
-  input.value = '';
-  input.style.height = 'auto';
-  renderChatMessages();
-  
-  // Show loading
-  _chatLoading = true;
-  sendBtn.disabled = true;
-  const loadingEl = document.getElementById('chatLoading');
-  if (loadingEl) loadingEl.style.display = 'flex';
-  
-  try {
-    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': getKey(),
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 2000,
-        system: _chatSystemContext,
-        messages: _chatHistory
-      })
-    }, 60000);
-    
-    const data = await r.json();
-    if (data && data.error) throw new Error(data.error.message || 'API error');
-    if (!data || !data.content || !data.content.length) throw new Error('Empty response');
-    
-    const reply = data.content[0].text;
-    _chatHistory.push({ role: 'assistant', content: reply });
-    if (_chatHistory.length > 30) {
-      _chatHistory = _chatHistory.slice(-30);
-    }
-    renderChatMessages();
-    saveSessionState();
-    
-  } catch (e) {
-    _chatHistory.push({ role: 'assistant', content: '❌ Error: ' + (e.message || 'Failed to get response. Try again.') });
-    try {
-      renderChatMessages();
-    } catch (renderErr) {
-      // Fallback if renderChatMessages throws
-      console.error('Failed to render chat messages:', renderErr);
-    }
-    saveSessionState();
-  } finally {
-    _chatLoading = false;
-    const sendBtn = document.getElementById('chatSendBtn');
-    if (sendBtn) sendBtn.disabled = false;
-    const loadingEl = document.getElementById('chatLoading');
-    if (loadingEl) loadingEl.style.display = 'none';
-  }
-}
-
-/**
- * Renders chat messages in the chat container.
- */
-function renderChatMessages() {
-  const container = document.getElementById('chatMessages');
-  if (!container) return;
-  
-  if (_chatHistory.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:#333;font-size:13px;padding:20px">No messages yet. Ask me to refine your scripts!</div>';
-    return;
-  }
-  
-  let html = '';
-  _chatHistory.forEach(msg => {
-    const isUser = msg.role === 'user';
-    html += '<div class="chat-message ' + msg.role + '">'
-      + '<div class="chat-bubble">' + formatChatText(msg.content) + '</div>'
-      + '</div>';
-  });
-  
-  container.innerHTML = html;
-  requestAnimationFrame(() => {
-    container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
-  });
-}
-
-/**
- * Formats chat text with basic markdown-like rendering.
- * @param {string} text - Raw text
- * @returns {string} HTML formatted text
- */
-function formatChatText(text) {
-  if (!text) return '';
-  let html = esc(text);
-  // Bold: **text**
-  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-  // Italic: *text*
-  html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-  // Inline code: `text`
-  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-  // Line breaks
-  html = html.replace(/\n/g, '<br>');
-  return html;
-}
-
-/**
- * Resets the generation: clears scripts, chat, idea input, and charts.
- */
-function resetGeneration() {
-  if (_chatLoading) {
-    showToast('Wait for chat response to finish', 'error');
-    return;
-  }
-  
-  window._scripts = null;
-  _chatHistory = [];
-  _chatSystemContext = '';
-  _chatLoading = false;
-  _nextReelSuggestion = null;
-  _uploadedCharts.length = 0;
-  renderChartPreviews();
-  
-  // Clear saved session
-  localStorage.removeItem('_session');
-  localStorage.removeItem('_session_h');
-  
-  const ideaEl = document.getElementById('idea');
-  if (ideaEl) ideaEl.value = '';
-  
-  const out = document.getElementById('output');
-  if (out) out.innerHTML = '';
-  
-  haptic(10);
-  showToast('🔄 Reset — ready for a new idea', 'success', { duration: 2000 });
-}
-
-/**
- * Uses the next reel suggestion: populates the idea input and generates.
- */
-function useNextReelIdea() {
-  if (!_nextReelSuggestion || !_nextReelSuggestion.title) return;
-  const btn = document.getElementById('genBtn');
-  if (btn && btn.disabled) return; // Already generating
-  
-  const nextTitle = _nextReelSuggestion.title;
-  
-  // Reset chat but keep the flow going
-  _chatHistory = [];
-  _chatSystemContext = '';
-  _chatLoading = false;
-  _nextReelSuggestion = null;
-  
-  const ideaEl = document.getElementById('idea');
-  if (ideaEl) ideaEl.value = nextTitle;
-  
-  haptic(10);
-  showToast('Loading next reel idea...', 'info', { duration: 1500 });
-  setTimeout(() => generate(), 300);
-}
-
-// Chat voice recording state
-let _chatMediaRecorder = null;
-let _chatAudioChunks = [];
-let _chatRecording = false;
-
-/**
- * Toggles voice recording for chat input.
- */
-async function toggleChatMic() {
-  if (isRecording) {
-    showToast('Stop the main mic first', 'error');
-    return;
-  }
-  if (fbRecordingId) {
-    showToast('Stop feedback recording first', 'error');
-    return;
-  }
-  
-  const btn = document.getElementById('chatMicBtn');
-  const status = document.getElementById('chatMicStatus');
-  if (!btn) return;
-  
-  if (_chatRecording) {
-    if (_chatMediaRecorder && _chatMediaRecorder.state !== 'inactive') _chatMediaRecorder.stop();
-    _chatRecording = false;
-    btn.classList.remove('recording');
-    btn.textContent = '🎙️';
-    if (status) { status.textContent = '⏳ Transcribing...'; status.style.display = 'block'; }
-    return;
-  }
-  
-  if (typeof MediaRecorder === 'undefined') {
-    if (status) { status.style.display = 'block'; status.textContent = '⚠️ Voice not supported'; setTimeout(() => { status.style.display = 'none'; }, 3000); }
-    return;
-  }
-  
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    _chatAudioChunks = [];
-    
-    const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
-      ? 'audio/webm;codecs=opus'
-      : MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : '';
-    
-    const opts = mimeType ? { mimeType, audioBitsPerSecond: 32000 } : { audioBitsPerSecond: 32000 };
-    _chatMediaRecorder = new MediaRecorder(stream, opts);
-    _chatRecording = true;
-    
-    _chatMediaRecorder.ondataavailable = (e) => {
-      if (e.data && e.data.size > 0) _chatAudioChunks.push(e.data);
-    };
-    
-    _chatMediaRecorder.onstop = async () => {
-      stream.getTracks().forEach(t => t.stop());
-      _chatRecording = false;
-      
-      const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
-      const blob = new Blob(_chatAudioChunks, { type: mimeType || 'audio/webm' });
-      if (blob.size < 1000) {
-        if (status) { status.textContent = '⚠️ Too short'; status.style.display = 'block'; setTimeout(() => { status.style.display = 'none'; }, 2000); }
-        return;
-      }
-      
-      if (status) { status.style.display = 'block'; status.textContent = '⏳ Transcribing...'; }
-      
-      try {
-        const formData = new FormData();
-        formData.append('file', blob, 'voice.' + ext);
-        formData.append('model', 'whisper-1');
-        formData.append('language', 'en');
-        
-        const res = await fetchWithTimeout('https://api.openai.com/v1/audio/transcriptions', {
-          method: 'POST',
-          headers: { 'Authorization': 'Bearer ' + getOKey() },
-          body: formData
-        }, 30000);
-        
-        const data = await res.json();
-        if (data && data.text) {
-          const input = document.getElementById('chatInput');
-          if (input) input.value = input.value ? input.value + ' ' + data.text : data.text;
-          if (status) { status.textContent = '✅ Got it!'; setTimeout(() => { status.style.display = 'none'; }, 1500); }
-        } else {
-          if (status) { status.textContent = '❌ Failed'; setTimeout(() => { status.style.display = 'none'; }, 3000); }
-        }
-      } catch (err) {
-        if (status) { status.textContent = '❌ ' + (err.message || 'Failed'); setTimeout(() => { status.style.display = 'none'; }, 3000); }
-      }
-    };
-    
-    _chatMediaRecorder.start(250);
-    btn.classList.add('recording');
-    btn.textContent = '⏹️';
-    if (status) { status.style.display = 'block'; status.textContent = '🔴 Recording...'; }
-    
-    // Auto-stop at MAX_RECORDING_SECONDS
-    setTimeout(() => {
-      if (_chatRecording && _chatMediaRecorder && _chatMediaRecorder.state !== 'inactive') {
-        _chatMediaRecorder.stop();
-        btn.classList.remove('recording');
-        btn.textContent = '🎙️';
-        _chatRecording = false;
-        showToast('Chat recording auto-stopped at ' + (MAX_RECORDING_SECONDS / 60) + ' min', 'info');
-      }
-    }, MAX_RECORDING_SECONDS * 1000);
-    
-  } catch (err) {
-    if (status) {
-      status.style.display = 'block';
-      status.textContent = err.name === 'NotAllowedError' ? '🚫 Mic access denied' : '❌ ' + (err.message || 'Mic error');
-      setTimeout(() => { status.style.display = 'none'; }, 4000);
-    }
-  }
-}
-
-// Chat keyboard shortcut: Enter to send, Shift+Enter for newline
-document.addEventListener('keydown', function(e) {
-  const chatInput = document.getElementById('chatInput');
-  if (e.target === chatInput && e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendChatMessage();
-  }
-});
-
 // ========== IDEAS TAB ==========
 
 const IDEAS_STALE_MS = 20 * 60 * 60 * 1000;
 
-const IDEAS_SYSTEM_PROMPT = `You are a content strategist for Somesh (Kay Capitals) — a day trading educator with 1M+ Instagram followers who runs a $3K mentorship program (KCU).
-
-TODAY'S DATE: {todays_date}
-DAY OF WEEK: {day_of_week}
-
-CRITICAL: All news/market ideas MUST reference events from THIS WEEK (the week of {todays_date}). Do NOT reference old news, old prices, or events from previous months. If you're unsure of current prices or events, make the idea about a TIMELESS trading concept instead of guessing wrong numbers.
+const IDEAS_SYSTEM_PROMPT = `You are a content strategist for Somesh (Kay Capitals) — a day trading educator with 1M+ Instagram followers who runs a $3K mentorship program (KCU). His brand is raw, direct, no-BS. He talks like a real person, not a marketer.
 
 Generate 30 Instagram reel content ideas: 10 for each funnel stage.
 
-TOP OF FUNNEL (10): Goal is REACH. Cold audience. These people don't know Somesh yet.
-- 3-4 news/controversy (current events, market news, controversial opinions)
-- 2-3 relatable/emotional (things every aspiring trader feels)
-- 2-3 lifestyle/family (flex, personal life, behind-the-scenes)
-Ideas must be SPECIFIC and TIMELY, not generic.
+TODAY'S DATE AND LIVE CONTEXT:
+{trending_context}
+
+YOU MUST use the live headlines above. At least 6 of the 30 ideas must directly reference something from today's news (specific ticker, event, person, or market move). Do not make up events — use what's in the context.
+
+TOP OF FUNNEL (10): Goal is REACH. Cold audience who doesn't know Somesh yet.
+- 4 news/controversy ideas: MUST reference actual headlines from today's context. Example: "Why [SPECIFIC STOCK] dropping 8% today is actually a gift for day traders"
+- 3 relatable/emotional: things every struggling aspiring trader feels RIGHT NOW
+- 3 lifestyle/family: real moments, flex without cringe, behind-the-scenes
 
 MIDDLE OF FUNNEL (10): Goal is ENGAGEMENT. Warm audience who already follows.
-- 3-4 strategy/education (specific trading concepts, chart patterns, setups)
-- 3-4 psychology/mindset (discipline, emotions, revenge trading, consistency)
-- 2-3 personal stories (his journey, lessons, failures, wins)
+- 4 strategy/education: specific trading concepts tied to TODAY's market conditions if possible
+- 3 psychology/mindset: discipline, revenge trading, consistency — use current market volatility as context
+- 3 personal stories: his journey, real failures and wins, vulnerable moments
 
-BOTTOM OF FUNNEL (10): Goal is CONVERSION. Hot audience ready to buy.
-- 3-4 social proof (student wins, transformations, testimonials)
-- 3-4 direct CTA (why join KCU, what happens inside, the cost of NOT joining)
-- 2-3 community/inside content (insider moments, wins celebrations, "you know you're in KCU when")
+BOTTOM OF FUNNEL (10): Goal is CONVERSION. Hot audience close to buying.
+- 4 social proof: student wins, transformations, specific results
+- 3 direct CTA: why join KCU, what happens inside, cost of NOT joining
+- 3 community/inside: wins celebrations, "you know you're in KCU when", member stories
 
 TASTE PROFILE (what Somesh likes/rejects):
 {taste_profile}
 
-TRENDING CONTEXT:
-{trending_context}
+CRITICAL RULES:
+- NEVER use generic titles like "Trading Psychology Tips" or "How I Made Money Today" — those are trash
+- Every title must be so specific that you could only use it TODAY, not any day
+- Reference real people (Trump, Fed chair, Elon, etc.) when they're in today's news and relevant to markets
+- Ideas should feel like they were written this morning, not last month
+- Include ideas about things traders are FEELING right now based on current market conditions
 
-Return ONLY valid JSON in this format:
-{"ideas":[{"id":"unique_id","funnel":"tof","topic":"trading","title":"The specific idea title","preview":"2-3 sentence script preview","tags":["tag1","tag2"]}]}
+Return ONLY valid JSON:
+{"ideas":[{"id":"unique_id","funnel":"tof","topic":"trading","title":"The specific idea title","preview":"3-4 sentence script preview showing his voice — raw, direct, specific","tags":["tag1","tag2"]}]}
 
-Each idea MUST have: id (unique string), funnel (tof/mof/bof), topic (trading/psychology/family/lifestyle/news/student_story), title, preview, tags array.
-Ideas must be SPECIFIC not generic. "Trump's new tariff just killed tech stocks — here's how day traders are eating" NOT "something about the economy".
-Include non-trading ideas: family moments, lifestyle flex, behind-the-scenes, wife/dad content.`;
+Each idea MUST have: id, funnel (tof/mof/bof), topic (trading/psychology/family/lifestyle/news/student_story), title, preview, tags.
+The preview must be 3-4 sentences in his actual voice — not polished marketing copy.`;
 
 /**
  * Loads and displays the Ideas tab content.
@@ -2528,18 +1821,8 @@ function loadIdeasTab() {
 
   renderTasteSummary();
 
-  if (!Array.isArray(ideas) || ideas.length === 0) {
-    // Don't auto-generate — show empty state with manual button
-    const container = document.getElementById('ideasContent');
-    if (container) container.innerHTML = '<div class="ideas-empty" style="padding:40px 20px;text-align:center"><p style="color:#d4a843;font-size:16px;margin-bottom:12px">💡 No ideas yet</p><p style="color:#666;font-size:13px;margin-bottom:16px">Tap below to generate 30 fresh content ideas</p><button class="gen-btn" onclick="generateAllIdeas(false)" style="max-width:280px;margin:0 auto">⚡ Generate Ideas</button></div>';
-  } else if (age > IDEAS_STALE_MS) {
-    // Show existing ideas but show a subtle "stale" banner — don't auto-regenerate
-    renderIdeas(ideas);
-    updateIdeasAge(ts);
-    const container = document.getElementById('ideasContent');
-    if (container) {
-      container.insertAdjacentHTML('afterbegin', '<div style="text-align:center;padding:12px;color:#d4a843;font-size:13px;border:1px solid #333;border-radius:8px;margin-bottom:12px">⏰ Ideas are ' + Math.round(age/3600000) + 'h old. Tap "🔄 Generate Fresh Ideas" to refresh.</div>');
-    }
+  if (!Array.isArray(ideas) || ideas.length === 0 || age > IDEAS_STALE_MS) {
+    generateAllIdeas(false);
   } else {
     renderIdeas(ideas);
     updateIdeasAge(ts);
@@ -2565,13 +1848,55 @@ function updateIdeasAge(ts) {
  */
 async function fetchTrendingContext() {
   try {
-    const queries = ['stock market news today', 'trading trending topics', 'day trading social media'];
-    const results = await Promise.all(queries.map(q => searchBrain(q, 3)));
-    const all = results.flat().filter(r => r && r.text);
-    if (all.length === 0) return 'No trending context available — use general market awareness.';
-    return all.map(r => r.text).join('\n\n');
+    // Pull live market headlines via RSS feeds (no API key needed)
+    const feeds = [
+      'https://finance.yahoo.com/rss/topfinstories',
+      'https://feeds.marketwatch.com/marketwatch/topstories/',
+      'https://feeds.a.dj.com/rss/RSSMarketsMain.xml'
+    ];
+
+    const parser = new DOMParser();
+    const headlines = [];
+    const today = new Date();
+    const todayStr = today.toDateString();
+
+    for (const feedUrl of feeds) {
+      try {
+        const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(feedUrl);
+        const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(5000) });
+        if (!res.ok) continue;
+        const text = await res.text();
+        const doc = parser.parseFromString(text, 'text/xml');
+        const items = doc.querySelectorAll('item');
+        items.forEach(item => {
+          const title = item.querySelector('title')?.textContent?.trim();
+          const desc = item.querySelector('description')?.textContent?.trim();
+          const pubDate = item.querySelector('pubDate')?.textContent?.trim();
+          if (title && title.length > 10) {
+            const itemDate = pubDate ? new Date(pubDate).toDateString() : '';
+            const isToday = itemDate === todayStr || !pubDate;
+            headlines.push({ title, desc: desc?.replace(/<[^>]*>/g, '').slice(0, 120), isToday });
+          }
+        });
+      } catch (e) { /* feed failed, skip */ }
+    }
+
+    if (headlines.length === 0) throw new Error('No headlines');
+
+    // Sort today's first
+    headlines.sort((a, b) => (b.isToday ? 1 : 0) - (a.isToday ? 1 : 0));
+    const top = headlines.slice(0, 15);
+
+    const dateLabel = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    return `TODAY IS ${dateLabel.toUpperCase()}\n\nLIVE MARKET HEADLINES RIGHT NOW:\n` +
+      top.map((h, i) => `${i + 1}. ${h.title}${h.desc ? ' — ' + h.desc : ''}`).join('\n') +
+      '\n\nUse these SPECIFIC real events to make ideas feel current and timely. Reference the actual headlines, stocks, or people mentioned.';
+
   } catch (e) {
-    return 'No trending context available — use general market awareness.';
+    // Fallback: at least give today's date
+    const today = new Date();
+    const dateLabel = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    return `TODAY IS ${dateLabel.toUpperCase()}\n\nLive news unavailable — use current market awareness. Reference specific tickers, recent moves, or things happening this week in trading.`;
   }
 }
 
@@ -2621,13 +1946,7 @@ async function generateAllIdeas(force) {
 
   btn.textContent = '⏳ Generating 30 ideas (TOF → MOF → BOF)...';
 
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  const dayStr = now.toLocaleDateString('en-US', { weekday: 'long' });
   const prompt = IDEAS_SYSTEM_PROMPT
-    .replace('{todays_date}', dateStr)
-    .replace('{day_of_week}', dayStr)
-    .replace('{todays_date}', dateStr)
     .replace('{taste_profile}', tasteStr)
     .replace('{trending_context}', trending);
 
@@ -2777,852 +2096,4 @@ function renderIdeaCard(idea) {
       + '<select id="reason-' + safeId + '"><option value="">Why not?</option><option value="done_before">Done before</option><option value="boring">Boring</option><option value="not_my_style">Not my style</option><option value="wrong_timing">Wrong timing</option><option value="too_generic">Too generic</option><option value="other">Other</option></select>'
       + '<div class="fb-row"><input type="text" id="fb-text-' + safeId + '" placeholder="Optional feedback...">'
       + '<button class="fb-mic" id="fb-mic-' + safeId + '" onclick="toggleFbMic(\'' + safeId + '\')">🎙️</button></div>'
-      + '<div id="fb-mic-status-' + safeId + '" style="display:none;text-align:center;padding:4px;color:#d4a843;font-size:12px;margin-top:4px"></div>'
-      + '<button class="fb-submit" onclick="submitReject(\'' + safeId + '\')">Reject & Replace</button></div>')
-    + '</div>';
-}
-
-/**
- * Toggles the preview section of an idea card.
- * @param {string} id - Safe card ID
- */
-function togglePreview(id) {
-  const el = document.getElementById('preview-' + id);
-  if (!el) return;
-  const btn = el.previousElementSibling;
-  el.classList.toggle('show');
-  if (btn) btn.textContent = el.classList.contains('show') ? '▼ Preview' : '▶ Preview';
-}
-
-/**
- * Gets an idea object by its safe ID.
- * @param {string} id - Safe card ID
- * @returns {Object|undefined}
- */
-function getIdeaById(id) {
-  const ideas = secureLoad('_ideas', []);
-  if (!Array.isArray(ideas)) return undefined;
-  return ideas.find(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
-}
-
-// ========== APPROVE / REJECT ==========
-
-const _busyCards = new Set();
-
-/**
- * Approves an idea: moves it to approved queue with undo toast.
- * @param {string} id - Safe card ID
- */
-function approveIdea(id) {
-  if (_busyCards.has(id)) return;
-  _busyCards.add(id);
-
-  try {
-    const ideas = secureLoad('_ideas', []);
-    if (!Array.isArray(ideas)) { _busyCards.delete(id); return; }
-    const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
-    if (idx === -1) { _busyCards.delete(id); return; }
-
-    const idea = ideas[idx];
-    ideas.splice(idx, 1);
-    secureStore('_ideas', ideas);
-
-    // Add to approved
-    const approved = secureLoad('_approved', []);
-    idea.approvedAt = Date.now();
-    idea.filmed = false;
-    approved.unshift(idea);
-    secureStore('_approved', approved);
-
-    // Update taste with timestamped history
-    const taste = getTasteProfile();
-    taste.liked_topics.push(idea.topic);
-    if (taste.liked_funnels && taste.liked_funnels[idea.funnel] !== undefined) taste.liked_funnels[idea.funnel]++;
-    if (taste.liked_topics.length > 50) taste.liked_topics = taste.liked_topics.slice(-50);
-    taste.history.push({ action: 'approve', topic: idea.topic, funnel: idea.funnel, ts: Date.now() });
-    if (taste.history.length > 100) taste.history = taste.history.slice(-100);
-    saveTasteProfile(taste);
-
-    haptic(15);
-
-    // Animate slide out
-    const card = document.getElementById('card-' + id);
-    if (card) {
-      card.classList.add('slide-out-right');
-      setTimeout(() => { renderIdeas(ideas); updateTabCounts(); renderTasteSummary(); }, 350);
-    } else {
-      renderIdeas(ideas);
-      updateTabCounts();
-      renderTasteSummary();
-    }
-
-    // Show toast with undo
-    showToast('✅ Approved!', 'success', {
-      duration: 5000,
-      onUndo: () => {
-        // Undo: remove from approved, add back to ideas
-        const currentApproved = secureLoad('_approved', []);
-        const undoIdx = currentApproved.findIndex(a => (a.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
-        if (undoIdx !== -1) {
-          const undone = currentApproved.splice(undoIdx, 1)[0];
-          delete undone.approvedAt;
-          delete undone.filmed;
-          secureStore('_approved', currentApproved);
-          const currentIdeas = secureLoad('_ideas', []);
-          currentIdeas.push(undone); // Push to end instead of using stale idx
-          secureStore('_ideas', currentIdeas);
-          renderIdeas(currentIdeas);
-          updateTabCounts();
-          showToast('Approve undone', 'info', { duration: 1500 });
-        }
-      }
-    });
-  } finally {
-    _busyCards.delete(id);
-  }
-}
-
-/**
- * Handles the reject button — shows bottom sheet on mobile, inline form on desktop.
- * @param {string} id - Safe card ID
- */
-function handleReject(id) {
-  if (isMobile()) {
-    openBottomSheet(id);
-  } else {
-    showRejectForm(id);
-  }
-}
-
-/**
- * Shows the inline reject form (desktop only).
- * @param {string} id - Safe card ID
- */
-function showRejectForm(id) {
-  const form = document.getElementById('reject-' + id);
-  if (form) form.classList.toggle('show');
-}
-
-// ========== BOTTOM SHEET (mobile reject) ==========
-
-let _bsRejectId = null;
-
-/**
- * Opens the bottom sheet for rejecting an idea (mobile).
- * @param {string} id - Safe card ID
- */
-function openBottomSheet(id) {
-  _bsRejectId = id;
-  const idea = getIdeaById(id);
-  const titleEl = document.getElementById('bsTitle');
-  if (titleEl) titleEl.textContent = idea ? idea.title : '';
-
-  const overlay = document.getElementById('bsOverlay');
-  if (overlay) {
-    overlay.classList.add('show');
-    // Reset form
-    const reason = document.getElementById('bsReason');
-    const fb = document.getElementById('bsFeedback');
-    if (reason) reason.value = '';
-    if (fb) fb.value = '';
-  }
-}
-
-/**
- * Closes the bottom sheet.
- * @param {Event} [event] - Click event
- */
-function closeBottomSheet(event) {
-  if (event && event.target !== document.getElementById('bsOverlay')) return;
-  const overlay = document.getElementById('bsOverlay');
-  if (overlay) overlay.classList.remove('show');
-  _bsRejectId = null;
-}
-
-/**
- * Submits the reject from the bottom sheet.
- */
-async function submitBottomSheetReject() {
-  if (!_bsRejectId) return;
-  const id = _bsRejectId;
-  const reason = document.getElementById('bsReason');
-  const fb = document.getElementById('bsFeedback');
-  closeBottomSheet();
-  await doReject(id, reason ? reason.value : '', fb ? fb.value : '');
-}
-
-/**
- * Submits a reject from the inline form (desktop).
- * @param {string} id - Safe card ID
- */
-async function submitReject(id) {
-  const reason = document.getElementById('reason-' + id);
-  const text = document.getElementById('fb-text-' + id);
-  await doReject(id, reason ? reason.value : '', text ? text.value : '');
-}
-
-/**
- * Core reject logic: saves feedback, updates taste, replaces idea, with undo.
- * @param {string} id - Safe card ID
- * @param {string} reason - Reject reason
- * @param {string} text - Optional feedback text
- */
-async function doReject(id, reason, text) {
-  if (_busyCards.has(id)) return;
-  _busyCards.add(id);
-
-  try {
-    const ideas = secureLoad('_ideas', []);
-    if (!Array.isArray(ideas)) { _busyCards.delete(id); return; }
-    const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
-    if (idx === -1) { _busyCards.delete(id); return; }
-
-    const idea = ideas[idx];
-
-    // Save feedback
-    const feedback = _safeParse('_feedback', '[]');
-    feedback.push({ ideaId: idea.id, title: idea.title, funnel: idea.funnel, topic: idea.topic, reason: reason || '', text: text || '', ts: Date.now() });
-    localStorage.setItem('_feedback', JSON.stringify(feedback));
-
-    // Update taste with history
-    const taste = getTasteProfile();
-    taste.rejected_topics.push(idea.topic);
-    if (reason) taste.rejected_reasons.push(reason);
-    if (text) taste.notes.push(text);
-    if (taste.rejected_topics.length > 50) taste.rejected_topics = taste.rejected_topics.slice(-50);
-    if (taste.rejected_reasons.length > 50) taste.rejected_reasons = taste.rejected_reasons.slice(-50);
-    if (taste.notes.length > 30) taste.notes = taste.notes.slice(-30);
-    taste.history.push({ action: 'reject', topic: idea.topic, funnel: idea.funnel, reason: reason || '', ts: Date.now() });
-    if (taste.history.length > 100) taste.history = taste.history.slice(-100);
-    saveTasteProfile(taste);
-
-    haptic(15);
-
-    // Animate slide out
-    const card = document.getElementById('card-' + id);
-    if (card) card.classList.add('slide-out-left');
-
-    // Store for undo
-    const rejectedIdea = { ...idea };
-    const rejectedIdx = idx;
-
-    // Replace with new idea
-    try {
-      const newIdea = await generateOneIdea(idea.funnel);
-      if (newIdea && validateIdea(newIdea)) {
-        ideas[idx] = newIdea;
-      } else {
-        ideas.splice(idx, 1);
-      }
-    } catch (e) {
-      ideas.splice(idx, 1);
-    }
-
-    secureStore('_ideas', ideas);
-
-    setTimeout(() => {
-      renderIdeas(ideas);
-      updateTabCounts();
-      renderTasteSummary();
-    }, card ? 350 : 0);
-
-    // Show undo toast
-    showToast('❌ Rejected', 'info', {
-      duration: 5000,
-      onUndo: () => {
-        const currentIdeas = secureLoad('_ideas', []);
-        currentIdeas.splice(Math.min(rejectedIdx, currentIdeas.length), 0, rejectedIdea);
-        secureStore('_ideas', currentIdeas);
-        renderIdeas(currentIdeas);
-        updateTabCounts();
-        showToast('Reject undone', 'info', { duration: 1500 });
-      }
-    });
-  } finally {
-    _busyCards.delete(id);
-  }
-}
-
-/**
- * Refreshes a single idea with a new one.
- * @param {string} id - Safe card ID
- */
-async function refreshIdea(id) {
-  if (_busyCards.has(id)) return;
-  _busyCards.add(id);
-
-  try {
-    const ideas = secureLoad('_ideas', []);
-    if (!Array.isArray(ideas)) { _busyCards.delete(id); return; }
-    const idx = ideas.findIndex(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
-    if (idx === -1) { _busyCards.delete(id); return; }
-
-    const idea = ideas[idx];
-    const card = document.getElementById('card-' + id);
-    if (card) card.classList.add('replacing');
-
-    try {
-      const newIdea = await generateOneIdea(idea.funnel);
-      if (newIdea && validateIdea(newIdea)) {
-        ideas[idx] = newIdea;
-      }
-    } catch (e) { /* keep old idea on error */ }
-
-    secureStore('_ideas', ideas);
-    renderIdeas(ideas);
-    updateTabCounts();
-  } finally {
-    _busyCards.delete(id);
-  }
-}
-
-/**
- * Refreshes all non-news ideas (keeps news TOF intact, replaces everything else).
- */
-async function refreshNonNewsIdeas() {
-  if (!checkRateLimit()) return;
-  const btn = document.getElementById('refreshNonNewsBtn');
-  if (!btn) return;
-  btn.disabled = true;
-  btn.textContent = '⏳ Refreshing non-news ideas...';
-
-  try {
-    const ideas = secureLoad('_ideas', []);
-    const newsIdeas = ideas.filter(i => i.funnel === 'tof' && i.topic === 'news');
-    const nonNewsCount = ideas.length - newsIdeas.length;
-
-    const taste = getTasteProfile();
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-    const dayStr = now.toLocaleDateString('en-US', { weekday: 'long' });
-
-    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': getKey(), 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4000,
-        system: 'You generate content ideas for Somesh (Kay Capitals) — day trading educator, 1M+ IG followers. TODAY IS: ' + dateStr + ' (' + dayStr + '). Generate NON-NEWS ideas only. No market news, no stock prices, no current events. Focus on: trading education, psychology, personal stories, family, lifestyle, student wins, community, CTA.',
-        messages: [{ role: 'user', content: 'Generate ' + nonNewsCount + ' content ideas to replace existing non-news ideas. Keep the same funnel distribution minus news.\n\nNeeded:\n- TOF non-news (relatable, family, lifestyle): ' + ideas.filter(i => i.funnel === 'tof' && i.topic !== 'news').length + '\n- MOF (strategy, psychology, personal stories): ' + ideas.filter(i => i.funnel === 'mof').length + '\n- BOF (student proof, CTA, community): ' + ideas.filter(i => i.funnel === 'bof').length + '\n\nTaste profile: ' + JSON.stringify(taste) + '\n\nReturn ONLY valid JSON: {"ideas":[{"id":"unique","funnel":"tof/mof/bof","topic":"trading/psychology/family/lifestyle/student_story","title":"specific title","preview":"2-3 sentences","tags":["tag1"]}]}' }]
-      })
-    }, 90000);
-
-    const data = await r.json();
-    if (data && data.error) throw new Error(data.error.message);
-    if (!data || !data.content || !data.content.length) throw new Error('Empty response');
-
-    const txt = data.content[0].text;
-    const match = txt.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error('No JSON in response');
-
-    const parsed = JSON.parse(match[0]);
-    const newIdeas = (parsed.ideas || []).filter(validateIdea);
-
-    if (newIdeas.length > 0) {
-      const combined = [...newsIdeas, ...newIdeas];
-      secureStore('_ideas', combined);
-      localStorage.setItem('_ideas_ts', String(Date.now()));
-      renderIdeas(combined);
-      updateTabCounts();
-      showToast('✅ ' + newIdeas.length + ' ideas refreshed (news kept)', 'success');
-      haptic(15);
-    } else {
-      throw new Error('No valid ideas returned');
-    }
-  } catch (e) {
-    showToast('❌ ' + (e.message || 'Failed to refresh'), 'error');
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '🔄 Refresh Ideas (keep news)';
-  }
-}
-
-/**
- * Refreshes only the news/timely TOF ideas.
- */
-async function refreshNewsOnly() {
-  const btn = document.getElementById('refreshNewsBtn');
-  if (!btn) return;
-  if (!checkRateLimit()) return;
-
-  const origText = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = '⏳ Fetching fresh news...';
-
-  try {
-    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': getKey(),
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 2000,
-        system: 'You generate TOP OF FUNNEL content ideas for Somesh (Kay Capitals) — day trading educator, 1M+ IG followers. Focus on NEWS, CURRENT EVENTS, CONTROVERSY, and TIMELY topics only.\n\nTODAY IS: ' + new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + '.\n\nCRITICAL: All ideas MUST reference events from THIS WEEK ONLY. Do NOT make up prices, do NOT reference old news from previous months. If unsure about exact current prices, use phrases like "just tanked" or "is mooning" instead of specific numbers. NEVER guess stock/crypto prices.\n\nInclude: market news, earnings, Fed decisions, political moves affecting markets, viral financial topics, breaking economic data. Each idea should be a specific scroll-stopping hook. Return ONLY valid JSON.',
-        messages: [{ role: 'user', content: 'Today is ' + new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + '. Generate 5 fresh NEWS-BASED top of funnel content ideas about what is happening in markets RIGHT NOW this week. Do NOT reference old news or guess prices.\n\nReturn: {"ideas":[{"id":"news_' + Date.now() + '_1","funnel":"tof","topic":"news","title":"...","preview":"2-3 sentence script preview","tags":["news","timely"]}]}' }]
-      })
-    }, 60000);
-
-    const data = await r.json();
-    if (data && data.error) throw new Error(data.error.message);
-    if (!data || !data.content || !data.content.length) throw new Error('Empty response from API');
-    const txt = data.content[0].text;
-    const m = txt.match(/\{[\s\S]*"ideas"[\s\S]*\}/);
-    if (!m) throw new Error('Bad response');
-
-    const parsed = JSON.parse(m[0]);
-    let newNewsIdeas = Array.isArray(parsed.ideas) ? parsed.ideas.filter(validateIdea) : [];
-
-    let ideas = secureLoad('_ideas', []);
-    if (!Array.isArray(ideas)) ideas = [];
-    const nonNewsIdeas = ideas.filter(i => !(i.funnel === 'tof' && i.topic === 'news'));
-
-    ideas = [...nonNewsIdeas, ...newNewsIdeas.map((idea, idx) => ({
-      ...idea,
-      id: idea.id || 'news_' + Date.now() + '_' + idx
-    }))];
-
-    secureStore('_ideas', ideas);
-    renderIdeas(ideas);
-    updateTabCounts();
-    btn.textContent = '✅ News refreshed!';
-    setTimeout(() => { btn.textContent = '🔥 Refresh News'; btn.disabled = false; }, 2000);
-  } catch (e) {
-    btn.textContent = '❌ ' + esc(e.message || 'Failed');
-    setTimeout(() => { btn.textContent = origText; btn.disabled = false; }, 3000);
-  }
-}
-
-/**
- * Generates a single replacement idea for a given funnel stage.
- * @param {string} funnel - Funnel stage ('tof', 'mof', 'bof')
- * @returns {Promise<Object|null>} The new idea or null
- */
-async function generateOneIdea(funnel) {
-  if (!checkRateLimit()) return null;
-
-  const taste = getTasteProfile();
-  const funnelLabel = funnel === 'tof' ? 'TOP OF FUNNEL' : funnel === 'mof' ? 'MIDDLE OF FUNNEL' : 'BOTTOM OF FUNNEL';
-
-  try {
-    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': getKey(),
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 500,
-        system: 'You generate content ideas for Somesh (Kay Capitals) — day trading educator, 1M+ IG followers. Return ONLY valid JSON.',
-        messages: [{ role: 'user', content: 'Generate 1 new ' + funnelLabel + ' Instagram reel idea. Be SPECIFIC and TIMELY.\n\nTaste profile: ' + JSON.stringify(taste) + '\n\nReturn ONLY: {"idea":{"id":"' + Date.now() + '_new","funnel":"' + funnel + '","topic":"trading|psychology|family|lifestyle|news|student_story","title":"...","preview":"2-3 sentences","tags":[]}}' }]
-      })
-    }, 30000);
-
-    const data = await r.json();
-    if (!data || data.error || !data.content || !data.content.length) return null;
-    const txt = data.content[0].text;
-    const m = txt.match(/\{[\s\S]*"idea"[\s\S]*\}/);
-    if (m) {
-      const parsed = JSON.parse(m[0]);
-      return (parsed.idea && validateIdea(parsed.idea)) ? parsed.idea : null;
-    }
-    return null;
-  } catch (e) {
-    return null;
-  }
-}
-
-// ========== SWIPE GESTURES ==========
-
-const SWIPE_THRESHOLD = 80;
-let _swipeState = null;
-let _swipeContainerBound = false;
-
-/**
- * Attaches swipe event handlers using event delegation.
- */
-function attachSwipeHandlers() {
-  if (_swipeContainerBound) return; // Only bind once
-  const container = document.getElementById('ideasContent');
-  if (!container) return;
-  _swipeContainerBound = true;
-  
-  container.addEventListener('touchstart', (e) => {
-    const card = e.target.closest('.idea-card');
-    if (!card) return;
-    onSwipeStart({ ...e, currentTarget: card, touches: e.touches });
-  }, { passive: true });
-  
-  container.addEventListener('touchmove', (e) => {
-    if (!_swipeState) return;
-    onSwipeMove(e);
-  }, { passive: false });
-  
-  container.addEventListener('touchend', (e) => {
-    if (!_swipeState) return;
-    onSwipeEnd(e);
-  }, { passive: true });
-}
-
-/**
- * Handles touch start for swipe.
- * @param {TouchEvent} e
- */
-function onSwipeStart(e) {
-  const touch = e.touches[0];
-  if (!touch) return;
-  const card = e.target.closest('.idea-card');
-  if (!card) return;
-  _swipeState = {
-    startX: touch.clientX,
-    startY: touch.clientY,
-    card: card,
-    id: card.dataset.ideaId,
-    moved: false
-  };
-}
-
-/**
- * Handles touch move for swipe.
- * @param {TouchEvent} e
- */
-function onSwipeMove(e) {
-  if (!_swipeState) return;
-  const touch = e.touches[0];
-  if (!touch) return;
-
-  const dx = touch.clientX - _swipeState.startX;
-  const dy = touch.clientY - _swipeState.startY;
-
-  // If vertical scroll is dominant, bail
-  if (Math.abs(dy) > Math.abs(dx) && !_swipeState.moved) {
-    _swipeState = null;
-    return;
-  }
-
-  if (Math.abs(dx) > 10) {
-    _swipeState.moved = true;
-    e.preventDefault();
-    _swipeState.card.classList.add('swiping');
-    _swipeState.card.style.transform = 'translateX(' + dx + 'px)';
-    _swipeState.card.style.opacity = String(Math.max(0.3, 1 - Math.abs(dx) / 300));
-  }
-}
-
-/**
- * Handles touch end for swipe.
- * @param {TouchEvent} e
- */
-function onSwipeEnd(e) {
-  if (!_swipeState || !_swipeState.moved) {
-    _swipeState = null;
-    return;
-  }
-
-  const card = _swipeState.card;
-  const id = _swipeState.id;
-  const touch = e.changedTouches[0];
-  if (!touch) { resetSwipe(card); return; }
-
-  const dx = touch.clientX - _swipeState.startX;
-
-  if (dx > SWIPE_THRESHOLD && id) {
-    // Swipe right → approve
-    card.classList.remove('swiping');
-    card.classList.add('slide-out-right');
-    setTimeout(() => approveIdea(id), 300);
-  } else if (dx < -SWIPE_THRESHOLD && id) {
-    // Swipe left → reject
-    card.classList.remove('swiping');
-    card.classList.add('slide-out-left');
-    setTimeout(() => handleReject(id), 300);
-  } else {
-    resetSwipe(card);
-  }
-
-  _swipeState = null;
-}
-
-/**
- * Resets a card's swipe position.
- * @param {HTMLElement} card
- */
-function resetSwipe(card) {
-  if (!card) return;
-  card.classList.remove('swiping');
-  card.style.transform = '';
-  card.style.opacity = '';
-}
-
-// ========== PULL TO REFRESH ==========
-
-let _ptrState = null;
-const PTR_THRESHOLD = 60;
-
-/**
- * Initializes pull-to-refresh on the Ideas panel.
- */
-function initPullToRefresh() {
-  // Pull-to-refresh DISABLED — too sensitive on mobile, causes accidental refreshes
-}
-
-// ========== APPROVED TAB ==========
-
-/**
- * Renders the approved queue and completed sections.
- */
-function renderApproved() {
-  const approved = secureLoad('_approved', []);
-  if (!Array.isArray(approved)) return;
-
-  const active = approved.filter(a => !a.filmed);
-  const completed = approved.filter(a => a.filmed);
-
-  const counterEl = document.getElementById('approvedCounter');
-  if (counterEl) counterEl.textContent = active.length + ' idea' + (active.length !== 1 ? 's' : '') + ' ready to film';
-
-  let html = '';
-  if (active.length === 0) {
-    html = '<div class="ideas-empty">No approved ideas yet.<br>Go to 💡 Ideas and approve some!</div>';
-  }
-
-  active.forEach(idea => {
-    if (!idea) return;
-    const safeId = (idea.id || '').replace(/[^a-zA-Z0-9_-]/g, '');
-    const funnelClass = VALID_FUNNELS.has(idea.funnel) ? idea.funnel : 'tof';
-    const funnelLabel = funnelClass === 'tof' ? 'TOF' : funnelClass === 'mof' ? 'MOF' : 'BOF';
-    const topicLabel = TOPIC_LABELS[idea.topic] || idea.topic || 'General';
-
-    html += '<div class="approved-card" id="approved-' + safeId + '">'
-      + '<div class="idea-badges">'
-      + '<span class="idea-badge ' + funnelClass + '">' + funnelLabel + '</span>'
-      + '<span class="idea-badge topic">' + esc(topicLabel) + '</span>'
-      + '</div>'
-      + '<div class="approved-title">' + esc(idea.title) + '</div>'
-      + '<div class="approved-actions">'
-      + '<button class="approved-action generate" onclick="generateFromIdea(\'' + safeId + '\')">⚡ Generate Scripts</button>'
-      + '<button class="approved-action filmed" onclick="markFilmed(\'' + safeId + '\')">✅ Filmed</button>'
-      + '<button class="approved-action remove" onclick="confirmRemoveApproved(\'' + safeId + '\')">🗑️</button>'
-      + '</div></div>';
-  });
-
-  const listEl = document.getElementById('approvedList');
-  if (listEl) listEl.innerHTML = html;
-
-  // Completed section
-  const completedSection = document.getElementById('completedSection');
-  if (completed.length > 0) {
-    if (completedSection) completedSection.style.display = 'block';
-    const countEl = document.getElementById('completedCount');
-    if (countEl) countEl.textContent = completed.length;
-    let cHtml = '';
-    completed.forEach(idea => {
-      if (!idea) return;
-      const funnelClass = VALID_FUNNELS.has(idea.funnel) ? idea.funnel : 'tof';
-      const funnelLabel = funnelClass === 'tof' ? 'TOF' : funnelClass === 'mof' ? 'MOF' : 'BOF';
-      cHtml += '<div class="completed-card"><div class="idea-badges"><span class="idea-badge ' + funnelClass + '">' + funnelLabel + '</span></div><div class="idea-title">' + esc(idea.title) + '</div></div>';
-    });
-    const completedList = document.getElementById('completedList');
-    if (completedList) completedList.innerHTML = cHtml;
-  } else {
-    if (completedSection) completedSection.style.display = 'none';
-  }
-
-  updateTabCounts();
-}
-
-/**
- * Switches to generate tab and pre-fills with an approved idea.
- * @param {string} id - Safe card ID
- */
-function generateFromIdea(id) {
-  const approved = secureLoad('_approved', []);
-  if (!Array.isArray(approved)) return;
-  const idea = approved.find(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
-  if (!idea) return;
-
-  switchTab('generate');
-  const ta = document.getElementById('idea');
-  if (ta) {
-    ta.value = idea.title;
-    ta.focus();
-  }
-  setTimeout(() => generate(), 300);
-}
-
-/**
- * Marks an approved idea as filmed.
- * @param {string} id - Safe card ID
- */
-function markFilmed(id) {
-  const approved = secureLoad('_approved', []);
-  if (!Array.isArray(approved)) return;
-  const idea = approved.find(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
-  if (idea) {
-    idea.filmed = true;
-    idea.filmedAt = Date.now();
-    secureStore('_approved', approved);
-    renderApproved();
-    haptic(10);
-    showToast('Marked as filmed!', 'success', { duration: 1500 });
-  }
-}
-
-/**
- * Confirms before removing from approved queue.
- * @param {string} id - Safe card ID
- */
-function confirmRemoveApproved(id) {
-  const approved = secureLoad('_approved', []);
-  if (!Array.isArray(approved)) return;
-  const idea = approved.find(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') === id);
-  if (!idea) return;
-
-  // Show confirmation via toast with undo
-  const filtered = approved.filter(i => (i.id || '').replace(/[^a-zA-Z0-9_-]/g, '') !== id);
-  secureStore('_approved', filtered);
-
-  // Animate
-  const card = document.getElementById('approved-' + id);
-  if (card) {
-    card.classList.add('slide-out');
-    setTimeout(() => renderApproved(), 350);
-  } else {
-    renderApproved();
-  }
-
-  haptic(10);
-
-  showToast('Removed from queue', 'info', {
-    duration: 5000,
-    onUndo: () => {
-      const current = secureLoad('_approved', []);
-      current.push(idea);
-      secureStore('_approved', current);
-      renderApproved();
-      showToast('Restored', 'success', { duration: 1500 });
-    }
-  });
-}
-
-/**
- * Toggles the completed ideas list visibility.
- */
-function toggleCompleted() {
-  const list = document.getElementById('completedList');
-  const arrow = document.getElementById('completedArrow');
-  if (!list || !arrow) return;
-  if (list.style.display === 'none') {
-    list.style.display = 'block';
-    arrow.textContent = '▼';
-  } else {
-    list.style.display = 'none';
-    arrow.textContent = '▶';
-  }
-}
-
-// ========== KEYBOARD SHORTCUTS ==========
-
-document.getElementById('idea')?.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) generate();
-});
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && document.getElementById('loginScreen')?.style.display !== 'none') checkLogin();
-});
-
-// ========== UNBOUNDED STORAGE CLEANUP ==========
-function cleanupUnboundedStorage() {
-  // Cap _feedback to last 50 entries
-  try {
-    const fb = JSON.parse(localStorage.getItem('_feedback') || '[]');
-    if (Array.isArray(fb) && fb.length > 50) {
-      localStorage.setItem('_feedback', JSON.stringify(fb.slice(-50)));
-    }
-  } catch(e) {
-    localStorage.removeItem('_feedback');
-  }
-  
-  // Cap _scriptRatings to last 100 entries
-  try {
-    const sr = JSON.parse(localStorage.getItem('_scriptRatings') || '{}');
-    const keys = Object.keys(sr);
-    if (keys.length > 100) {
-      const trimmed = {};
-      keys.slice(-100).forEach(k => {
-        trimmed[k] = sr[k];
-      });
-      localStorage.setItem('_scriptRatings', JSON.stringify(trimmed));
-    }
-  } catch(e) {
-    localStorage.removeItem('_scriptRatings');
-  }
-  
-  // Cap _scriptCopies to last 100 entries
-  try {
-    const sc = JSON.parse(localStorage.getItem('_scriptCopies') || '{}');
-    const keys = Object.keys(sc);
-    if (keys.length > 100) {
-      const trimmed = {};
-      keys.slice(-100).forEach(k => {
-        trimmed[k] = sc[k];
-      });
-      localStorage.setItem('_scriptCopies', JSON.stringify(trimmed));
-    }
-  } catch(e) {
-    localStorage.removeItem('_scriptCopies');
-  }
-}
-
-// ========== INIT ==========
-document.addEventListener('DOMContentLoaded', () => {
-  cleanupUnboundedStorage();
-  
-  if (localStorage.getItem('_cs') === 'true') {
-    const loginScreen = document.getElementById('loginScreen');
-    const mainApp = document.getElementById('mainApp');
-    if (loginScreen) loginScreen.style.display = 'none';
-    if (mainApp) mainApp.style.display = 'block';
-    initTabIndicator();
-    
-    // Restore session if coming back from background
-    restoreSessionState();
-  }
-  updateTabCounts();
-  initPullToRefresh();
-
-  // Resize handler for tab indicator
-  window.addEventListener('resize', updateTabIndicator);
-});
-
-// Periodic auto-save (fix beforeunload iOS unreliability)
-setInterval(() => {
-  if (window._scripts && window._scripts.length > 0 && !_isRestoring) {
-    saveSessionState();
-  }
-}, 30000);
-
-// Save state when app is about to be suspended/hidden (iOS PWA background)
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden' && window._scripts) {
-    saveSessionState();
-  } else if (document.visibilityState === 'visible' && (!window._scripts || window._scripts.length === 0)) {
-    restoreSessionState();
-  }
-});
-
-// Also save on beforeunload as fallback
-window.addEventListener('beforeunload', () => {
-  if (window._scripts) {
-    saveSessionState();
-  }
-});
-</script>
-</body>
-</html>
+      + '<div id="fb-mic-status-' + safeId + '" style="display:none;text-align:center;padding:4px;color:#d4a843;font-size:12px;margin
