@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://api.anthropic.com https://api.openai.com https://kc-tools.kaycapitals.co https://api.allorigins.win; img-src 'self' data:; font-src 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://api.anthropic.com https://api.openai.com https://kc-tools.kaycapitals.co; img-src 'self' data:; font-src 'self';">
 <title>Content Engine</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -1874,60 +1874,46 @@ function updateIdeasAge(ts) {
  * @returns {Promise<string>}
  */
 async function fetchTrendingContext() {
+  const today = new Date();
+  const dateLabel = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  const datePrefix = `TODAY IS ${dateLabel.toUpperCase()}`;
+
   try {
-    // Pull live market headlines via RSS feeds (no API key needed)
-    const feeds = [
-      'https://finance.yahoo.com/rss/topfinstories',
-      'https://feeds.marketwatch.com/marketwatch/topstories/',
-      'https://feeds.a.dj.com/rss/RSSMarketsMain.xml'
-    ];
+    // Ask Claude to surface real current market context using its knowledge
+    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': getKey(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5',
+        max_tokens: 600,
+        messages: [{ role: 'user', content: `What are the most relevant and current things happening RIGHT NOW in the US stock market, trading, and financial news? Today is ${dateLabel}.
 
-    const parser = new DOMParser();
-    const headlines = [];
-    const today = new Date();
-    const todayStr = today.toDateString();
+List 12-15 specific, concrete items that a day trader would care about. Include:
+- Specific stocks making big moves (with ticker symbols and % moves if known)
+- Fed/economic events this week
+- Earnings reports happening now or this week
+- Political/Trump news affecting markets
+- Sector moves (tech, energy, etc.)
+- Anything traders are talking about right now
 
-    // Fetch all feeds in parallel — a slow/failed feed no longer blocks the others.
-    const perFeed = await Promise.all(feeds.map(async (feedUrl) => {
-      const out = [];
-      try {
-        const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(feedUrl);
-        const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(5000) });
-        if (!res.ok) return out;
-        const text = await res.text();
-        const doc = parser.parseFromString(text, 'text/xml');
-        const items = doc.querySelectorAll('item');
-        items.forEach(item => {
-          const title = item.querySelector('title')?.textContent?.trim();
-          const desc = item.querySelector('description')?.textContent?.trim();
-          const pubDate = item.querySelector('pubDate')?.textContent?.trim();
-          if (title && title.length > 10) {
-            const itemDate = pubDate ? new Date(pubDate).toDateString() : '';
-            const isToday = itemDate === todayStr || !pubDate;
-            out.push({ title, desc: desc?.replace(/<[^>]*>/g, '').slice(0, 120), isToday });
-          }
-        });
-      } catch (e) { /* feed failed, skip */ }
-      return out;
-    }));
-    perFeed.forEach(arr => headlines.push(...arr));
+Be specific. Use real tickers. Real numbers. Real names. Format as a numbered list. No fluff.` }]
+      })
+    }, 15000);
 
-    if (headlines.length === 0) throw new Error('No headlines');
+    if (!r.ok) throw new Error('API error');
+    const data = await r.json();
+    if (data && data.error) throw new Error(data.error.message);
+    const marketContext = data.content[0].text.trim();
 
-    // Sort today's first
-    headlines.sort((a, b) => (b.isToday ? 1 : 0) - (a.isToday ? 1 : 0));
-    const top = headlines.slice(0, 15);
-
-    const dateLabel = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-    return `TODAY IS ${dateLabel.toUpperCase()}\n\nLIVE MARKET HEADLINES RIGHT NOW:\n` +
-      top.map((h, i) => `${i + 1}. ${h.title}${h.desc ? ' — ' + h.desc : ''}`).join('\n') +
-      '\n\nUse these SPECIFIC real events to make ideas feel current and timely. Reference the actual headlines, stocks, or people mentioned.';
+    return `${datePrefix}\n\nCURRENT MARKET CONTEXT:\n${marketContext}\n\nUse these SPECIFIC real events. Name the tickers. Name the people. Make ideas feel like they were written this morning.`;
 
   } catch (e) {
-    // Fallback: at least give today's date
-    const today = new Date();
-    const dateLabel = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-    return `TODAY IS ${dateLabel.toUpperCase()}\n\nLive news unavailable — use current market awareness. Reference specific tickers, recent moves, or things happening this week in trading.`;
+    return `${datePrefix}\n\nUse current market awareness — reference specific tickers, recent Fed moves, earnings season, political/Trump impact on markets, and what traders are watching this week. Make ideas feel current and specific.`;
   }
 }
 
@@ -2142,6 +2128,7 @@ function renderIdeaCard(idea) {
     + '<div class="idea-preview" id="preview-' + safeId + '">' + esc(idea.preview || '') + '</div>'
     + '<div class="idea-actions">'
     + '<button class="idea-action approve" onclick="approveIdea(\'' + safeId + '\')">✅</button>'
+    + '<button class="idea-action" style="border-color:#d4a843;color:#d4a843" onclick="generateFromIdea(\'' + safeId + '\')">⚡ Generate</button>'
     + '<button class="idea-action reject" onclick="handleReject(\'' + safeId + '\')">❌</button>'
     + '<button class="idea-action refresh" onclick="refreshIdea(\'' + safeId + '\')">🔄</button>'
     + '</div>'
@@ -2492,14 +2479,44 @@ function renderApprovedCard(a) {
   const funnelClass = VALID_FUNNELS.has(a.funnel) ? a.funnel : 'tof';
   const funnelLabel = funnelClass.toUpperCase();
   const topicLabel = TOPIC_LABELS[a.topic] || a.topic || 'General';
+  const approvedDate = a.approvedAt ? new Date(a.approvedAt).toLocaleDateString('en-US', {month:'short',day:'numeric'}) : '';
+  const genDate = a.generatedAt ? new Date(a.generatedAt).toLocaleDateString('en-US', {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : null;
+
+  // Render generated scripts inline if they exist
+  let scriptsHtml = '';
+  if (a.scripts && a.scripts.length > 0) {
+    scriptsHtml = '<div class="approved-scripts" id="scripts-' + safeId + '" style="display:none;margin-top:10px;border-top:1px solid #222;padding-top:10px">'
+      + a.scripts.map((s, i) => {
+        const icon = {aggressive:'🔥',teaching:'📚',story:'📖',hot_take:'🌶️'}[s.variant] || '🎬';
+        return '<div style="margin-bottom:12px;padding:10px;background:#0a0a0a;border-radius:8px">'
+          + '<div style="font-size:11px;font-weight:700;color:#d4a843;margin-bottom:6px">' + icon + ' ' + (s.variant||'').toUpperCase().replace('_',' ') + '</div>'
+          + '<div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:6px">' + esc(s.hook||'') + '</div>'
+          + '<div style="font-size:13px;color:#bbb;line-height:1.6;margin-bottom:6px">' + esc(s.body||'') + '</div>'
+          + '<div style="font-size:12px;color:#6b6">' + esc(s.cta||'') + '</div>'
+          + '<button onclick="copyApprovedScript(' + i + ',\'' + safeId + '\')" style="margin-top:8px;padding:6px 12px;border-radius:6px;border:1px solid #333;background:none;color:#888;font-size:12px;cursor:pointer">📋 Copy</button>'
+          + '</div>';
+      }).join('')
+      + '</div>';
+  }
+
+  const hasScripts = a.scripts && a.scripts.length > 0;
+
   return '<div class="approved-card" id="approved-' + safeId + '">'
-    + '<div class="idea-badges"><span class="idea-badge ' + funnelClass + '">' + funnelLabel + '</span><span class="idea-badge topic">' + esc(topicLabel) + '</span></div>'
+    + '<div class="idea-badges"><span class="idea-badge ' + funnelClass + '">' + funnelLabel + '</span><span class="idea-badge topic">' + esc(topicLabel) + '</span>'
+    + (approvedDate ? '<span class="idea-badge" style="background:#111;color:#555">✅ ' + approvedDate + '</span>' : '')
+    + (genDate ? '<span class="idea-badge" style="background:#0f1a0f;color:#6b6">⚡ Generated ' + genDate + '</span>' : '')
+    + '</div>'
     + '<div class="approved-title">' + esc(a.title) + '</div>'
-    + (a.preview ? '<div class="idea-preview show">' + esc(a.preview) + '</div>' : '')
+    + (a.preview ? '<div class="idea-preview show" style="margin-bottom:8px">' + esc(a.preview) + '</div>' : '')
     + '<div class="approved-actions">'
+    + '<button class="approved-action generate" id="gen-btn-' + safeId + '" onclick="generateFromApproved(\'' + safeId + '\')">'
+    + (hasScripts ? '⚡ Regenerate' : '⚡ Generate Scripts') + '</button>'
+    + (hasScripts ? '<button class="approved-action" style="background:none;border:1px solid #444;color:#888" onclick="toggleApprovedScripts(\'' + safeId + '\')" id="toggle-scripts-' + safeId + '">📄 View Scripts</button>' : '')
     + '<button class="approved-action filmed" onclick="markFilmed(\'' + safeId + '\')">🎬 Mark Filmed</button>'
-    + '<button class="approved-action remove" onclick="removeApproved(\'' + safeId + '\')">🗑 Remove</button>'
-    + '</div></div>';
+    + '<button class="approved-action remove" onclick="removeApproved(\'' + safeId + '\')">🗑</button>'
+    + '</div>'
+    + scriptsHtml
+    + '</div>';
 }
 
 /**
@@ -2520,6 +2537,129 @@ function renderCompletedCard(a) {
  * Marks an approved idea as filmed.
  * @param {string} id - Safe idea id
  */
+/**
+ * Generate scripts directly from an idea card (Ideas tab).
+ * Approves the idea first, then generates scripts and saves to approved entry.
+ */
+function generateFromIdea(safeId) {
+  // First approve it if not already approved
+  const ideas = secureLoad('_ideas', []);
+  const idea = ideas.find(i => _toSafeId(i.id) === safeId);
+  if (!idea) { showToast('Idea not found', 'error'); return; }
+
+  // Ensure it's approved
+  const approved = secureLoad('_approved', []);
+  if (!approved.find(a => _toSafeId(a.id) === safeId)) {
+    approved.unshift({ ...idea, approvedAt: Date.now() });
+    secureStore('_approved', approved);
+    updateTabCounts();
+  }
+
+  // Switch to approved tab and trigger generate
+  switchTab('approved');
+  setTimeout(() => generateFromApproved(safeId), 300);
+}
+
+/**
+ * Generate scripts for an approved idea and save them inline.
+ */
+async function generateFromApproved(safeId) {
+  const approved = secureLoad('_approved', []);
+  const idx = approved.findIndex(a => _toSafeId(a.id) === safeId);
+  if (idx === -1) { showToast('Not found', 'error'); return; }
+  const idea = approved[idx];
+
+  const btn = document.getElementById('gen-btn-' + safeId);
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Generating...'; }
+
+  // Build a mini idea textarea value and call the main generate pipeline
+  const ideaText = idea.title + (idea.preview ? '\n\n' + idea.preview : '');
+
+  try {
+    // Search brain for context
+    const [reelResults, bookResults, courseResults] = await Promise.all([
+      searchBrain(idea.title + ' ' + (idea.topic || ''), 5),
+      searchBrain(idea.title, 3),
+      searchBrain(idea.title, 3)
+    ]);
+    const reelQuotes = reelResults.filter(r => r && r.text);
+    const bookKnowledge = bookResults.filter(r => r && r.text);
+    const courseContent = courseResults.filter(r => r && r.text);
+    const brainContext = [
+      reelQuotes.length ? '== YOUR PAST REELS ==\n' + reelQuotes.map(r => r.text).join('\n\n') : '',
+      bookKnowledge.length ? '== TRADING BOOKS ==\n' + bookKnowledge.map(r => r.text).join('\n\n') : '',
+      courseContent.length ? '== KCU COURSE ==\n' + courseContent.map(r => r.text).join('\n\n') : ''
+    ].filter(Boolean).join('\n\n');
+
+    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': getKey(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 3000,
+        system: SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: 'Generate 4 reel scripts for this idea:\n\n' + ideaText + (brainContext ? '\n\n---\nBRAIN CONTEXT:\n' + brainContext : '') + '\n\nReturn valid JSON only: {"scripts":[...]}' }]
+      })
+    }, 90000);
+
+    const data = await r.json();
+    if (data && data.error) throw new Error(data.error.message);
+    const txt = data.content[0].text;
+    const m = txt.match(/\{[\s\S]*"scripts"[\s\S]*\}/);
+    const parsed = m ? JSON.parse(m[0]) : null;
+    if (!parsed || !Array.isArray(parsed.scripts) || parsed.scripts.length === 0) throw new Error('No scripts returned');
+
+    const scripts = parsed.scripts.filter(validateScript);
+
+    // Save scripts into the approved entry
+    approved[idx].scripts = scripts;
+    approved[idx].generatedAt = Date.now();
+    secureStore('_approved', approved);
+    renderApproved();
+    // Auto-expand scripts
+    setTimeout(() => {
+      const el = document.getElementById('scripts-' + safeId);
+      if (el) el.style.display = 'block';
+      const toggleBtn = document.getElementById('toggle-scripts-' + safeId);
+      if (toggleBtn) toggleBtn.textContent = '📄 Hide Scripts';
+    }, 100);
+    showToast('✅ Scripts generated!', 'success');
+  } catch (e) {
+    if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Scripts'; }
+    showToast('❌ ' + (e.message || 'Failed'), 'error');
+  }
+}
+
+/**
+ * Toggle visibility of generated scripts on approved card.
+ */
+function toggleApprovedScripts(safeId) {
+  const el = document.getElementById('scripts-' + safeId);
+  const btn = document.getElementById('toggle-scripts-' + safeId);
+  if (!el) return;
+  const isHidden = el.style.display === 'none' || el.style.display === '';
+  el.style.display = isHidden ? 'block' : 'none';
+  if (btn) btn.textContent = isHidden ? '📄 Hide Scripts' : '📄 View Scripts';
+}
+
+/**
+ * Copy a single script from an approved card.
+ */
+function copyApprovedScript(scriptIndex, safeId) {
+  const approved = secureLoad('_approved', []);
+  const a = approved.find(item => _toSafeId(item.id) === safeId);
+  if (!a || !a.scripts || !a.scripts[scriptIndex]) return;
+  const s = a.scripts[scriptIndex];
+  const text = '[HOOK]\n' + (s.hook||'') + '\n\n[BODY]\n' + (s.body||'') + '\n\n[CTA]\n' + (s.cta||'');
+  navigator.clipboard.writeText(text).then(() => showToast('📋 Copied!', 'success')).catch(() => {});
+  haptic(10);
+}
+
 function markFilmed(id) {
   const approved = secureLoad('_approved', []);
   const i = approved.findIndex(a => _toSafeId(a.id) === id);
