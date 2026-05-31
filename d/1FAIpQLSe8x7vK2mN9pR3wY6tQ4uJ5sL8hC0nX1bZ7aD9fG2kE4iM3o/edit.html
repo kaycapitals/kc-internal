@@ -9,7 +9,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0a0a0a;color:#e0e0e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom, 0px));-webkit-font-smoothing:antialiased}
 .wrap{max-width:720px;margin:0 auto}
-.hdr{text-align:center;padding:24px 0 20px}
+.hdr{text-align:center;padding:calc(24px + env(safe-area-inset-top, 0px)) 0 20px}
 .hdr h1{font-size:24px;font-weight:700;color:#d4a843;margin-bottom:6px}
 .hdr p{color:#555;font-size:13px}
 .input-wrap{margin-bottom:20px}
@@ -247,7 +247,7 @@ textarea::placeholder{color:#444}
 <div class="wrap">
   <div class="hdr">
     <h1>🎬 Content Engine</h1>
-    <p>1,025 reels analyzed · your voice · your scripts</p>
+    <p>1,904 reels · 439 competitor reels · your brain · your scripts</p>
     <button onclick="handleLogout()" style="background:none;border:none;color:#333;font-size:11px;cursor:pointer;margin-top:8px;min-height:44px">Log out</button>
   </div>
 
