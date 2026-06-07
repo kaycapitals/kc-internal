@@ -164,19 +164,22 @@
             <h2 class="text-xl sm:text-2xl font-bold mb-6 text-white">What You'll Learn</h2>
             <ul class="space-y-5">
 
-              <!-- Item 1 -->
+              <!-- Card 1: Animated drawing chart -->
               <li class="flex items-center gap-4">
-                <div class="flex-shrink-0 w-[84px] h-[84px] relative">
+                <div class="flex-shrink-0 w-[84px] h-[84px]">
                   <div class="w-full h-full rounded-xl overflow-hidden relative"
                        style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(201,162,39,0.3);">
-                    <div class="absolute inset-0 flex items-end px-2 pb-2 pt-4">
-                      <svg viewBox="0 0 60 36" class="w-full" fill="none">
-                        <polyline points="2,34 12,26 22,28 34,16 44,20 58,6" stroke="#C9A227" stroke-width="2.2" stroke-linejoin="round"/>
-                        <circle cx="58" cy="6" r="3" fill="#C9A227"/>
-                      </svg>
-                    </div>
                     <div class="absolute top-2 left-3">
                       <div class="text-[7px] font-bold tracking-widest" style="color: #C9A227;">SETUP</div>
+                    </div>
+                    <div class="absolute inset-0 flex items-end px-2 pb-2 pt-5">
+                      <svg id="chart-svg" viewBox="0 0 60 36" class="w-full" fill="none" style="overflow:visible;">
+                        <polyline id="chart-line" points="2,34 12,26 22,28 34,16 44,20 58,6"
+                          stroke="#C9A227" stroke-width="2.2" stroke-linejoin="round"
+                          stroke-dasharray="100" stroke-dashoffset="100"
+                          style="transition: stroke-dashoffset 0s;"/>
+                        <circle id="chart-dot" cx="2" cy="34" r="3" fill="#C9A227" opacity="0"/>
+                      </svg>
                     </div>
                   </div>
                 </div>
@@ -185,23 +188,24 @@
                 </p>
               </li>
 
-              <!-- Item 2 -->
+              <!-- Card 2: Risk vs Reward animated bars -->
               <li class="flex items-center gap-4">
-                <div class="flex-shrink-0 w-[84px] h-[84px] relative">
+                <div class="flex-shrink-0 w-[84px] h-[84px]">
                   <div class="w-full h-full rounded-xl overflow-hidden relative"
                        style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(201,162,39,0.3);">
-                    <div class="absolute inset-0 flex items-center justify-center gap-1.5 px-2">
-                      <div class="flex flex-col items-center gap-1">
-                        <div class="text-[6px] font-semibold" style="color: #ef4444;">LOSS</div>
-                        <div class="w-4 rounded-t-sm" style="height: 22px; background: #ef4444; opacity: 0.8;"></div>
-                      </div>
-                      <div class="flex flex-col items-center gap-1">
-                        <div class="text-[6px] font-semibold" style="color: #C9A227;">WIN</div>
-                        <div class="w-4 rounded-t-sm" style="height: 50px; background: #C9A227;"></div>
-                      </div>
-                    </div>
-                    <div class="absolute top-2 left-3">
+                    <div class="absolute top-2 left-3 right-3 flex justify-between">
                       <div class="text-[7px] font-bold tracking-widest" style="color: #C9A227;">RISK</div>
+                      <div class="text-[7px] font-bold tracking-widest" style="color: #C9A227;">WIN</div>
+                    </div>
+                    <div class="absolute bottom-3 left-0 right-0 flex items-end justify-center gap-4 px-3" style="height:52px;">
+                      <div class="flex flex-col items-center gap-1">
+                        <div id="loss-bar" class="w-5 rounded-t-sm" style="height:0; background:#ef4444; transition: height 0.8s ease; min-height:1px;"></div>
+                        <div class="text-[6px]" style="color:#ef4444;">LOSS</div>
+                      </div>
+                      <div class="flex flex-col items-center gap-1">
+                        <div id="win-bar" class="w-5 rounded-t-sm" style="height:0; background:#C9A227; transition: height 0.8s ease 0.3s; min-height:1px;"></div>
+                        <div class="text-[6px]" style="color:#C9A227;">WIN</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -210,21 +214,32 @@
                 </p>
               </li>
 
-              <!-- Item 3 -->
+              <!-- Card 3: Emotion states cycling -->
               <li class="flex items-center gap-4">
-                <div class="flex-shrink-0 w-[84px] h-[84px] relative">
+                <div class="flex-shrink-0 w-[84px] h-[84px]">
                   <div class="w-full h-full rounded-xl overflow-hidden relative"
                        style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(201,162,39,0.3);">
-                    <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 p-2">
+                    <div class="absolute top-2 left-3">
                       <div class="text-[7px] font-bold tracking-widest" style="color: #C9A227;">MINDSET</div>
-                      <div class="w-9 h-9 rounded-full flex items-center justify-center"
-                           style="border: 2px solid rgba(201,162,39,0.6); background: rgba(201,162,39,0.08);">
-                        <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="#C9A227" stroke-width="1.8">
-                          <path d="M12 2C8 2 5 5 5 9c0 2.4 1.1 4.5 2.8 5.9V17h8.4v-2.1C17.9 13.5 19 11.4 19 9c0-4-3-7-7-7z"/>
-                          <path d="M9 21h6M10 17v4M14 17v4"/>
+                    </div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center gap-1.5 pt-3">
+                      <!-- emotion label -->
+                      <div id="emotion-label" class="text-[7px] font-bold px-2 py-0.5 rounded-full"
+                           style="background: rgba(239,68,68,0.2); color: #f87171; transition: all 0.5s;">FEAR</div>
+                      <!-- icon circle -->
+                      <div id="emotion-circle" class="w-8 h-8 rounded-full flex items-center justify-center"
+                           style="border: 2px solid #f87171; background: rgba(239,68,68,0.08); transition: all 0.5s;">
+                        <svg id="emotion-icon" viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="#f87171" stroke-width="1.8" style="transition: all 0.5s;">
+                          <circle cx="12" cy="12" r="10"/>
+                          <path d="M8 15s1-2 4-2 4 2 4 2" stroke-linecap="round"/>
+                          <line x1="9" y1="9" x2="9.01" y2="9" stroke-width="3" stroke-linecap="round"/>
+                          <line x1="15" y1="9" x2="15.01" y2="9" stroke-width="3" stroke-linecap="round"/>
                         </svg>
                       </div>
-                      <div class="h-1 w-10 rounded-full" style="background: rgba(201,162,39,0.5);"></div>
+                      <!-- progress bar -->
+                      <div class="w-10 h-1 rounded-full overflow-hidden" style="background: rgba(255,255,255,0.1);">
+                        <div id="emotion-bar" class="h-full rounded-full" style="width:30%; background:#f87171; transition: width 0.5s, background 0.5s;"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -233,25 +248,24 @@
                 </p>
               </li>
 
-              <!-- Item 4 -->
+              <!-- Card 4: P&L counter ticking up -->
               <li class="flex items-center gap-4">
-                <div class="flex-shrink-0 w-[84px] h-[84px] relative">
+                <div class="flex-shrink-0 w-[84px] h-[84px]">
                   <div class="w-full h-full rounded-xl overflow-hidden relative"
                        style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(201,162,39,0.3);">
                     <div class="absolute top-2 left-2 right-2 flex justify-between items-baseline">
                       <div class="text-[6px]" style="color: #94a3b8;">P&amp;L</div>
-                      <!-- TODO: update this number -->
-                      <div class="font-bold text-[8px]" style="color: #C9A227;">+$4,280</div>
+                      <div id="pnl-counter" class="font-bold text-[8px]" style="color: #C9A227;">+$0</div>
                     </div>
                     <div class="absolute bottom-2 left-2 right-2 flex items-end gap-0.5" style="height: 44px;">
-                      <div class="flex-1 rounded-t-sm" style="height: 40%; background: #C9A227; opacity: 0.7;"></div>
-                      <div class="flex-1 rounded-t-sm" style="height: 28%; background: #ef4444; opacity: 0.7;"></div>
-                      <div class="flex-1 rounded-t-sm" style="height: 62%; background: #C9A227; opacity: 0.7;"></div>
-                      <div class="flex-1 rounded-t-sm" style="height: 50%; background: #C9A227; opacity: 0.8;"></div>
-                      <div class="flex-1 rounded-t-sm" style="height: 90%; background: #C9A227;"></div>
+                      <div id="pb1" class="flex-1 rounded-t-sm" style="height:0; background:#C9A227; opacity:0.8; transition: height 0.4s ease;"></div>
+                      <div id="pb2" class="flex-1 rounded-t-sm" style="height:0; background:#ef4444; opacity:0.8; transition: height 0.4s ease 0.1s;"></div>
+                      <div id="pb3" class="flex-1 rounded-t-sm" style="height:0; background:#C9A227; opacity:0.8; transition: height 0.4s ease 0.2s;"></div>
+                      <div id="pb4" class="flex-1 rounded-t-sm" style="height:0; background:#C9A227; opacity:0.9; transition: height 0.4s ease 0.3s;"></div>
+                      <div id="pb5" class="flex-1 rounded-t-sm" style="height:0; background:#C9A227; transition: height 0.4s ease 0.4s;"></div>
                     </div>
                     <div class="absolute top-2 right-2">
-                      <div class="w-2 h-2 rounded-full animate-ping" style="background: rgba(201,162,39,0.6);"></div>
+                      <div class="w-2 h-2 rounded-full animate-ping" style="background: rgba(201,162,39,0.7);"></div>
                     </div>
                   </div>
                 </div>
@@ -523,6 +537,107 @@
     function scrollToForm() {
       document.getElementById('mobile-form').scrollIntoView({ behavior: 'smooth' });
     }
+
+    // ── INTERSECTION OBSERVER — trigger animations on scroll into view ──
+    const observerOptions = { threshold: 0.4 };
+
+    // CARD 1: Chart draws itself
+    const chartLine = document.getElementById('chart-line');
+    const chartDot  = document.getElementById('chart-dot');
+    function animateChart() {
+      const len = chartLine.getTotalLength ? chartLine.getTotalLength() : 100;
+      chartLine.style.strokeDasharray  = len;
+      chartLine.style.strokeDashoffset = len;
+      chartLine.style.transition = 'none';
+      chartDot.style.opacity = '0';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          chartLine.style.transition = 'stroke-dashoffset 1.4s cubic-bezier(0.4,0,0.2,1)';
+          chartLine.style.strokeDashoffset = '0';
+          setTimeout(() => {
+            chartDot.setAttribute('cx', '58');
+            chartDot.setAttribute('cy', '6');
+            chartDot.style.opacity = '1';
+            chartDot.style.transition = 'opacity 0.3s';
+          }, 1200);
+        });
+      });
+    }
+    new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) animateChart();
+    }, observerOptions).observe(document.getElementById('chart-svg'));
+
+    // CARD 2: Risk/Win bars grow
+    function animateBars() {
+      document.getElementById('loss-bar').style.height = '22px';
+      document.getElementById('win-bar').style.height  = '44px';
+    }
+    new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) animateBars();
+    }, observerOptions).observe(document.getElementById('loss-bar'));
+
+    // CARD 3: Emotion states cycle — fear → control → machine
+    const emotions = [
+      { label:'FEAR',    labelBg:'rgba(239,68,68,0.2)',    labelColor:'#f87171', circleBorder:'#f87171', circleBg:'rgba(239,68,68,0.08)',  barColor:'#f87171', barW:'25%',
+        icon:`<circle cx="12" cy="12" r="10"/><path d="M8 15s1-2 4-2 4 2 4 2" stroke-linecap="round"/><line x1="9" y1="9" x2="9.01" y2="9" stroke-width="3" stroke-linecap="round"/><line x1="15" y1="9" x2="15.01" y2="9" stroke-width="3" stroke-linecap="round"/>` },
+      { label:'CONTROL', labelBg:'rgba(201,162,39,0.15)',  labelColor:'#C9A227', circleBorder:'#C9A227', circleBg:'rgba(201,162,39,0.08)', barColor:'#C9A227', barW:'60%',
+        icon:`<circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>` },
+      { label:'MACHINE', labelBg:'rgba(201,162,39,0.25)',  labelColor:'#E8D050', circleBorder:'#E8D050', circleBg:'rgba(232,208,80,0.12)', barColor:'#E8D050', barW:'100%',
+        icon:`<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>` },
+    ];
+    let emotionIdx = 0;
+    function setEmotion(i) {
+      const e = emotions[i];
+      const lbl  = document.getElementById('emotion-label');
+      const circ = document.getElementById('emotion-circle');
+      const icon = document.getElementById('emotion-icon');
+      const bar  = document.getElementById('emotion-bar');
+      lbl.textContent = e.label;
+      lbl.style.background = e.labelBg;
+      lbl.style.color = e.labelColor;
+      circ.style.borderColor = e.circleBorder;
+      circ.style.background  = e.circleBg;
+      icon.style.stroke = e.circleBorder;
+      icon.innerHTML = e.icon;
+      bar.style.width      = e.barW;
+      bar.style.background = e.barColor;
+    }
+    let emotionInterval = null;
+    function startEmotionCycle() {
+      emotionIdx = 0; setEmotion(0);
+      emotionInterval = setInterval(() => {
+        emotionIdx = (emotionIdx + 1) % emotions.length;
+        setEmotion(emotionIdx);
+      }, 1200);
+    }
+    new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) { if (!emotionInterval) startEmotionCycle(); }
+      else { clearInterval(emotionInterval); emotionInterval = null; }
+    }, observerOptions).observe(document.getElementById('emotion-label'));
+
+    // CARD 4: P&L bars grow + counter ticks up
+    function animatePnL() {
+      const bars   = [['pb1',40],['pb2',28],['pb3',62],['pb4',50],['pb5',90]];
+      const colors = ['#C9A227','#ef4444','#C9A227','#C9A227','#C9A227'];
+      bars.forEach(([id, pct], i) => {
+        setTimeout(() => {
+          document.getElementById(id).style.height = (44 * pct / 100) + 'px';
+        }, i * 120);
+      });
+      // counter ticks up to $1,840
+      const target = 1840;
+      let current  = 0;
+      const step   = Math.ceil(target / 60);
+      const ticker = setInterval(() => {
+        current = Math.min(current + step, target);
+        document.getElementById('pnl-counter').textContent = '+$' + current.toLocaleString();
+        if (current >= target) clearInterval(ticker);
+      }, 25);
+    }
+    new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) animatePnL();
+    }, observerOptions).observe(document.getElementById('pnl-counter'));
+
   </script>
 
 </body>
