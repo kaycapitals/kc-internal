@@ -9,8 +9,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.45); }
-      50% { box-shadow: 0 0 0 14px rgba(0, 255, 135, 0); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.45); }
+      50% { box-shadow: 0 0 0 14px rgba(232, 208, 80, 0); }
     }
     .pulse-btn { animation: pulse-glow 2.2s infinite; }
 
@@ -25,19 +25,19 @@
     .delay-4 { animation-delay: 0.55s; }
 
     .accent-text {
-      background: linear-gradient(90deg, #00C853, #69FF47);
+      background: linear-gradient(90deg, #C9A227, #E8D050);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
     .accent-btn {
-      background: linear-gradient(90deg, #00C853, #69FF47);
+      background: linear-gradient(90deg, #C9A227, #E8D050);
       color: #000;
     }
     .accent-btn:hover { filter: brightness(1.1); }
     .accent-border {
-      border-color: rgba(0, 200, 83, 0.4) !important;
-      background: rgba(0, 200, 83, 0.1) !important;
+      border-color: rgba(201, 162, 39, 0.4) !important;
+      background: rgba(201, 162, 39, 0.1) !important;
     }
 
     .form-input {
@@ -53,8 +53,8 @@
       box-sizing: border-box;
     }
     .form-input:focus {
-      border-color: #00C853;
-      background: rgba(0, 200, 83, 0.07);
+      border-color: #C9A227;
+      background: rgba(201, 162, 39, 0.07);
     }
     .form-input::placeholder { color: rgba(255,255,255,0.3); }
 
@@ -90,7 +90,7 @@
 <body>
 
   <!-- ── COUNTDOWN BAR ─────────────────────────────────────── -->
-  <div id="countdown-bar" style="background: linear-gradient(90deg, #00C853, #69FF47); color: #000;"
+  <div id="countdown-bar" style="background: linear-gradient(90deg, #C9A227, #E8D050); color: #000;"
        class="w-full text-center py-2 px-4 text-xs font-semibold tracking-wide flex items-center justify-center gap-2 sm:gap-3">
     <span class="uppercase tracking-wider font-bold hidden sm:inline">Spots Closing In:</span>
     <span class="uppercase tracking-wider font-bold sm:hidden">Closing In:</span>
@@ -116,12 +116,12 @@
         <!-- Live Badge -->
         <div class="flex mb-6 delay-1 fade-in-up">
           <div class="inline-flex items-center gap-2.5 rounded-full px-4 py-2"
-               style="background: rgba(0,200,83,0.08); border: 1px solid rgba(0,200,83,0.25);">
+               style="background: rgba(201,162,39,0.08); border: 1px solid rgba(201,162,39,0.25);">
             <span class="relative flex h-2.5 w-2.5 flex-shrink-0">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style="background: #ff4444;"></span>
               <span class="relative inline-flex rounded-full h-2.5 w-2.5" style="background: #ff4444;"></span>
             </span>
-            <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" style="color: #00C853;">
+            <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" style="color: #C9A227;">
               <path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/>
             </svg>
             <!-- TODO: Update date/time -->
@@ -142,12 +142,12 @@
 
         <!-- Video -->
         <div class="w-full rounded-xl overflow-hidden shadow-2xl delay-4 fade-in-up"
-             style="background: #0d1221; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(0,200,83,0.2);">
+             style="background: #0d1221; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(201,162,39,0.2);">
           <!-- TODO: Replace this block with actual video embed (Wistia / YouTube / Vimeo) -->
           <div class="text-center px-6">
             <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3"
-                 style="background: rgba(0,200,83,0.15); border: 2px solid rgba(0,200,83,0.4);">
-              <svg class="w-7 h-7" fill="#00C853" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                 style="background: rgba(201,162,39,0.15); border: 2px solid rgba(201,162,39,0.4);">
+              <svg class="w-7 h-7" fill="#C9A227" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </div>
             <p class="text-slate-500 text-xs">[ Video goes here ]</p>
           </div>
@@ -170,15 +170,15 @@
               <li class="flex items-center gap-4">
                 <div class="flex-shrink-0 w-[84px] h-[84px] relative">
                   <div class="w-full h-full rounded-xl overflow-hidden relative"
-                       style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(0,200,83,0.3);">
+                       style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(201,162,39,0.3);">
                     <div class="absolute inset-0 flex items-end px-2 pb-2 pt-4">
                       <svg viewBox="0 0 60 36" class="w-full" fill="none">
-                        <polyline points="2,34 12,26 22,28 34,16 44,20 58,6" stroke="#00C853" stroke-width="2.2" stroke-linejoin="round"/>
-                        <circle cx="58" cy="6" r="3" fill="#00C853"/>
+                        <polyline points="2,34 12,26 22,28 34,16 44,20 58,6" stroke="#C9A227" stroke-width="2.2" stroke-linejoin="round"/>
+                        <circle cx="58" cy="6" r="3" fill="#C9A227"/>
                       </svg>
                     </div>
                     <div class="absolute top-2 left-3">
-                      <div class="text-[7px] font-bold tracking-widest" style="color: #00C853;">SETUP</div>
+                      <div class="text-[7px] font-bold tracking-widest" style="color: #C9A227;">SETUP</div>
                     </div>
                   </div>
                 </div>
@@ -191,19 +191,19 @@
               <li class="flex items-center gap-4">
                 <div class="flex-shrink-0 w-[84px] h-[84px] relative">
                   <div class="w-full h-full rounded-xl overflow-hidden relative"
-                       style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(0,200,83,0.3);">
+                       style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(201,162,39,0.3);">
                     <div class="absolute inset-0 flex items-center justify-center gap-1.5 px-2">
                       <div class="flex flex-col items-center gap-1">
                         <div class="text-[6px] font-semibold" style="color: #ef4444;">LOSS</div>
                         <div class="w-4 rounded-t-sm" style="height: 22px; background: #ef4444; opacity: 0.8;"></div>
                       </div>
                       <div class="flex flex-col items-center gap-1">
-                        <div class="text-[6px] font-semibold" style="color: #00C853;">WIN</div>
-                        <div class="w-4 rounded-t-sm" style="height: 50px; background: #00C853;"></div>
+                        <div class="text-[6px] font-semibold" style="color: #C9A227;">WIN</div>
+                        <div class="w-4 rounded-t-sm" style="height: 50px; background: #C9A227;"></div>
                       </div>
                     </div>
                     <div class="absolute top-2 left-3">
-                      <div class="text-[7px] font-bold tracking-widest" style="color: #00C853;">RISK</div>
+                      <div class="text-[7px] font-bold tracking-widest" style="color: #C9A227;">RISK</div>
                     </div>
                   </div>
                 </div>
@@ -216,17 +216,17 @@
               <li class="flex items-center gap-4">
                 <div class="flex-shrink-0 w-[84px] h-[84px] relative">
                   <div class="w-full h-full rounded-xl overflow-hidden relative"
-                       style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(0,200,83,0.3);">
+                       style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(201,162,39,0.3);">
                     <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 p-2">
-                      <div class="text-[7px] font-bold tracking-widest" style="color: #00C853;">MINDSET</div>
+                      <div class="text-[7px] font-bold tracking-widest" style="color: #C9A227;">MINDSET</div>
                       <div class="w-9 h-9 rounded-full flex items-center justify-center"
-                           style="border: 2px solid rgba(0,200,83,0.6); background: rgba(0,200,83,0.08);">
-                        <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="#00C853" stroke-width="1.8">
+                           style="border: 2px solid rgba(201,162,39,0.6); background: rgba(201,162,39,0.08);">
+                        <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="#C9A227" stroke-width="1.8">
                           <path d="M12 2C8 2 5 5 5 9c0 2.4 1.1 4.5 2.8 5.9V17h8.4v-2.1C17.9 13.5 19 11.4 19 9c0-4-3-7-7-7z"/>
                           <path d="M9 21h6M10 17v4M14 17v4"/>
                         </svg>
                       </div>
-                      <div class="h-1 w-10 rounded-full" style="background: rgba(0,200,83,0.5);"></div>
+                      <div class="h-1 w-10 rounded-full" style="background: rgba(201,162,39,0.5);"></div>
                     </div>
                   </div>
                 </div>
@@ -239,21 +239,21 @@
               <li class="flex items-center gap-4">
                 <div class="flex-shrink-0 w-[84px] h-[84px] relative">
                   <div class="w-full h-full rounded-xl overflow-hidden relative"
-                       style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(0,200,83,0.3);">
+                       style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(201,162,39,0.3);">
                     <div class="absolute top-2 left-2 right-2 flex justify-between items-baseline">
                       <div class="text-[6px]" style="color: #94a3b8;">P&amp;L</div>
                       <!-- TODO: update this number -->
-                      <div class="font-bold text-[8px]" style="color: #00C853;">+$4,280</div>
+                      <div class="font-bold text-[8px]" style="color: #C9A227;">+$4,280</div>
                     </div>
                     <div class="absolute bottom-2 left-2 right-2 flex items-end gap-0.5" style="height: 44px;">
-                      <div class="flex-1 rounded-t-sm" style="height: 40%; background: #00C853; opacity: 0.7;"></div>
+                      <div class="flex-1 rounded-t-sm" style="height: 40%; background: #C9A227; opacity: 0.7;"></div>
                       <div class="flex-1 rounded-t-sm" style="height: 28%; background: #ef4444; opacity: 0.7;"></div>
-                      <div class="flex-1 rounded-t-sm" style="height: 62%; background: #00C853; opacity: 0.7;"></div>
-                      <div class="flex-1 rounded-t-sm" style="height: 50%; background: #00C853; opacity: 0.8;"></div>
-                      <div class="flex-1 rounded-t-sm" style="height: 90%; background: #00C853;"></div>
+                      <div class="flex-1 rounded-t-sm" style="height: 62%; background: #C9A227; opacity: 0.7;"></div>
+                      <div class="flex-1 rounded-t-sm" style="height: 50%; background: #C9A227; opacity: 0.8;"></div>
+                      <div class="flex-1 rounded-t-sm" style="height: 90%; background: #C9A227;"></div>
                     </div>
                     <div class="absolute top-2 right-2">
-                      <div class="w-2 h-2 rounded-full animate-ping" style="background: rgba(0,200,83,0.6);"></div>
+                      <div class="w-2 h-2 rounded-full animate-ping" style="background: rgba(201,162,39,0.6);"></div>
                     </div>
                   </div>
                 </div>
@@ -277,7 +277,7 @@
         <div class="max-w-2xl mx-auto">
           <!-- TODO: Replace with Somesh's preferred quote -->
           <p class="text-slate-300 text-base sm:text-lg leading-relaxed border-l-4 pl-5 text-left italic"
-             style="border-color: #00C853;">
+             style="border-color: #C9A227;">
             "The trading space is flooded with noise — Discord alerts, gurus with rented Lambos, and people selling the dream instead of the system. I built KCU because I wanted to cut through all of it and give people the exact framework I use every single day. This training is where it starts."
           </p>
           <p class="text-slate-500 text-sm mt-3 pl-5">— Somesh · Kay Capitals</p>
@@ -448,7 +448,7 @@
                style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
             <div class="flex-shrink-0 mt-0.5">
               <div class="w-5 h-5 rounded flex items-center justify-center border-2 flex-shrink-0"
-                   style="background: linear-gradient(135deg, #00C853, #69FF47); border-color: #00C853;">
+                   style="background: linear-gradient(135deg, #C9A227, #E8D050); border-color: #C9A227;">
                 <svg class="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                 </svg>
