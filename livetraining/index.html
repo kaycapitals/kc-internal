@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Free Live Trading Masterclass | Kay Capitals</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="How Day Traders Are Pulling $1K–$5K/Day Consistently. Free 60-Minute Live Training by Kay Capitals.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.45); }
+      50% { box-shadow: 0 0 0 14px rgba(0, 255, 135, 0); }
+    }
+    .pulse-btn { animation: pulse-glow 2.2s infinite; }
+
+    @keyframes fade-in-up {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in-up { animation: fade-in-up 0.7s ease both; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.25s; }
+    .delay-3 { animation-delay: 0.4s; }
+    .delay-4 { animation-delay: 0.55s; }
+
+    .accent-text {
+      background: linear-gradient(90deg, #00C853, #69FF47);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .accent-btn {
+      background: linear-gradient(90deg, #00C853, #69FF47);
+      color: #000;
+    }
+    .accent-btn:hover { filter: brightness(1.1); }
+    .accent-border {
+      border-color: rgba(0, 200, 83, 0.4) !important;
+      background: rgba(0, 200, 83, 0.1) !important;
+    }
+
+    .form-input {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      border-radius: 10px;
+      padding: 12px 16px;
+      width: 100%;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .form-input:focus {
+      border-color: #00C853;
+      background: rgba(0, 200, 83, 0.07);
+    }
+    .form-input::placeholder { color: rgba(255,255,255,0.3); }
+
+    @media (min-width: 1024px) {
+      .page-layout {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        min-height: calc(100vh - 40px);
+        align-items: start;
+      }
+      .scroll-col { overflow-y: auto; }
+      .sticky-col {
+        position: sticky;
+        top: 0;
+        height: calc(100vh - 40px);
+        display: flex;
+        align-items: center;
+        padding: 24px;
+        border-left: 1px solid rgba(255,255,255,0.08);
+        background: #0d1221;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      background-color: #0a0e1a;
+      color: white;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── COUNTDOWN BAR ─────────────────────────────────────── -->
+  <div id="countdown-bar" style="background: linear-gradient(90deg, #00C853, #69FF47); color: #000;"
+       class="w-full text-center py-2 px-4 text-xs font-semibold tracking-wide flex items-center justify-center gap-2 sm:gap-3">
+    <span class="uppercase tracking-wider font-bold hidden sm:inline">Spots Closing In:</span>
+    <span class="uppercase tracking-wider font-bold sm:hidden">Closing In:</span>
+    <span class="inline-flex items-center gap-1 font-mono font-bold text-sm">
+      <span id="cd-days">--<span class="text-[10px] font-semibold ml-0.5 opacity-70">d</span></span>
+      <span class="opacity-50">:</span>
+      <span id="cd-hours">--<span class="text-[10px] font-semibold ml-0.5 opacity-70">h</span></span>
+      <span class="opacity-50">:</span>
+      <span id="cd-mins">--<span class="text-[10px] font-semibold ml-0.5 opacity-70">m</span></span>
+      <span class="opacity-50">:</span>
+      <span id="cd-secs">--<span class="text-[10px] font-semibold ml-0.5 opacity-70">s</span></span>
+    </span>
+  </div>
+
+  <div class="page-layout">
+
+    <!-- ── LEFT / SCROLL COLUMN ──────────────────────────────── -->
+    <div class="scroll-col">
+
+      <!-- HERO -->
+      <section class="max-w-2xl mx-auto px-5 pt-12 pb-10 fade-in-up">
+
+        <!-- Live Badge -->
+        <div class="flex mb-6 delay-1 fade-in-up">
+          <div class="inline-flex items-center gap-2.5 rounded-full px-4 py-2"
+               style="background: rgba(0,200,83,0.08); border: 1px solid rgba(0,200,83,0.25);">
+            <span class="relative flex h-2.5 w-2.5 flex-shrink-0">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style="background: #ff4444;"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5" style="background: #ff4444;"></span>
+            </span>
+            <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" style="color: #00C853;">
+              <path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/>
+            </svg>
+            <!-- TODO: Update date/time -->
+            <span class="text-sm font-semibold tracking-wide text-white">Live on Zoom &nbsp;·&nbsp; [DATE] &nbsp;·&nbsp; [TIME] EST</span>
+          </div>
+        </div>
+
+        <!-- Headline -->
+        <!-- TODO: Finalise headline -->
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-[1.15] sm:leading-tight tracking-tight mb-4 delay-2 fade-in-up">
+          How Everyday People Are Quitting Their 9–5 By Trading Options — Pulling <span class="accent-text">$1K–$5K/Day</span>
+        </h1>
+
+        <p class="text-slate-300 text-base sm:text-xl leading-snug sm:leading-relaxed mb-8 delay-3 fade-in-up">
+          <!-- TODO: Finalise subheadline -->
+          Free 60-Minute Live Training: The exact system used by 5,000+ students to trade consistently — without gambling, guessing, or blowing up their account.
+        </p>
+
+        <!-- Video -->
+        <div class="w-full rounded-xl overflow-hidden shadow-2xl delay-4 fade-in-up"
+             style="background: #0d1221; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(0,200,83,0.2);">
+          <!-- TODO: Replace this block with actual video embed (Wistia / YouTube / Vimeo) -->
+          <div class="text-center px-6">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3"
+                 style="background: rgba(0,200,83,0.15); border: 2px solid rgba(0,200,83,0.4);">
+              <svg class="w-7 h-7" fill="#00C853" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <p class="text-slate-500 text-xs">[ Video goes here ]</p>
+          </div>
+        </div>
+
+        <!-- Mobile CTA -->
+        <button onclick="scrollToForm()"
+                class="lg:hidden pulse-btn accent-btn w-full rounded-xl mt-5 px-6 py-4 flex flex-col items-center justify-center gap-0.5 transition-all duration-200 shadow-lg">
+          <span class="font-extrabold text-lg tracking-wide leading-tight">Save My Free Spot</span>
+          <span class="font-normal text-xs opacity-80 tracking-wide">Free 60-Minute Live Training</span>
+        </button>
+
+        <!-- WHAT YOU'LL LEARN -->
+        <section class="mt-8 -mx-5 border-y border-white/10 py-10 px-5" style="background: #0d1221;">
+          <div class="max-w-2xl mx-auto">
+            <h2 class="text-xl sm:text-2xl font-bold mb-6 text-white">What You'll Learn</h2>
+            <ul class="space-y-5">
+
+              <!-- Item 1 -->
+              <li class="flex items-center gap-4">
+                <div class="flex-shrink-0 w-[84px] h-[84px] relative">
+                  <div class="w-full h-full rounded-xl overflow-hidden relative"
+                       style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(0,200,83,0.3);">
+                    <div class="absolute inset-0 flex items-end px-2 pb-2 pt-4">
+                      <svg viewBox="0 0 60 36" class="w-full" fill="none">
+                        <polyline points="2,34 12,26 22,28 34,16 44,20 58,6" stroke="#00C853" stroke-width="2.2" stroke-linejoin="round"/>
+                        <circle cx="58" cy="6" r="3" fill="#00C853"/>
+                      </svg>
+                    </div>
+                    <div class="absolute top-2 left-3">
+                      <div class="text-[7px] font-bold tracking-widest" style="color: #00C853;">SETUP</div>
+                    </div>
+                  </div>
+                </div>
+                <p class="text-slate-200 text-sm sm:text-base leading-snug">
+                  The 3-pattern system that identifies high-probability setups — the exact entries pros use on SPY, QQQ, and NVDA every morning
+                </p>
+              </li>
+
+              <!-- Item 2 -->
+              <li class="flex items-center gap-4">
+                <div class="flex-shrink-0 w-[84px] h-[84px] relative">
+                  <div class="w-full h-full rounded-xl overflow-hidden relative"
+                       style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(0,200,83,0.3);">
+                    <div class="absolute inset-0 flex items-center justify-center gap-1.5 px-2">
+                      <div class="flex flex-col items-center gap-1">
+                        <div class="text-[6px] font-semibold" style="color: #ef4444;">LOSS</div>
+                        <div class="w-4 rounded-t-sm" style="height: 22px; background: #ef4444; opacity: 0.8;"></div>
+                      </div>
+                      <div class="flex flex-col items-center gap-1">
+                        <div class="text-[6px] font-semibold" style="color: #00C853;">WIN</div>
+                        <div class="w-4 rounded-t-sm" style="height: 50px; background: #00C853;"></div>
+                      </div>
+                    </div>
+                    <div class="absolute top-2 left-3">
+                      <div class="text-[7px] font-bold tracking-widest" style="color: #00C853;">RISK</div>
+                    </div>
+                  </div>
+                </div>
+                <p class="text-slate-200 text-sm sm:text-base leading-snug">
+                  The risk management framework that keeps you alive — why 90% of traders blow up their account and the rules that make you the other 10%
+                </p>
+              </li>
+
+              <!-- Item 3 -->
+              <li class="flex items-center gap-4">
+                <div class="flex-shrink-0 w-[84px] h-[84px] relative">
+                  <div class="w-full h-full rounded-xl overflow-hidden relative"
+                       style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(0,200,83,0.3);">
+                    <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 p-2">
+                      <div class="text-[7px] font-bold tracking-widest" style="color: #00C853;">MINDSET</div>
+                      <div class="w-9 h-9 rounded-full flex items-center justify-center"
+                           style="border: 2px solid rgba(0,200,83,0.6); background: rgba(0,200,83,0.08);">
+                        <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="#00C853" stroke-width="1.8">
+                          <path d="M12 2C8 2 5 5 5 9c0 2.4 1.1 4.5 2.8 5.9V17h8.4v-2.1C17.9 13.5 19 11.4 19 9c0-4-3-7-7-7z"/>
+                          <path d="M9 21h6M10 17v4M14 17v4"/>
+                        </svg>
+                      </div>
+                      <div class="h-1 w-10 rounded-full" style="background: rgba(0,200,83,0.5);"></div>
+                    </div>
+                  </div>
+                </div>
+                <p class="text-slate-200 text-sm sm:text-base leading-snug">
+                  The psychology framework that eliminates revenge trading, fear, hesitation, and emotional decisions — become a machine, not a gambler
+                </p>
+              </li>
+
+              <!-- Item 4 -->
+              <li class="flex items-center gap-4">
+                <div class="flex-shrink-0 w-[84px] h-[84px] relative">
+                  <div class="w-full h-full rounded-xl overflow-hidden relative"
+                       style="background: linear-gradient(135deg, #0d1221 0%, #0a1628 100%); border: 1px solid rgba(0,200,83,0.3);">
+                    <div class="absolute top-2 left-2 right-2 flex justify-between items-baseline">
+                      <div class="text-[6px]" style="color: #94a3b8;">P&amp;L</div>
+                      <!-- TODO: update this number -->
+                      <div class="font-bold text-[8px]" style="color: #00C853;">+$4,280</div>
+                    </div>
+                    <div class="absolute bottom-2 left-2 right-2 flex items-end gap-0.5" style="height: 44px;">
+                      <div class="flex-1 rounded-t-sm" style="height: 40%; background: #00C853; opacity: 0.7;"></div>
+                      <div class="flex-1 rounded-t-sm" style="height: 28%; background: #ef4444; opacity: 0.7;"></div>
+                      <div class="flex-1 rounded-t-sm" style="height: 62%; background: #00C853; opacity: 0.7;"></div>
+                      <div class="flex-1 rounded-t-sm" style="height: 50%; background: #00C853; opacity: 0.8;"></div>
+                      <div class="flex-1 rounded-t-sm" style="height: 90%; background: #00C853;"></div>
+                    </div>
+                    <div class="absolute top-2 right-2">
+                      <div class="w-2 h-2 rounded-full animate-ping" style="background: rgba(0,200,83,0.6);"></div>
+                    </div>
+                  </div>
+                </div>
+                <p class="text-slate-200 text-sm sm:text-base leading-snug">
+                  A live trade breakdown — I'll walk through real positions, real numbers, and exactly how I manage entries, exits, and sizing in real time
+                </p>
+              </li>
+
+            </ul>
+          </div>
+        </section>
+
+        <button onclick="scrollToForm()"
+                class="pulse-btn accent-btn lg:hidden inline-block font-extrabold text-lg sm:text-xl px-10 py-5 rounded-xl transition-all duration-200 tracking-wide shadow-lg w-full text-center mt-6">
+          Reserve My Free Spot →
+        </button>
+      </section>
+
+      <!-- QUOTE -->
+      <section style="background: #111827;" class="py-12 px-5">
+        <div class="max-w-2xl mx-auto">
+          <!-- TODO: Replace with Somesh's preferred quote -->
+          <p class="text-slate-300 text-base sm:text-lg leading-relaxed border-l-4 pl-5 text-left italic"
+             style="border-color: #00C853;">
+            "The trading space is flooded with noise — Discord alerts, gurus with rented Lambos, and people selling the dream instead of the system. I built KCU because I wanted to cut through all of it and give people the exact framework I use every single day. This training is where it starts."
+          </p>
+          <p class="text-slate-500 text-sm mt-3 pl-5">— Somesh · Kay Capitals</p>
+        </div>
+      </section>
+
+      <!-- BONUSES -->
+      <section class="py-14 px-5">
+        <div class="max-w-2xl mx-auto">
+          <h2 class="text-2xl sm:text-3xl font-bold text-center mb-3">
+            Show Up Live &amp; Get These <span class="accent-text">FREE Bonuses</span>
+          </h2>
+          <p class="text-slate-400 text-center mb-10 text-sm uppercase tracking-widest">Included when you register today</p>
+          <div class="space-y-5">
+
+            <div class="flex items-start gap-4 rounded-xl p-5"
+                 style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+              <div class="flex-shrink-0 w-10 h-10 rounded-lg accent-border border flex items-center justify-center">
+                <span class="accent-text font-bold text-xs">1</span>
+              </div>
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-widest mb-1 accent-text">BONUS 1</p>
+                <!-- TODO: Update bonus details -->
+                <h3 class="font-bold text-white text-base sm:text-lg mb-1">Full Session Recording</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                  The complete recording of this live session — including the live trade breakdowns and Q&amp;A — delivered to your inbox right after the event.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4 rounded-xl p-5"
+                 style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+              <div class="flex-shrink-0 w-10 h-10 rounded-lg accent-border border flex items-center justify-center">
+                <span class="accent-text font-bold text-xs">2</span>
+              </div>
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-widest mb-1 accent-text">BONUS 2</p>
+                <!-- TODO: Update bonus details -->
+                <h3 class="font-bold text-white text-base sm:text-lg mb-1">KCU Morning Prep Cheat Sheet</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                  The exact pre-market checklist I run through before every session — setups to watch, levels to mark, and the risk rules that keep me consistent.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- DO NOT REGISTER IF -->
+      <section class="py-14 px-5 border-t border-white/10">
+        <div class="max-w-2xl mx-auto">
+          <h2 class="text-2xl sm:text-3xl font-bold text-center mb-10">
+            Do <span class="text-red-400">Not</span> Register If…
+          </h2>
+          <div class="flex flex-col gap-5">
+
+            <div class="flex items-start gap-4 rounded-xl px-5 py-4"
+                 style="background: #0d1221; border: 1px solid rgba(255,255,255,0.1);">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-0.5"
+                    style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4);">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path d="M2 2L8 8M8 2L2 8" stroke="#f87171" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <!-- TODO: Update these if needed -->
+              <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                You're looking for a get-rich-quick tip sheet and not a real, repeatable system.
+              </p>
+            </div>
+
+            <div class="flex items-start gap-4 rounded-xl px-5 py-4"
+                 style="background: #0d1221; border: 1px solid rgba(255,255,255,0.1);">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-0.5"
+                    style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4);">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path d="M2 2L8 8M8 2L2 8" stroke="#f87171" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                You plan to register, skip the live session, and watch it "when you get time." Show up or don't sign up.
+              </p>
+            </div>
+
+            <div class="flex items-start gap-4 rounded-xl px-5 py-4"
+                 style="background: #0d1221; border: 1px solid rgba(255,255,255,0.1);">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mt-0.5"
+                    style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4);">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path d="M2 2L8 8M8 2L2 8" stroke="#f87171" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                You're not willing to put in the work. Trading is a skill — not a lottery ticket. This training will show you the path, but you have to walk it.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- MOBILE FORM -->
+      <section id="mobile-form" class="lg:hidden border-t border-white/10 py-16 px-5 text-center"
+               style="background: #0d1221;">
+        <div class="max-w-xl mx-auto">
+          <h2 class="text-2xl sm:text-3xl font-extrabold mb-2">Save Your <span class="accent-text">Free Spot</span></h2>
+          <!-- TODO: Update date/time -->
+          <p class="text-slate-400 text-sm mb-6">[DATE] · [TIME] EST</p>
+          <form class="space-y-3" onsubmit="handleSubmit(event, this)">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">First Name</label>
+                <input required name="first_name" placeholder="John" class="form-input" type="text">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Last Name</label>
+                <input required name="last_name" placeholder="Smith" class="form-input" type="text">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Email</label>
+              <input required name="email" placeholder="john@example.com" class="form-input" type="email">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Phone Number</label>
+              <input name="phone" placeholder="+1 (555) 000-0000" class="form-input" type="tel">
+            </div>
+            <button type="submit"
+                    class="pulse-btn accent-btn w-full font-extrabold text-base py-4 rounded-xl transition-all duration-200 tracking-wide shadow-lg mt-1">
+              Register Now →
+            </button>
+            <p class="text-center text-slate-500 text-xs pt-1">No credit card required. 100% free training.</p>
+          </form>
+        </div>
+      </section>
+
+    </div>
+    <!-- ── END LEFT COLUMN ──────────────────────────────────── -->
+
+    <!-- ── RIGHT / STICKY COLUMN (Desktop) ──────────────────── -->
+    <div class="sticky-col hidden lg:flex">
+      <div class="w-full">
+        <div class="mb-5 text-center">
+          <h2 class="text-xl font-extrabold mb-2">Save Your <span class="accent-text">Free Spot</span></h2>
+          <!-- TODO: Update date/time -->
+          <p class="text-slate-400 text-sm">[DATE] · [TIME] EST</p>
+        </div>
+        <form class="space-y-3" onsubmit="handleSubmit(event, this)">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">First Name</label>
+              <input required name="first_name" placeholder="John" class="form-input" type="text">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Last Name</label>
+              <input required name="last_name" placeholder="Smith" class="form-input" type="text">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Email</label>
+            <input required name="email" placeholder="john@example.com" class="form-input" type="email">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Phone Number</label>
+            <input name="phone" placeholder="+1 (555) 000-0000" class="form-input" type="tel">
+          </div>
+          <div class="flex items-start gap-3 rounded-xl p-4"
+               style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+            <div class="flex-shrink-0 mt-0.5">
+              <div class="w-5 h-5 rounded flex items-center justify-center border-2 flex-shrink-0"
+                   style="background: linear-gradient(135deg, #00C853, #69FF47); border-color: #00C853;">
+                <svg class="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              <!-- TODO: Update consent text to match your GHL / SMS provider -->
+              I agree to receive updates and marketing messages from Kay Capitals about this training and related offers. I can unsubscribe at any time.
+            </p>
+          </div>
+          <button type="submit"
+                  class="pulse-btn accent-btn w-full font-extrabold text-base py-4 rounded-xl transition-all duration-200 tracking-wide shadow-lg mt-1">
+            Register Now →
+          </button>
+          <p class="text-center text-slate-500 text-xs pt-1">No credit card required. 100% free training.</p>
+        </form>
+      </div>
+    </div>
+    <!-- ── END RIGHT COLUMN ───────────────────────────────────── -->
+
+  </div>
+
+  <script>
+    // ── COUNTDOWN TIMER ──────────────────────────────────────────
+    // TODO: Set your actual event date/time in ISO format (with timezone offset)
+    // Example below: Jun 18 2026 at 8:00 PM EST (UTC-4)
+    const EVENT_DATE = new Date('2026-06-18T20:00:00-04:00');
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = EVENT_DATE - now;
+
+      if (diff <= 0) {
+        document.getElementById('countdown-bar').innerHTML =
+          '<span class="font-bold uppercase tracking-widest">Registration Closed</span>';
+        return;
+      }
+
+      const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins  = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs  = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById('cd-days').innerHTML  = `${pad(days)}<span class="text-[10px] font-semibold ml-0.5 opacity-70">d</span>`;
+      document.getElementById('cd-hours').innerHTML = `${pad(hours)}<span class="text-[10px] font-semibold ml-0.5 opacity-70">h</span>`;
+      document.getElementById('cd-mins').innerHTML  = `${pad(mins)}<span class="text-[10px] font-semibold ml-0.5 opacity-70">m</span>`;
+      document.getElementById('cd-secs').innerHTML  = `${pad(secs)}<span class="text-[10px] font-semibold ml-0.5 opacity-70">s</span>`;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // ── FORM SUBMIT ──────────────────────────────────────────────
+    // TODO: Replace the body below with your actual GHL webhook POST
+    // e.g. fetch('https://YOUR_GHL_WEBHOOK', { method: 'POST', body: new FormData(form) })
+    function handleSubmit(e, form) {
+      e.preventDefault();
+      const btn = form.querySelector('button[type="submit"]');
+      const originalText = btn.innerHTML;
+      btn.textContent = 'Registering...';
+      btn.disabled = true;
+
+      // ── Placeholder: simulate network delay then confirm ──
+      setTimeout(() => {
+        btn.innerHTML = "You're In! Check Your Email ✓";
+        // TODO: Redirect to thank-you page if needed
+        // window.location.href = '/thankyou';
+      }, 1200);
+    }
+
+    // ── MOBILE SCROLL TO FORM ────────────────────────────────────
+    function scrollToForm() {
+      document.getElementById('mobile-form').scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+
+</body>
+</html>
