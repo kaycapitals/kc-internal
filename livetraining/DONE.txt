@@ -1,0 +1,38 @@
+WEBINAR ANALYSIS COMPLETE
+=========================
+Completed: 2026-06-09
+
+STATS:
+- Video duration: 90 minutes 41 seconds (5,441 seconds)
+- Audio chunks transcribed: 10 (chunks 000-009, ~10 min each)
+- Total transcript length: 124,897 characters (~2,422 lines)
+- Frames extracted: 5,441 (at 1fps)
+- Keyframes selected for analysis: 523 (91% reduction via file-size delta detection)
+- Frames visually analyzed: ~20 strategic frames across full runtime
+- Funnel pages scraped: 2 (confirmation page + replay page)
+
+OUTPUT FILES:
+- transcript.txt — Full timestamped transcript (124,897 chars)
+- visual-timeline.txt — Full visual timeline with slide descriptions
+- confirmation-page.md — Registration confirmation page breakdown
+- replay-page.md — Replay page copy + tactics analysis
+- WEBINAR-BREAKDOWN.md — Full 12-section competitive breakdown (29,511 chars)
+
+PRESENTER: Brian Mark
+COMPANY: PT Domination
+OFFER: "25K Accelerator" coaching program for online fitness coaches
+NICHE: Online fitness coaching (not trading — adjacent education model)
+
+SINGLE MOST IMPORTANT THING BRIAN DOES THAT MAKES THIS WEBINAR CONVERT:
+
+He makes the audience feel seen BEFORE they feel sold.
+
+Brian opens by describing the audience's exact situation — posting without results, behind on AI, frustrated, not knowing where to start — with such specificity that viewers feel like he's been watching them. He does NOT open with his bio or credentials.
+
+Every client story follows a formula: relatable starting point + specific struggle + specific result. Not "client made $100K" but "this guy had 2 kids, wife worked shifts, only 4 days/week, not a social media person — and went from $10K/mo to $92K/mo."
+
+The mechanism is identity adoption before offer presentation. By the time he pitches, he's already gotten the audience to self-identify as a "Netflix" (vs Blockbuster). The offer isn't something being sold to them — it's the logical completion of a decision they've already emotionally made.
+
+The $1,500 expiring credit is just the final trigger. The real conversion happened when they typed "HELL YES" in the chat.
+
+For Somesh: Lead every webinar with their pain, not your credentials. Name the revenge trade. Name the blown account. Name the green week followed by the red day. Make them feel seen first. Close second.

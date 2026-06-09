@@ -1,0 +1,164 @@
+VISUAL TIMELINE — Brian Mark / PT Domination Webinar
+Generated from 1fps frame extraction (5,441 frames), 523 keyframes analyzed
+============================================================
+
+[00:01] WEBCAM — Brian Mark on camera, green hoodie, studio setup with LED strips, plants, bookshelves. 
+         Caption: "AI to grow your online fitness business"
+
+[01:09] SLIDE — Warm-up/engagement period still ongoing, presenter talking to chat
+
+[01:57] SLIDE — Title slide / webinar opener. Webinar branding: "How to use AI to make an extra $1-2k/week as an online fitness coach"
+
+[03:07] SLIDE — Industry stats slide
+         TEXT: "$14.2 billion online fitness industry → $52 billion by 2033"
+         "50% of fitness clients prefer online coaching"
+         Client results: John Shaw 7,700 followers → $60K/mo; Angela Holmes 525 followers → $10K/mo in 60 days; Sammy Smith → $200K revenue
+
+[03:52] SLIDE — Engagement hook
+         TEXT: "How many of you feel like you're BEHIND with all the AI stuff?"
+         "Type 1 in the chat"
+
+[05:02] SLIDE — Fear/urgency: "The truth is that we all are..."
+         DESIGN: White bg, cyan header bar, red highlighted key phrase
+         TEXT: News excerpt — Jack Dorsey/Block laid off 4,000 employees (Feb 2026)
+         "The AI wave is 100% here" (in red)
+         "coaches who are not learning how to use it...are going to get left behind"
+
+[06:08] SLIDE — More AI job displacement stats
+         TEXT: Disney artists fired, replaced with AI; Meta laid off 7,000 employees
+         "We are all behind"
+
+[06:58] SLIDE — Client result teaser
+         TEXT: John Shaw — 7,700 followers → $60K/mo → then $93K/mo
+         "He built out an AI project that helps him write highly targeted content"
+
+[10:13] SLIDE — Blockbuster vs Netflix analogy
+         DESIGN: Split image — Blockbuster logo with red X, Netflix logo
+         TEXT: "WE ARE IN THE BLOCKBUSTER VS NETFLIX ERA"
+         "fitness coaches that haven't started using AI are like Blockbuster"
+
+[11:07] SLIDE — Brian Mark bio/credibility slide
+         TEXT: "My name is Brian Mark"
+         "PT Domination — helping online fitness coaches grow on Instagram"
+         "673K followers on Instagram"
+         "3x national bestseller: $10 Million Instagram Funnel Blueprint" (book shown)
+         "12,000 coaches helped"
+
+[12:41] SLIDE — Brian's origin story: Instagram account disabled overnight, built from scratch to 671K followers
+         "I lost everything overnight. Rebuilt it. Cracked the code."
+
+[17:00] SLIDE — The Blueprint reveal
+         TEXT: "The Blueprint To Adding an Extra 1-2k per week.."
+         "This is going to seem SO STUPID-SIMPLE that you're going to wonder why you haven't already done this"
+         "If you're ready to learn how, drop a HELL YES in the chat"
+         Social proof screenshot: Shannon Hanson "16.5k! #record"
+
+[20:00] SLIDE — Core Teaching 1: Hyper-specific messaging / avatar identity
+         TEXT: "Give them an identity"
+         Example: "Sondra, a career driven mom of three"
+         vs generic: "my client Sarah lost 15 pounds"
+
+[22:00] SLIDE — Specific vs generic content comparison
+         TEXT: DON'T post: "Here's how to lose weight" / "3 tips for fat loss"
+         DO post: "Here's how to lose weight as a woman in your 30s" / "3 biggest mistakes busy moms make"
+
+[25:03] SLIDE — Core Teaching 2: AI-powered content creation
+         TEXT: "Great marketers join the conversation happening in prospects' minds"
+         "Write this down — this is the foundation of all great marketing"
+         Transition: "Previously you needed to be great at marketing. Now you need to understand AI."
+
+[27:00] SLIDE — Tool intro: sandcastles.ai
+         Live demo of sorting competitor videos by "outlier score" (10X+)
+         "Find what's already working, grab the template, recreate it"
+
+[34:07] SCREEN SHARE — Claude.ai interface showing live demo
+         Brian using Claude to recreate viral video scripts for different avatars
+         "Never start another diet until you fix these seven mistakes" → rewritten for "Ambitious Working Moms making $100K+"
+         Shows real-time AI prompting workflow
+
+[38:00] SLIDE — Transition to Teaching 3
+         TEXT: "Now that we've got leads, how do we turn them into sales calls?"
+         DM strategy introduced
+
+[40:00] SLIDE — The "5130 post" strategy
+         Story poll: "I'm looking for 5 men who want to drop 5-10 pounds in 30-60 days"
+         Options: "I'm in" / "Send details" / "I'm interested" / "Nah I'm good"
+         "Always give people a chance to vote against you — hacks the algorithm"
+
+[43:01] SLIDE — DM Script breakdown
+         TEXT: "Bad, Good, and Excellent DM conversation examples"
+         Analogy: "The needy guy" — dating metaphor for chasing prospects
+         "You chase, they run."
+         Rule: "Talk like you're talking to your friend"
+
+[52:08] SLIDE — Client deep-dive: John Shaw (@john_teamjsf)
+         Visual: headshot + Instagram reel screenshot + DM conversation
+         "33 years old, 2 kids, 4 days/week, not a social media person"
+         Result: $10K/mo → $92K/mo using AI content system
+
+[52:30] SLIDE — Social proof avalanche
+         Multiple client wins: Holly $100K, Chloe $119K, Jordan $10,800/week (mom of 3),
+         Selena $8,500/day, Kenny Duzo (300 followers → UFC sponsorship),
+         Jesse $1,400 → $13K first month, Maureen $60K/mo
+
+[54:32] SLIDE — The "Two Paths" pivot to pitch
+         TEXT: "You've got two paths"
+         SLOW PATH: Figure it out yourself, 1-2 months of trial and error
+         FAST PATH: Follow Brian's proven frameworks, guaranteed result
+
+[59:00] SLIDE — Pre-pitch departure offer
+         TEXT: "This might not be for everyone"
+         "If you don't want to learn how to use AI to grow your fitness business, there's a leave button"
+         "This is only for people who know the industry is changing"
+
+[60:19] WEBCAM — Brian back on camera, direct address
+         TEXT: "For those of you still with me — you're the game changers"
+         "It's 5:30pm Monday and you made the decision to be here"
+
+[60:26] SLIDE — Offer reveal: "25K Accelerator for Online Fitness Coaches"
+         DESIGN: White bg, cyan header, red urgency text
+         TEXT: "Just launched our brand new fitness coaching program"
+         "Designed to teach you how to build a standout personal brand and integrate AI"
+         "Help you hit $25,000/month"
+
+[62:00] SLIDE — The Bonus / CTA
+         TEXT: "$1,500 in credit — live attendees only, expires TODAY"
+         "Book a call with me and my team"
+         Calendar button dropped in chat
+         "171 people on this call — first come, first served"
+
+[63:00] SLIDE — Guarantee
+         TEXT: "Make $10,000 or you don't pay"
+         "Full refund + I'll send you $1,000 for wasting your time"
+         "I've given this guarantee to 4,000 people. Only 1 person qualified for a refund."
+
+[66:35] SLIDE — "Summary of 25K Accelerator Benefits"
+         BULLET POINTS:
+         • 30 Day Custom Gameplan
+         • "Cash Grab" Campaign — first clients in 1-2 weeks
+         • Unlimited support, 24/7 access
+         • Content AI Toolkit
+         • Content Audits (live review of your content)
+         • Sales Audits ("Savage Sales" — review actual calls)
+         • 5 Live Coaching Calls/Week
+         • AI Coach specialist
+         GREEN BONUSES:
+         • Money Back Guarantee — Make 10K or you don't pay
+         • $1,500 credit (expires today)
+         RED URGENCY BANNER: "CREDIT EXPIRES TODAY!!!"
+         Social proof: Nicole Gomez $100K gross volume shown
+
+[69:05] SLIDE — Program deep-dive continued
+         Live Q&A / action taker shoutouts begin
+         "David locked in, Coach Holly locked in, Coach Tom locked in..."
+
+[77:36] WEBCAM — Full camera, no slides. Brian doing live content audits
+         Logging into Instagram live on Zoom call
+         Pulling up participant @AlexisJean's profile for live audit
+
+[84:00] SCREEN SHARE — Claude Sonnet 4.0 live demo
+         "Auditing content for former athlete audience"
+         Shows Claude rating video content alignment with avatar on 1-10 scale
+         Demonstrates AI workflow for content quality checking
+
+[90:40] END — Final close, wrap-up, last action taker shoutouts
