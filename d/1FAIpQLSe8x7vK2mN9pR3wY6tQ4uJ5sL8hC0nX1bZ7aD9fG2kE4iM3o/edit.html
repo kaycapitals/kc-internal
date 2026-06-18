@@ -1465,7 +1465,7 @@ async function generate() {
   out.innerHTML = '<div class="loading"><div class="bar"><div class="fill"></div></div><p>Crafting scripts in your voice (' + totalHits + ' brain matches: ' + reelQuotes.length + ' reels, ' + bookKnowledge.length + ' books, ' + courseContent.length + ' course)...</p></div>';
 
   const apiBody = {
-    model: 'claude-sonnet-4-20250514',
+    model: 'claude-sonnet-4-5',
     max_tokens: 3000,
     system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content: 'Write 4 Instagram reel scripts for this idea:\n\n"' + idea + '"\n' + brainContext + '\n\n4 variants:\n1. 🔥 AGGRESSIVE — confrontational, calling people out\n2. 📚 TEACHING — step-by-step breakdown with specifics\n3. 📖 STORY — REAL personal story (from brain context above, NOT made up)\n4. 🌶️ HOT TAKE — controversial opinion, polarizing, debate-starter\n\nCRITICAL:\n- If "YOUR OWN WORDS" section exists above, you MUST use those exact phrases in at least 2 scripts\n- Story variant MUST reference a real experience from the brain context, not a generic "I remember when..."\n- Hot take should be something 50% of traders would disagree with\n- Sound like you\'re ranting to camera, not reading a script\n- 80-180 words per script MAX\n- Return ONLY valid JSON, no markdown' }]
@@ -1645,7 +1645,7 @@ async function regenerateVariant(idx) {
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-5',
         max_tokens: 800,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: 'Regenerate ONLY the ' + variant.toUpperCase() + ' variant for this idea:\n\n"' + idea + '"\n\nReturn ONLY valid JSON: {"script":{"variant":"' + variant + '","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"high"}}' }]
@@ -1997,7 +1997,7 @@ async function generateAllIdeas(force) {
           'anthropic-dangerous-direct-browser-access': 'true'
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
+          model: 'claude-sonnet-4-5',
           max_tokens: 8000,
           system: prompt,
           messages: [{ role: 'user', content: 'Generate 30 fresh content ideas for today. Be SPECIFIC and TIMELY. Return valid JSON only.' }]
@@ -2332,7 +2332,7 @@ async function refreshIdea(id) {
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-5',
         max_tokens: 1000,
         system: 'You generate a single Instagram reel content idea for Somesh (Kay Capitals), a raw/direct, no-BS day trading educator. Return ONLY valid JSON.',
         messages: [{ role: 'user', content: 'Generate ONE fresh ' + funnel + ' content idea on the topic "' + topic + '". Make it specific and timely. Do NOT repeat any of these existing titles: ' + existingTitles + '\n\nReturn ONLY valid JSON: {"idea":{"id":"unique_id","funnel":"' + funnel + '","topic":"' + topic + '","title":"...","preview":"3-4 sentence script preview in his raw voice","tags":["tag1","tag2"]}}' }]
@@ -2600,7 +2600,7 @@ async function generateFromApproved(safeId) {
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-5',
         max_tokens: 3000,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: 'Generate 4 reel scripts for this idea:\n\n' + ideaText + (brainContext ? '\n\n---\nBRAIN CONTEXT:\n' + brainContext : '') + '\n\nReturn valid JSON only: {"scripts":[...]}' }]
