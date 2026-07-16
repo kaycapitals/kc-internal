@@ -1559,10 +1559,10 @@ async function generate() {
       n: 1,
       size: '1024x1024',
       quality: 'standard',
-      response_format: 'url'
+      response_format: 'b64_json'
     })
   }, 30000).then(r => r.json()).then(d => {
-    if (d && d.data && d.data[0] && d.data[0].url) return d.data[0].url;
+    if (d?.data?.[0]?.b64_json) return 'data:image/png;base64,' + d.data[0].b64_json;
     return null;
   }).catch(() => null); // Image failure never blocks scripts
 
@@ -1595,6 +1595,12 @@ async function generate() {
     btn.textContent = '⚡ Generate Scripts';
     return;
   }
+
+  // Show image loading state on Generate tab while scripts render
+  out.innerHTML = '<div style="padding:12px;background:#111;border-radius:12px;margin-bottom:16px">'
+    + '<div style="font-size:12px;color:#555;margin-bottom:6px">🖼️ Generating image...</div>'
+    + '<div style="height:3px;background:#1a1a1a;border-radius:2px"><div style="height:100%;width:60%;background:#d4a843;border-radius:2px;animation:load 8s ease-in-out forwards"></div></div>'
+    + '</div>';
 
   // Wait for image (already in flight, probably done by now)
   generatedImageUrl = await imagePromise;
@@ -1824,21 +1830,29 @@ function generate_renderScripts() {
  * Copy the generated image to clipboard — for pasting into OBS or anywhere.
  */
 async function copyImageToClipboard() {
-  const url = window._generatedImageUrl;
-  if (!url) { showToast('No image to copy', 'error'); return; }
+  const dataUrl = window._generatedImageUrl;
+  if (!dataUrl) { showToast('No image to copy', 'error'); return; }
+  await _copyImageDataUrl(dataUrl);
+}
+
+async function copyApprovedImage(safeId) {
+  const approved = secureLoad('_approved', []);
+  const a = approved.find(item => _toSafeId(item.id) === safeId);
+  if (!a || !a.imageUrl) { showToast('No image saved', 'error'); return; }
+  await _copyImageDataUrl(a.imageUrl);
+}
+
+async function _copyImageDataUrl(dataUrl) {
   try {
-    // Fetch the image as a blob and copy to clipboard
-    const res = await fetch(url);
+    // Convert base64 data URL to blob for clipboard
+    const res = await fetch(dataUrl);
     const blob = await res.blob();
-    await navigator.clipboard.write([
-      new ClipboardItem({ [blob.type]: blob })
-    ]);
+    await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })]);
     showToast('🖼️ Image copied — paste into OBS!', 'success');
     haptic(20);
   } catch (e) {
-    // Fallback: open in new tab so user can right-click copy
-    window.open(url, '_blank');
-    showToast('Opened in new tab — right-click to copy', 'info');
+    // Fallback: create an img and tell user to right-click
+    showToast('Right-click the image → Copy Image', 'info');
   }
 }
 
@@ -2578,18 +2592,30 @@ function renderApprovedCard(a) {
   const approvedDate = a.approvedAt ? new Date(a.approvedAt).toLocaleDateString('en-US', {month:'short',day:'numeric'}) : '';
   const genDate = a.generatedAt ? new Date(a.generatedAt).toLocaleDateString('en-US', {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : null;
 
-  // Render generated scripts inline if they exist
+  // Render generated scripts + image inline if they exist
   let scriptsHtml = '';
   if (a.scripts && a.scripts.length > 0) {
-    scriptsHtml = '<div class="approved-scripts" id="scripts-' + safeId + '" style="display:' + (isExpanded ? 'block' : 'none') + ';margin-top:10px;border-top:1px solid #222;padding-top:10px">'
-      + a.scripts.map((s, i) => {
+    scriptsHtml = '<div class="approved-scripts" id="scripts-' + safeId + '" style="display:' + (isExpanded ? 'block' : 'none') + ';margin-top:10px;border-top:1px solid #222;padding-top:10px">';
+
+    // Show image if saved
+    if (a.imageUrl) {
+      scriptsHtml += '<div style="margin-bottom:12px">'
+        + '<div style="font-size:11px;font-weight:700;color:#d4a843;margin-bottom:6px">🖼️ GENERATED IMAGE</div>'
+        + '<img src="' + a.imageUrl + '" style="width:100%;border-radius:10px;display:block;margin-bottom:8px">'
+        + '<div style="display:flex;gap:8px">'
+        + '<button onclick="copyApprovedImage(\'' + safeId + '\')" style="flex:1;padding:10px;border-radius:8px;border:1px solid #d4a843;background:transparent;color:#d4a843;font-size:13px;font-weight:700;cursor:pointer;min-height:44px">📋 Copy for OBS</button>'
+        + '<a href="' + a.imageUrl + '" download="kc-visual.png" style="flex:1;padding:10px;border-radius:8px;border:1px solid #555;background:transparent;color:#888;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;display:flex;align-items:center;justify-content:center;min-height:44px">⬇️ Save</a>'
+        + '</div></div>';
+    }
+
+    scriptsHtml += a.scripts.map((s, i) => {
         const icon = {aggressive:'🔥',teaching:'📚',story:'📖',hot_take:'🌶️'}[s.variant] || '🎬';
         return '<div style="margin-bottom:12px;padding:10px;background:#0a0a0a;border-radius:8px">'
           + '<div style="font-size:11px;font-weight:700;color:#d4a843;margin-bottom:6px">' + icon + ' ' + (s.variant||'').toUpperCase().replace('_',' ') + '</div>'
           + '<div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:6px">' + esc(s.hook||'') + '</div>'
           + '<div style="font-size:13px;color:#bbb;line-height:1.6;margin-bottom:6px">' + esc(s.body||'') + '</div>'
           + '<div style="font-size:12px;color:#6b6">' + esc(s.cta||'') + '</div>'
-          + '<button onclick="copyApprovedScript(' + i + ',\'' + safeId + '\')" style="margin-top:8px;padding:6px 12px;border-radius:6px;border:1px solid #333;background:none;color:#888;font-size:12px;cursor:pointer">📋 Copy</button>'
+          + '<button onclick="copyApprovedScript(' + i + ',\'' + safeId + '\')" style="margin-top:8px;padding:6px 12px;border-radius:6px;border:1px solid #333;background:none;color:#888;font-size:12px;cursor:pointer">📋 Copy Script</button>'
           + '</div>';
       }).join('')
       + '</div>';
@@ -2666,18 +2692,53 @@ async function generateFromApproved(safeId) {
   const idea = approved[idx];
 
   const btn = document.getElementById('gen-btn-' + safeId);
-  if (btn) { btn.disabled = true; btn.textContent = '⏳ Generating...'; }
+  const card = document.getElementById('approved-' + safeId);
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Generating scripts + image...'; }
 
-  // Build a mini idea textarea value and call the main generate pipeline
+  // Show inline loading bar on the card
+  let loadingEl = document.getElementById('loading-' + safeId);
+  if (!loadingEl && card) {
+    loadingEl = document.createElement('div');
+    loadingEl.id = 'loading-' + safeId;
+    loadingEl.innerHTML = '<div style="margin-top:10px;padding:10px;background:#0a0a0a;border-radius:8px">'
+      + '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:#888" id="loading-label-' + safeId + '">⏳ Scripts generating...</span><span style="font-size:12px;color:#555" id="loading-pct-' + safeId + '">0%</span></div>'
+      + '<div style="height:3px;background:#1a1a1a;border-radius:2px"><div id="loading-bar-' + safeId + '" style="height:100%;width:0%;background:#d4a843;border-radius:2px;transition:width 0.5s ease"></div></div>'
+      + '<div style="margin-top:6px;font-size:11px;color:#333" id="loading-img-status-' + safeId + '">🖼️ Image generating in parallel...</div>'
+      + '</div>';
+    card.appendChild(loadingEl);
+  }
+
+  const setProgress = (pct, label, imgStatus) => {
+    const bar = document.getElementById('loading-bar-' + safeId);
+    const lbl = document.getElementById('loading-label-' + safeId);
+    const pctEl = document.getElementById('loading-pct-' + safeId);
+    const imgEl = document.getElementById('loading-img-status-' + safeId);
+    if (bar) bar.style.width = pct + '%';
+    if (lbl && label) lbl.textContent = label;
+    if (pctEl) pctEl.textContent = pct + '%';
+    if (imgEl && imgStatus) imgEl.textContent = imgStatus;
+  };
+
   const ideaText = idea.title + (idea.preview ? '\n\n' + idea.preview : '');
 
   try {
-    // Search brain for context
-    const [reelResults, bookResults, courseResults] = await Promise.all([
+    setProgress(10, '🧠 Searching brain...', '🖼️ Image generating in parallel...');
+
+    // Fire brain search + image generation in parallel with script generation
+    const brainPromise = Promise.all([
       searchBrain(idea.title + ' ' + (idea.topic || ''), 5),
       searchBrain(idea.title, 3),
       searchBrain(idea.title, 3)
     ]);
+
+    const imagePromise = fetchWithTimeout('https://api.openai.com/v1/images/generations', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getOKey() },
+      body: JSON.stringify({ model: 'dall-e-3', prompt: buildImagePrompt(idea.title), n: 1, size: '1024x1024', quality: 'standard', response_format: 'b64_json' })
+    }, 30000).then(r => r.json()).then(d => d?.data?.[0]?.b64_json ? 'data:image/png;base64,' + d.data[0].b64_json : null).catch(() => null);
+
+    const [brainResults] = await Promise.all([brainPromise]);
+    const [reelResults, bookResults, courseResults] = brainResults;
     const reelQuotes = reelResults.filter(r => r && r.text);
     const bookKnowledge = bookResults.filter(r => r && r.text);
     const courseContent = courseResults.filter(r => r && r.text);
@@ -2687,46 +2748,46 @@ async function generateFromApproved(safeId) {
       courseContent.length ? '== KCU COURSE ==\n' + courseContent.map(r => r.text).join('\n\n') : ''
     ].filter(Boolean).join('\n\n');
 
+    setProgress(30, '✍️ Writing scripts...', '🖼️ Image still generating...');
+
     const r = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': getKey(),
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: MODEL_OPUS,
-        max_tokens: 3000,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: 'Generate 4 reel scripts for this idea:\n\n' + ideaText + (brainContext ? '\n\n---\nBRAIN CONTEXT:\n' + brainContext : '') + '\n\nReturn valid JSON only: {"scripts":[...]}' }]
-      })
+      headers: { 'Content-Type': 'application/json', 'x-api-key': getKey(), 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model: MODEL_OPUS, max_tokens: 3000, system: SYSTEM_PROMPT, messages: [{ role: 'user', content: 'Generate 4 reel scripts for this idea:\n\n' + ideaText + (brainContext ? '\n\n---\nBRAIN CONTEXT:\n' + brainContext : '') + '\n\nReturn valid JSON only: {"scripts":[...]}' }] })
     }, 90000);
+
+    setProgress(75, '✅ Scripts done, waiting for image...', '🖼️ Almost there...');
 
     const data = await r.json();
     if (data && data.error) throw new Error(data.error.message || 'API error');
-    if (!data || !data.content || !data.content.length) throw new Error('Empty response from API');
+    if (!data?.content?.length) throw new Error('Empty response from API');
     const txt = data.content[0].text;
     const m = txt.match(/\{[\s\S]*"scripts"[\s\S]*\}/);
     const parsed = m ? JSON.parse(m[0]) : null;
     if (!parsed || !Array.isArray(parsed.scripts) || parsed.scripts.length === 0) throw new Error('No scripts returned');
-
     const scripts = parsed.scripts.filter(validateScript);
 
-    // Save scripts into the approved entry
+    // Wait for image
+    const imageDataUrl = await imagePromise;
+    setProgress(100, '✅ Done!', imageDataUrl ? '🖼️ Image ready!' : '🖼️ Image unavailable');
+
+    // Save everything
     approved[idx].scripts = scripts;
     approved[idx].generatedAt = Date.now();
+    approved[idx].imageUrl = imageDataUrl || null;
     secureStore('_approved', approved);
     _expandedScripts.add(safeId);
+
+    if (loadingEl) loadingEl.remove();
     renderApproved();
-    // Auto-expand scripts
+
     setTimeout(() => {
       const el = document.getElementById('scripts-' + safeId);
       if (el) el.style.display = 'block';
       const toggleBtn = document.getElementById('toggle-scripts-' + safeId);
       if (toggleBtn) toggleBtn.textContent = '📄 Hide Scripts';
     }, 100);
-    showToast('✅ Scripts generated!', 'success');
+    showToast('✅ Scripts + image generated!', 'success');
   } catch (e) {
     if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Scripts'; }
     showToast('❌ ' + (e.message || 'Failed'), 'error');
