@@ -297,6 +297,7 @@ textarea::placeholder{color:#444}
   <!-- Tab 3: Approved Queue -->
   <div class="tab-panel" id="panelApproved">
     <div class="approved-counter" id="approvedCounter">0 ideas ready to film</div>
+    <button onclick="exportApprovedIdeas()" style="display:block;width:100%;padding:12px;border-radius:10px;border:1px solid #d4a843;background:transparent;color:#d4a843;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:12px">💾 Backup All Ideas (save before changes)</button>
     <div id="approvedList"></div>
     <div class="completed-section" id="completedSection" style="display:none">
       <button class="completed-toggle" onclick="toggleCompleted()">
@@ -593,6 +594,36 @@ function fetchWithTimeout(url, opts, ms = 60000) {
   const ctrl = new AbortController();
   const id = setTimeout(() => ctrl.abort(), ms);
   return fetch(url, { ...opts, signal: ctrl.signal }).finally(() => clearTimeout(id));
+}
+
+/**
+ * Fetch with automatic retry on 529 (overloaded) and 429 (rate limit).
+ * Exponential backoff: 3s, 6s, 12s.
+ */
+async function fetchWithRetry(url, opts, ms = 120000, maxRetries = 3) {
+  let lastErr;
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    if (attempt > 0) {
+      const wait = 3000 * Math.pow(2, attempt - 1); // 3s, 6s, 12s
+      await new Promise(r => setTimeout(r, wait));
+    }
+    try {
+      const res = await fetchWithTimeout(url, opts, ms);
+      // On 529 or 429, retry
+      if (res.status === 529 || res.status === 429) {
+        lastErr = new Error('API overloaded (attempt ' + (attempt + 1) + '/' + maxRetries + ') — retrying...');
+        const errData = await res.json().catch(() => ({}));
+        // Show retry toast
+        showToast('⏳ API overloaded — retrying in ' + (3 * Math.pow(2, attempt)) + 's...', 'info');
+        continue;
+      }
+      return res;
+    } catch (e) {
+      lastErr = e;
+      if (e.name === 'AbortError') throw e; // Don't retry aborts
+    }
+  }
+  throw lastErr || new Error('Failed after ' + maxRetries + ' attempts');
 }
 
 /**
@@ -1465,7 +1496,7 @@ async function generate() {
   out.innerHTML = '<div class="loading"><div class="bar"><div class="fill"></div></div><p>Crafting scripts in your voice (' + totalHits + ' brain matches: ' + reelQuotes.length + ' reels, ' + bookKnowledge.length + ' books, ' + courseContent.length + ' course)...</p></div>';
 
   const apiBody = {
-    model: 'claude-sonnet-4-5',
+    model: 'claude-opus-4-5',
     max_tokens: 3000,
     system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content: 'Write 4 Instagram reel scripts for this idea:\n\n"' + idea + '"\n' + brainContext + '\n\n4 variants:\n1. 🔥 AGGRESSIVE — confrontational, calling people out\n2. 📚 TEACHING — step-by-step breakdown with specifics\n3. 📖 STORY — REAL personal story (from brain context above, NOT made up)\n4. 🌶️ HOT TAKE — controversial opinion, polarizing, debate-starter\n\nCRITICAL:\n- If "YOUR OWN WORDS" section exists above, you MUST use those exact phrases in at least 2 scripts\n- Story variant MUST reference a real experience from the brain context, not a generic "I remember when..."\n- Hot take should be something 50% of traders would disagree with\n- Sound like you\'re ranting to camera, not reading a script\n- 80-180 words per script MAX\n- Return ONLY valid JSON, no markdown' }]
@@ -1482,7 +1513,7 @@ async function generate() {
         if (!checkRateLimit()) break;
       }
 
-      const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+      const r = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1636,7 +1667,7 @@ async function regenerateVariant(idx) {
   if (card) card.style.opacity = '0.4';
 
   try {
-    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+    const r = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1645,7 +1676,7 @@ async function regenerateVariant(idx) {
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
+        model: 'claude-opus-4-5',
         max_tokens: 800,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: 'Regenerate ONLY the ' + variant.toUpperCase() + ' variant for this idea:\n\n"' + idea + '"\n\nReturn ONLY valid JSON: {"script":{"variant":"' + variant + '","hook":"...","body":"...","cta":"...","visual_notes":"...","estimated_seconds":45,"energy":"high"}}' }]
@@ -1880,7 +1911,7 @@ async function fetchTrendingContext() {
 
   try {
     // Ask Claude to surface real current market context using its knowledge
-    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+    const r = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1988,7 +2019,7 @@ async function generateAllIdeas(force) {
         }
       }
 
-      const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+      const r = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1997,7 +2028,7 @@ async function generateAllIdeas(force) {
           'anthropic-dangerous-direct-browser-access': 'true'
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-5',
+          model: 'claude-opus-4-5',
           max_tokens: 8000,
           system: prompt,
           messages: [{ role: 'user', content: 'Generate 30 fresh content ideas for today. Be SPECIFIC and TIMELY. Return valid JSON only.' }]
@@ -2323,7 +2354,7 @@ async function refreshIdea(id) {
     const funnel = VALID_FUNNELS.has(old.funnel) ? old.funnel : 'tof';
     const topic = old.topic || 'trading';
 
-    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+    const r = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -2332,7 +2363,7 @@ async function refreshIdea(id) {
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
+        model: 'claude-opus-4-5',
         max_tokens: 1000,
         system: 'You generate a single Instagram reel content idea for Somesh (Kay Capitals), a raw/direct, no-BS day trading educator. Return ONLY valid JSON.',
         messages: [{ role: 'user', content: 'Generate ONE fresh ' + funnel + ' content idea on the topic "' + topic + '". Make it specific and timely. Do NOT repeat any of these existing titles: ' + existingTitles + '\n\nReturn ONLY valid JSON: {"idea":{"id":"unique_id","funnel":"' + funnel + '","topic":"' + topic + '","title":"...","preview":"3-4 sentence script preview in his raw voice","tags":["tag1","tag2"]}}' }]
@@ -2591,7 +2622,7 @@ async function generateFromApproved(safeId) {
       courseContent.length ? '== KCU COURSE ==\n' + courseContent.map(r => r.text).join('\n\n') : ''
     ].filter(Boolean).join('\n\n');
 
-    const r = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+    const r = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -2600,7 +2631,7 @@ async function generateFromApproved(safeId) {
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
+        model: 'claude-opus-4-5',
         max_tokens: 3000,
         system: SYSTEM_PROMPT,
         messages: [{ role: 'user', content: 'Generate 4 reel scripts for this idea:\n\n' + ideaText + (brainContext ? '\n\n---\nBRAIN CONTEXT:\n' + brainContext : '') + '\n\nReturn valid JSON only: {"scripts":[...]}' }]
@@ -2658,6 +2689,27 @@ function copyApprovedScript(scriptIndex, safeId) {
   const text = '[HOOK]\n' + (s.hook||'') + '\n\n[BODY]\n' + (s.body||'') + '\n\n[CTA]\n' + (s.cta||'');
   navigator.clipboard.writeText(text).then(() => showToast('📋 Copied!', 'success')).catch(() => {});
   haptic(10);
+}
+
+/**
+ * Export all approved ideas to a JSON file for backup.
+ */
+function exportApprovedIdeas() {
+  const approved = secureLoad('_approved', []);
+  const ideas = secureLoad('_ideas', []);
+  const backup = {
+    exportedAt: new Date().toISOString(),
+    approved: approved,
+    ideas: ideas
+  };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'kc-content-backup-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('💾 Backup downloaded!', 'success');
 }
 
 function markFilmed(id) {
