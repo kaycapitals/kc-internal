@@ -1515,22 +1515,60 @@ async function generate() {
     messages: [{ role: 'user', content: 'Write 4 Instagram reel scripts for this idea:\n\n"' + idea + '"\n' + brainContext + '\n\n4 variants:\n1. 🔥 AGGRESSIVE — confrontational, calling people out\n2. 📚 TEACHING — step-by-step breakdown with specifics\n3. 📖 STORY — REAL personal story (from brain context above, NOT made up)\n4. 🌶️ HOT TAKE — controversial opinion, polarizing, debate-starter\n\nCRITICAL:\n- If "YOUR OWN WORDS" section exists above, you MUST use those exact phrases in at least 2 scripts\n- Story variant MUST reference a real experience from the brain context, not a generic "I remember when..."\n- Hot take should be something 50% of traders would disagree with\n- Sound like you\'re ranting to camera, not reading a script\n- 80-180 words per script MAX\n- Return ONLY valid JSON, no markdown' }]
   };
 
+  // Build image prompt from idea — used for DALL-E 3 parallel call
+  function buildImagePrompt(ideaText) {
+    const lower = ideaText.toLowerCase();
+    let style = 'professional trading chart visualization, dark background, clean minimal design, green and red candles, sharp lines, high contrast';
+    if (lower.match(/psych|mindset|emotion|fear|greed|discipline|confidence/)) {
+      style = 'dramatic cinematic portrait lighting, dark moody background, determined focus, professional trader aesthetic';
+    } else if (lower.match(/lifestyle|car|house|money|wealth|rich|success/)) {
+      style = 'luxury lifestyle photography aesthetic, gold and black, aspirational, clean minimal';
+    } else if (lower.match(/pattern|flag|wedge|triangle|breakout|vwap|ema|orb|level/)) {
+      style = 'clean stock chart showing the pattern, dark charcoal background, glowing green lines, professional TradingView aesthetic';
+    }
+    return 'Create a visually striking image for a day trading Instagram reel about: "' + ideaText.substring(0, 120) + '". Style: ' + style + '. No text overlay. No watermarks. Cinematic quality.';
+  }
+
   let scripts = null;
   let iT = 0, oT = 0;
+  let generatedImageUrl = null;
 
-  // Single call — fetchWithRetry already handles overloaded/rate-limit retries internally.
+  btn.textContent = '⏳ Generating scripts + image...';
+
+  // Fire script generation AND image generation in PARALLEL
+  const scriptPromise = fetchWithRetry('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': getKey(),
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify(apiBody)
+  }, 90000);
+
+  const imagePromise = fetchWithTimeout('https://api.openai.com/v1/images/generations', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + getOKey()
+    },
+    body: JSON.stringify({
+      model: 'dall-e-3',
+      prompt: buildImagePrompt(idea),
+      n: 1,
+      size: '1024x1024',
+      quality: 'standard',
+      response_format: 'url'
+    })
+  }, 30000).then(r => r.json()).then(d => {
+    if (d && d.data && d.data[0] && d.data[0].url) return d.data[0].url;
+    return null;
+  }).catch(() => null); // Image failure never blocks scripts
+
+  // Wait for both — scripts are required, image is optional
   try {
-    const r = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': getKey(),
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify(apiBody)
-    }, 90000);
-
+    const r = await scriptPromise;
     const data = await r.json();
     if (data && data.error) throw new Error(data.error.message || 'API error');
     if (!data || !data.content || !data.content.length) throw new Error('Empty response from API');
@@ -1543,11 +1581,9 @@ async function generate() {
       const m = txt.match(/\{[\s\S]*"scripts"[\s\S]*\}/);
       const parsed = m ? JSON.parse(m[0]) : null;
       if (parsed && Array.isArray(parsed.scripts)) {
-        // Validate and filter scripts
         scripts = parsed.scripts.filter(validateScript);
       }
     } catch (parseErr) {
-      // Parse failed — show raw response
       out.innerHTML = '<div class="card"><pre class="raw">' + esc(txt.substring(0, 2000)) + '</pre></div>';
       btn.disabled = false;
       btn.textContent = '⚡ Generate Scripts';
@@ -1559,6 +1595,9 @@ async function generate() {
     btn.textContent = '⚡ Generate Scripts';
     return;
   }
+
+  // Wait for image (already in flight, probably done by now)
+  generatedImageUrl = await imagePromise;
 
   const cost = ((iT * 3) + (oT * 15)) / 1000000;
 
@@ -1610,7 +1649,20 @@ async function generate() {
       h += '</div>';
     });
 
-    h += '<div class="cost">Cost: $' + cost.toFixed(4) + ' · ' + (iT + oT) + ' tokens</div>';
+    // Add generated image at the top if we got one
+    if (generatedImageUrl) {
+      h = '<div class="card" style="padding:14px">'
+        + '<div class="lbl" style="margin-bottom:10px">🖼️ Generated Image</div>'
+        + '<img src="' + generatedImageUrl + '" alt="Generated visual" style="width:100%;border-radius:10px;display:block;margin-bottom:10px" crossorigin="anonymous" id="genImage">'
+        + '<div style="display:flex;gap:8px;flex-wrap:wrap">'
+        + '<button onclick="copyImageToClipboard()" style="flex:1;padding:10px;border-radius:8px;border:1px solid #d4a843;background:transparent;color:#d4a843;font-size:13px;font-weight:700;cursor:pointer;min-height:44px">📋 Copy Image</button>'
+        + '<a href="' + generatedImageUrl + '" download="kc-visual.png" target="_blank" style="flex:1;padding:10px;border-radius:8px;border:1px solid #555;background:transparent;color:#888;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;display:flex;align-items:center;justify-content:center;min-height:44px">⬇️ Save</a>'
+        + '</div>'
+        + '</div>' + h;
+      window._generatedImageUrl = generatedImageUrl;
+    }
+
+    h += '<div class="cost">Cost: $' + cost.toFixed(4) + ' · ' + (iT + oT) + ' tokens' + (generatedImageUrl ? ' + image ~$0.04' : '') + '</div>';
     out.innerHTML = h;
   } else {
     out.innerHTML = '<div class="error">❌ No valid scripts generated. Please try again.</div>';
@@ -1768,6 +1820,28 @@ function generate_renderScripts() {
  * Copies a single script to clipboard and tracks the copy.
  * @param {number} i - Script index
  */
+/**
+ * Copy the generated image to clipboard — for pasting into OBS or anywhere.
+ */
+async function copyImageToClipboard() {
+  const url = window._generatedImageUrl;
+  if (!url) { showToast('No image to copy', 'error'); return; }
+  try {
+    // Fetch the image as a blob and copy to clipboard
+    const res = await fetch(url);
+    const blob = await res.blob();
+    await navigator.clipboard.write([
+      new ClipboardItem({ [blob.type]: blob })
+    ]);
+    showToast('🖼️ Image copied — paste into OBS!', 'success');
+    haptic(20);
+  } catch (e) {
+    // Fallback: open in new tab so user can right-click copy
+    window.open(url, '_blank');
+    showToast('Opened in new tab — right-click to copy', 'info');
+  }
+}
+
 function copyOne(i) {
   const s = window._scripts ? window._scripts[i] : null;
   if (!s) return;
