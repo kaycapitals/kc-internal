@@ -249,7 +249,7 @@ textarea::placeholder{color:#444}
 <div id="mainApp" style="display:none">
 <div class="wrap">
   <div class="hdr">
-    <h1>🎬 Content Engine <span style="font-size:11px;font-weight:500;color:#444;vertical-align:middle;margin-left:6px">v1.3</span></h1>
+    <h1>🎬 Content Engine <span style="font-size:11px;font-weight:500;color:#444;vertical-align:middle;margin-left:6px">v1.4</span></h1>
     <p>1,904 reels · 439 competitor reels · your brain · your scripts</p>
     <button onclick="handleLogout()" style="background:none;border:none;color:#333;font-size:11px;cursor:pointer;margin-top:8px;min-height:44px">Log out</button>
   </div>
@@ -1560,8 +1560,8 @@ async function generate() {
       model: 'gpt-image-1',
       prompt: buildImagePrompt(idea),
       n: 1,
-      size: '1024x1024',
-      quality: 'medium',
+      size: '1536x1024',
+      quality: 'high',
 
     })
   }, 45000).then(r => r.json()).then(d => {
@@ -2732,7 +2732,7 @@ async function generateFromApproved(safeId) {
     const imagePromise = fetchWithTimeout('https://api.openai.com/v1/images/generations', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getOKey() },
-      body: JSON.stringify({ model: 'gpt-image-1', prompt: buildImagePrompt(idea.title), n: 1, size: '1024x1024', quality: 'medium' })
+      body: JSON.stringify({ model: 'gpt-image-1', prompt: buildImagePrompt(idea.title), n: 1, size: '1536x1024', quality: 'high' })
     }, 30000).then(r => r.json()).then(d => d?.data?.[0]?.b64_json ? 'data:image/png;base64,' + d.data[0].b64_json : null).catch(() => null);
 
     const [brainResults] = await Promise.all([brainPromise]);
