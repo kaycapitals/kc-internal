@@ -1564,10 +1564,11 @@ async function generate() {
       quality: 'standard',
       response_format: 'b64_json'
     })
-  }, 30000).then(r => r.json()).then(d => {
+  }, 45000).then(r => r.json()).then(d => {
     if (d?.data?.[0]?.b64_json) return 'data:image/png;base64,' + d.data[0].b64_json;
+    if (d?.error) console.error('DALL-E error:', d.error.message);
     return null;
-  }).catch(() => null); // Image failure never blocks scripts
+  }).catch(e => { console.error('Image fetch failed:', e); return null; }); // Image failure never blocks scripts
 
   // Wait for both — scripts are required, image is optional
   try {
@@ -1599,13 +1600,7 @@ async function generate() {
     return;
   }
 
-  // Show image loading state on Generate tab while scripts render
-  out.innerHTML = '<div style="padding:12px;background:#111;border-radius:12px;margin-bottom:16px">'
-    + '<div style="font-size:12px;color:#555;margin-bottom:6px">🖼️ Generating image...</div>'
-    + '<div style="height:3px;background:#1a1a1a;border-radius:2px"><div style="height:100%;width:60%;background:#d4a843;border-radius:2px;animation:load 8s ease-in-out forwards"></div></div>'
-    + '</div>';
-
-  // Wait for image (already in flight, probably done by now)
+  // Wait for image (already in flight since parallel call started)
   generatedImageUrl = await imagePromise;
 
   const cost = ((iT * 3) + (oT * 15)) / 1000000;
