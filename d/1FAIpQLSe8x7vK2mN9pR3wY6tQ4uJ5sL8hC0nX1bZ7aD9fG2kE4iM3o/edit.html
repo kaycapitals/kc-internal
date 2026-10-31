@@ -1534,45 +1534,20 @@ async function generate() {
 
   let scripts = null;
   let iT = 0, oT = 0;
-  let generatedImageUrl = null;
 
-  btn.textContent = '⏳ Generating scripts + image...';
+  btn.textContent = '⏳ Generating scripts...';
 
-  // Fire script generation AND image generation in PARALLEL
-  const scriptPromise = fetchWithRetry('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': getKey(),
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify(apiBody)
-  }, 90000);
-
-  const imagePromise = fetchWithTimeout('https://api.openai.com/v1/images/generations', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + getOKey()
-    },
-    body: JSON.stringify({
-      model: 'gpt-image-1',
-      prompt: buildImagePrompt(idea),
-      n: 1,
-      size: '1536x1024',
-      quality: 'high',
-
-    })
-  }, 45000).then(r => r.json()).then(d => {
-    if (d?.data?.[0]?.b64_json) return 'data:image/png;base64,' + d.data[0].b64_json;
-    if (d?.error) console.error('DALL-E error:', d.error.message);
-    return null;
-  }).catch(e => { console.error('Image fetch failed:', e); return null; }); // Image failure never blocks scripts
-
-  // Wait for both — scripts are required, image is optional
   try {
-    const r = await scriptPromise;
+    const r = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': getKey(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify(apiBody)
+    }, 90000);
     const data = await r.json();
     if (data && data.error) throw new Error(data.error.message || 'API error');
     if (!data || !data.content || !data.content.length) throw new Error('Empty response from API');
@@ -1599,9 +1574,6 @@ async function generate() {
     btn.textContent = '⚡ Generate Scripts';
     return;
   }
-
-  // Wait for image (already in flight since parallel call started)
-  generatedImageUrl = await imagePromise;
 
   const cost = ((iT * 3) + (oT * 15)) / 1000000;
 
@@ -1653,20 +1625,7 @@ async function generate() {
       h += '</div>';
     });
 
-    // Add generated image at the top if we got one
-    if (generatedImageUrl) {
-      h = '<div class="card" style="padding:14px">'
-        + '<div class="lbl" style="margin-bottom:10px">🖼️ Generated Image</div>'
-        + '<img src="' + generatedImageUrl + '" alt="Generated visual" style="width:100%;border-radius:10px;display:block;margin-bottom:10px" crossorigin="anonymous" id="genImage">'
-        + '<div style="display:flex;gap:8px;flex-wrap:wrap">'
-        + '<button onclick="copyImageToClipboard()" style="flex:1;padding:10px;border-radius:8px;border:1px solid #d4a843;background:transparent;color:#d4a843;font-size:13px;font-weight:700;cursor:pointer;min-height:44px">📋 Copy Image</button>'
-        + '<a href="' + generatedImageUrl + '" download="kc-visual.png" target="_blank" style="flex:1;padding:10px;border-radius:8px;border:1px solid #555;background:transparent;color:#888;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;display:flex;align-items:center;justify-content:center;min-height:44px">⬇️ Save</a>'
-        + '</div>'
-        + '</div>' + h;
-      window._generatedImageUrl = generatedImageUrl;
-    }
-
-    h += '<div class="cost">Cost: $' + cost.toFixed(4) + ' · ' + (iT + oT) + ' tokens' + (generatedImageUrl ? ' + image ~$0.04' : '') + '</div>';
+    h += '<div class="cost">Cost: $' + cost.toFixed(4) + ' · ' + (iT + oT) + ' tokens</div>';
     out.innerHTML = h;
   } else {
     out.innerHTML = '<div class="error">❌ No valid scripts generated. Please try again.</div>';
@@ -2691,7 +2650,7 @@ async function generateFromApproved(safeId) {
 
   const btn = document.getElementById('gen-btn-' + safeId);
   const card = document.getElementById('approved-' + safeId);
-  if (btn) { btn.disabled = true; btn.textContent = '⏳ Generating scripts + image...'; }
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Generating scripts...'; }
 
   // Show inline loading bar on the card
   let loadingEl = document.getElementById('loading-' + safeId);
@@ -2701,39 +2660,29 @@ async function generateFromApproved(safeId) {
     loadingEl.innerHTML = '<div style="margin-top:10px;padding:10px;background:#0a0a0a;border-radius:8px">'
       + '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:12px;color:#888" id="loading-label-' + safeId + '">⏳ Scripts generating...</span><span style="font-size:12px;color:#555" id="loading-pct-' + safeId + '">0%</span></div>'
       + '<div style="height:3px;background:#1a1a1a;border-radius:2px"><div id="loading-bar-' + safeId + '" style="height:100%;width:0%;background:#d4a843;border-radius:2px;transition:width 0.5s ease"></div></div>'
-      + '<div style="margin-top:6px;font-size:11px;color:#333" id="loading-img-status-' + safeId + '">🖼️ Image generating in parallel...</div>'
       + '</div>';
     card.appendChild(loadingEl);
   }
 
-  const setProgress = (pct, label, imgStatus) => {
+  const setProgress = (pct, label) => {
     const bar = document.getElementById('loading-bar-' + safeId);
     const lbl = document.getElementById('loading-label-' + safeId);
     const pctEl = document.getElementById('loading-pct-' + safeId);
-    const imgEl = document.getElementById('loading-img-status-' + safeId);
     if (bar) bar.style.width = pct + '%';
     if (lbl && label) lbl.textContent = label;
     if (pctEl) pctEl.textContent = pct + '%';
-    if (imgEl && imgStatus) imgEl.textContent = imgStatus;
   };
 
   const ideaText = idea.title + (idea.preview ? '\n\n' + idea.preview : '');
 
   try {
-    setProgress(10, '🧠 Searching brain...', '🖼️ Image generating in parallel...');
+    setProgress(10, '🧠 Searching brain...');
 
-    // Fire brain search + image generation in parallel with script generation
     const brainPromise = Promise.all([
       searchBrain(idea.title + ' ' + (idea.topic || ''), 5),
       searchBrain(idea.title, 3),
       searchBrain(idea.title, 3)
     ]);
-
-    const imagePromise = fetchWithTimeout('https://api.openai.com/v1/images/generations', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getOKey() },
-      body: JSON.stringify({ model: 'gpt-image-1', prompt: buildImagePrompt(idea.title), n: 1, size: '1536x1024', quality: 'high' })
-    }, 30000).then(r => r.json()).then(d => d?.data?.[0]?.b64_json ? 'data:image/png;base64,' + d.data[0].b64_json : null).catch(() => null);
 
     const [brainResults] = await Promise.all([brainPromise]);
     const [reelResults, bookResults, courseResults] = brainResults;
@@ -2746,7 +2695,7 @@ async function generateFromApproved(safeId) {
       courseContent.length ? '== KCU COURSE ==\n' + courseContent.map(r => r.text).join('\n\n') : ''
     ].filter(Boolean).join('\n\n');
 
-    setProgress(30, '✍️ Writing scripts...', '🖼️ Image still generating...');
+    setProgress(30, '✍️ Writing scripts...');
 
     const r = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -2754,7 +2703,7 @@ async function generateFromApproved(safeId) {
       body: JSON.stringify({ model: MODEL_OPUS, max_tokens: 3000, system: SYSTEM_PROMPT, messages: [{ role: 'user', content: 'Generate 4 reel scripts for this idea:\n\n' + ideaText + (brainContext ? '\n\n---\nBRAIN CONTEXT:\n' + brainContext : '') + '\n\nReturn valid JSON only: {"scripts":[...]}' }] })
     }, 90000);
 
-    setProgress(75, '✅ Scripts done, waiting for image...', '🖼️ Almost there...');
+    setProgress(75, '✅ Almost done...');
 
     const data = await r.json();
     if (data && data.error) throw new Error(data.error.message || 'API error');
@@ -2765,14 +2714,11 @@ async function generateFromApproved(safeId) {
     if (!parsed || !Array.isArray(parsed.scripts) || parsed.scripts.length === 0) throw new Error('No scripts returned');
     const scripts = parsed.scripts.filter(validateScript);
 
-    // Wait for image
-    const imageDataUrl = await imagePromise;
-    setProgress(100, '✅ Done!', imageDataUrl ? '🖼️ Image ready!' : '🖼️ Image unavailable');
+    setProgress(100, '✅ Done!');
 
     // Save everything
     approved[idx].scripts = scripts;
     approved[idx].generatedAt = Date.now();
-    approved[idx].imageUrl = imageDataUrl || null;
     secureStore('_approved', approved);
     _expandedScripts.add(safeId);
 
@@ -2785,7 +2731,7 @@ async function generateFromApproved(safeId) {
       const toggleBtn = document.getElementById('toggle-scripts-' + safeId);
       if (toggleBtn) toggleBtn.textContent = '📄 Hide Scripts';
     }, 100);
-    showToast('✅ Scripts + image generated!', 'success');
+    showToast('✅ Scripts generated!', 'success');
   } catch (e) {
     if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Scripts'; }
     showToast('❌ ' + (e.message || 'Failed'), 'error');
